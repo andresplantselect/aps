@@ -10,7 +10,7 @@ import { useAlert } from '@/src/context/AlertContext';
 import { useLoading } from '@/src/context/LoadingContext';
 
 interface LayoutProps {
-  actions: ReactNode;
+  actions?: ReactNode;
   children: ReactNode;
 }
 
@@ -51,9 +51,9 @@ export default function Layout({ actions, children }: LayoutProps) {
       <Stack
         sx={{
           flex: 1,
+          position: 'relative',
         }}
-        px={{ xs: 3, md: 5 }}
-        pb={3}
+        px={{ xs: 1.5, md: 5 }}
         alignItems="center"
       >
         {alert && <CustomAlert alertState={alert} onClose={clearAlert} />}

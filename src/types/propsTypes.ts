@@ -135,8 +135,6 @@ export type UserMenuProps = {
 export type HeaderActionsProps = {
   actions: MenuAction[];
   name?: string;
-  isUnknownUser: boolean;
-  onLogin: () => void;
 };
 
 export type DeleteProductDialogProps = {
