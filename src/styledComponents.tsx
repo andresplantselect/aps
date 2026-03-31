@@ -168,17 +168,18 @@ export const WelcomeBox = styled(Stack)(({ theme }) => ({
   width: '100%',
   maxWidth: 600,
   marginBottom: theme.spacing(3),
-  padding: theme.spacing(3),
-  backgroundColor: theme.palette.background.paper,
   borderRadius: theme.shape.borderRadius * 2,
   border: `1px solid ${theme.palette.divider}`,
   boxShadow: '0 2px 12px rgba(0,0,0,0.06)',
+  position: 'relative',
+  overflow: 'hidden',
+
   '& h5': {
     fontWeight: 600,
     color: theme.palette.text.primary,
   },
+
   [theme.breakpoints.down('sm')]: {
-    padding: theme.spacing(2.25),
     marginBottom: theme.spacing(2),
   },
 }));

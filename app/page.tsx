@@ -78,12 +78,9 @@ export default function Page() {
   return (
     <Layout
       actions={
-        <HeaderActions
-          name={name as string}
-          isUnknownUser={isUnknownUser}
-          onLogin={() => openDialog('auth')}
-          actions={actions}
-        />
+        !isUnknownUser && (
+          <HeaderActions name={name as string} actions={actions} />
+        )
       }
     >
       {isAdmin && <UsersTabs />}

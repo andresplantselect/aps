@@ -1,6 +1,7 @@
 'use client';
 
 import BlockIcon from '@mui/icons-material/Block';
+import EditIcon from '@mui/icons-material/Edit';
 import EuroIcon from '@mui/icons-material/Euro';
 import GrassIcon from '@mui/icons-material/Grass';
 import HeightIcon from '@mui/icons-material/Height';
@@ -31,6 +32,32 @@ export default function HelpView({
           Esta aplicación te permite consultar el catálogo de plantas, reservar
           productos y seguir el estado de tus pedidos.
         </Typography>
+
+        {/* ACCESO / INVITACIÓN */}
+        <Stack spacing={1}>
+          <Stack direction="row" spacing={1} alignItems="center">
+            <PersonIcon fontSize="small" />
+            <Typography variant="h6">Acceso a la aplicación</Typography>
+          </Stack>
+
+          <Typography variant="body2" color="text.secondary">
+            Para utilizar la aplicación es necesario disponer de un enlace de
+            invitación.
+          </Typography>
+
+          <Typography variant="body2" color="text.secondary">
+            El administrador genera este enlace y lo comparte contigo.
+          </Typography>
+
+          <Typography variant="body2" color="text.secondary">
+            Al acceder al enlace podrás crear tu cuenta introduciendo tus datos.
+          </Typography>
+
+          <Typography variant="body2" color="text.secondary">
+            Estos datos serán los que utilizarás posteriormente para iniciar
+            sesión en la aplicación.
+          </Typography>
+        </Stack>
 
         {/* PRODUCTOS */}
         <Stack spacing={1}>
@@ -145,10 +172,10 @@ export default function HelpView({
             />
           </Stack>
 
-          <Typography variant="body2" color="text.secondary">
-            Cuando el estado cambie recibirás una notificación por correo
-            electrónico.
-          </Typography>
+          {/*<Typography variant="body2" color="text.secondary">*/}
+          {/*  Cuando el estado cambie recibirás una notificación por correo*/}
+          {/*  electrónico.*/}
+          {/*</Typography>*/}
         </Stack>
 
         {/* PEDIDOS */}
@@ -171,8 +198,8 @@ export default function HelpView({
         {/* PERFIL */}
         <Stack spacing={1}>
           <Stack direction="row" spacing={1} alignItems="center">
-            <PersonIcon fontSize="small" />
-            <Typography variant="h6">Perfil de usuario</Typography>
+            <EditIcon fontSize="small" />
+            <Typography variant="h6">Configuración del perfil</Typography>
           </Stack>
 
           <Typography variant="body2" color="text.secondary">
@@ -181,7 +208,7 @@ export default function HelpView({
 
           <Typography variant="body2" color="text.secondary">
             Es importante que el nombre sea correcto para que el administrador
-            pueda identificar quién ha realizado el pedido.
+            pueda identificar quién ha realizado el pedido y fecha.
           </Typography>
         </Stack>
       </Stack>
