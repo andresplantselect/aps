@@ -1,3 +1,4 @@
+// @ts-ignore
 import { serve } from "https://deno.land/std@0.224.0/http/server.ts";
 
 serve(async (req: Request) => {
@@ -11,7 +12,9 @@ serve(async (req: Request) => {
       });
     }
 
+    // @ts-ignore
     const supabaseUrl = Deno.env.get("SUPABASE_URL")!;
+    // @ts-ignore
     const serviceKey = Deno.env.get("SUPABASE_SERVICE_ROLE_KEY")!;
 
     const profileRes = await fetch(
@@ -28,36 +31,43 @@ serve(async (req: Request) => {
     const profileName = profiles?.[0]?.name ?? "—";
 
     const itemsHtml = order.items
-      .map(
-        (i: { title: string; quantity: string }) =>
-          `<li>${i.title} × ${i.quantity} un.</li>`,
-      )
+      .map((i: any) => `<li>${i.title} × ${i.quantity} un.</li>`)
       .join("");
 
     const html = `
-      <h2>🛒 Nuevo pedido recibido</h2>
+      <h2>🛒 Nuevo preorden recibido</h2>
       <p><strong>ID:</strong> ${order.id}</p>
       <p><strong>Name:</strong> ${profileName}</p>
       ${order.comment ? `<p><strong>Comentario:</strong> ${order.comment}</p>` : ""}
       <p><strong>Total:</strong> € ${order.total}</p>
-      <h3>Articulos</h3>
+      <h3>Productos</h3>
       <ul>${itemsHtml}</ul>
     `;
+
+    const adminEmails =
+      Deno.env
+        .get("ADMIN_EMAILS")
+        ?.split(",")
+        .map((e) => e.trim()) ?? [];
+
+    console.log("adminEmails:", adminEmails);
 
     const res = await fetch("https://api.resend.com/emails", {
       method: "POST",
       headers: {
+        // @ts-ignore
         Authorization: `Bearer ${Deno.env.get("RESEND_API_KEY")}`,
         "Content-Type": "application/json",
       },
       body: JSON.stringify({
         from: "Andres Plant Select <pedidos@andresplantselect.com>",
-        to: ["irina.nic.yu@gmail.com"],
+        to: adminEmails,
         subject: `#${order.id}: Nuevo pedido de ${profileName}`,
         html,
       }),
     });
 
+    console.log("RESPONSE:", res);
     const data = await res.json();
 
     return new Response(JSON.stringify({ ok: true, data }), {

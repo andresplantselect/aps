@@ -28,6 +28,8 @@ serve(async (req: Request) => {
 
     const userData = await userRes.json();
 
+    console.log("USER DATA", userData.email);
+
     if (!userRes.ok) {
       console.error("Failed to fetch user:", userData);
       return new Response("Failed to fetch user", { status: 500 });
