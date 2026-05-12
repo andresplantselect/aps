@@ -1,5 +1,6 @@
-'use client';
+"use client";
 
+import { useAuth } from "@/src/context/AuthContext.tsx";
 import {
   Table,
   TableBody,
@@ -8,12 +9,12 @@ import {
   TableContainer,
   Paper,
   TableSortLabel,
-} from '@mui/material';
+} from "@mui/material";
 
-import { TableHeaderCell } from '@/src/styledComponents';
-import { ProductsTableProps } from '@/src/types/propsTypes';
+import { TableHeaderCell } from "@/src/styledComponents";
+import { ProductsTableProps } from "@/src/types/propsTypes";
 
-import { ProductsRow } from './ProductsRow';
+import { ProductsRow } from "./ProductsRow";
 
 export default function ProductsTable({
   products,
@@ -23,6 +24,7 @@ export default function ProductsTable({
   onDelete,
   onEdit,
 }: ProductsTableProps) {
+  const { isAdmin } = useAuth();
   return (
     <TableContainer component={Paper}>
       <Table>
@@ -30,9 +32,9 @@ export default function ProductsTable({
           <TableRow>
             <TableHeaderCell>
               <TableSortLabel
-                active={sortBy === 'title'}
+                active={sortBy === "title"}
                 direction={sortDir}
-                onClick={() => toggleSort('title')}
+                onClick={() => toggleSort("title")}
               >
                 Artículo
               </TableSortLabel>
@@ -41,16 +43,21 @@ export default function ProductsTable({
             <TableHeaderCell align="center">Disponible</TableHeaderCell>
 
             <TableHeaderCell>Precio</TableHeaderCell>
+            <TableHeaderCell align="center">Disponible por Uds</TableHeaderCell>
 
-            <TableHeaderCell align="center">Uds x caja</TableHeaderCell>
+            <TableHeaderCell align="center">Uds × caja</TableHeaderCell>
 
             <TableHeaderCell>Maceta</TableHeaderCell>
 
             <TableHeaderCell>Altura</TableHeaderCell>
 
-            <TableHeaderCell align="center">Editar</TableHeaderCell>
+            {isAdmin && (
+              <TableHeaderCell align="center">Editar</TableHeaderCell>
+            )}
 
-            <TableHeaderCell align="center">Eliminar</TableHeaderCell>
+            {isAdmin && (
+              <TableHeaderCell align="center">Eliminar</TableHeaderCell>
+            )}
           </TableRow>
         </TableHead>
 

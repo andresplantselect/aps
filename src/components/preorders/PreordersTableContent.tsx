@@ -64,7 +64,7 @@ export function PreordersTableContent({ order }: PreordersTableContentProps) {
               {items.map((item) => {
                 const price = Number(item.price);
                 const quantity = Number(item.quantity);
-                const units = Number(item.pots_count || 1);
+                const units = Number(item.units_per_box || 1);
                 const itemsQuantity = units * quantity;
                 const total = price * quantity * units;
 

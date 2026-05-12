@@ -1,11 +1,12 @@
-'use client';
-import BlockIcon from '@mui/icons-material/Block';
-import GrassIcon from '@mui/icons-material/Grass';
-import HeightIcon from '@mui/icons-material/Height';
-import { Typography, Stack, Box } from '@mui/material';
-import React from 'react';
+"use client";
+import BlockIcon from "@mui/icons-material/Block";
+import GrassIcon from "@mui/icons-material/Grass";
+import YardOutlinedIcon from "@mui/icons-material/YardOutlined";
+import HeightIcon from "@mui/icons-material/Height";
+import { Typography, Stack, Box } from "@mui/material";
+import React from "react";
 
-import { ProductType } from '@/src/types/types';
+import { ProductType } from "@/src/types/types";
 
 export default function ProductInfo({ product }: { product: ProductType }) {
   return (
@@ -22,21 +23,29 @@ export default function ProductInfo({ product }: { product: ProductType }) {
           <Stack direction="row" spacing={0.5}>
             <BlockIcon fontSize="small" />
             <Typography variant="body2">
-              Maceta: {product.width ? `${product.width} cms` : '--'}
+              Maceta: {product.width ? `${product.width} cms` : "--"}
             </Typography>
           </Stack>
           <Stack direction="row" spacing={0.5}>
             <HeightIcon fontSize="small" />
             <Typography variant="body2">
-              Altura: {product.height ? `${product.height} cms` : '--'}
+              Altura: {product.height ? `${product.height} cms` : "--"}
             </Typography>
           </Stack>
           <Stack direction="row" spacing={0.5}>
             <GrassIcon fontSize="small" />
             <Stack>
               <Typography variant="body2">
-                Uds x caja: {product.pots_count}
-              </Typography>{' '}
+                Uds × Caja: {product.units_per_box}
+              </Typography>{" "}
+            </Stack>
+          </Stack>
+          <Stack direction="row" spacing={0.5}>
+            <YardOutlinedIcon fontSize="small" />
+            <Stack>
+              <Typography variant="body2">
+                Disponible por Uds: {product.can_buy_units ? "Si" : "No"}
+              </Typography>{" "}
             </Stack>
           </Stack>
         </Stack>

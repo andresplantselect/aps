@@ -1,5 +1,5 @@
-import { AlertColor } from '@mui/material';
-import React from 'react';
+import { AlertColor } from "@mui/material";
+import React from "react";
 
 export interface ProductType {
   id: string;
@@ -7,18 +7,19 @@ export interface ProductType {
   price: number;
   created_at: string;
   comment?: string;
-  pots_count: number;
+  units_per_box: number;
   images: string[];
   totalOrdered: number;
   available: number;
   height?: string;
   width?: string;
+  can_buy_units: boolean;
 }
 
 export interface UserType {
   id: string;
   name?: string;
-  role?: 'user' | 'admin';
+  role?: "user" | "admin";
   created_at?: string;
   email?: string;
 }
@@ -49,7 +50,8 @@ export interface CartItem {
   price: number;
   quantity: number;
   available: number;
-  pots_count: number;
+  units_per_box: number;
+  can_buy_units: boolean;
 }
 
 export interface OrderItem {
@@ -57,11 +59,11 @@ export interface OrderItem {
   title: string;
   price: number;
   quantity: number;
-  pots_count: number;
+  units_per_box: number;
 }
 
-export type OrderStatusType = 'pending' | 'approved' | 'cancelled';
-export type DisponibilityType = 'available' | 'outOfStock';
+export type OrderStatusType = "pending" | "approved" | "cancelled";
+export type DisponibilityType = "available" | "outOfStock";
 
 export interface OrderType {
   id: number;
@@ -82,12 +84,12 @@ export type AlertType = {
 } | null;
 
 export type InputFieldType =
-  | 'text'
-  | 'number'
-  | 'password'
-  | 'textarea'
-  | 'images'
-  | 'confirm';
+  | "text"
+  | "number"
+  | "password"
+  | "textarea"
+  | "images"
+  | "confirm";
 
 export type FormField<Form> = {
   disabled?: boolean;
@@ -122,6 +124,6 @@ export type MenuAction = {
   visibility: boolean;
 };
 
-export type ProductsViewType = 'cards' | 'table';
+export type ProductsViewType = "cards" | "table";
 
-export type ProductSortKey = 'title' | 'available' | 'price';
+export type ProductSortKey = "title" | "available" | "price";
