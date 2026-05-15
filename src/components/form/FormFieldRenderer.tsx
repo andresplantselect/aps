@@ -1,9 +1,9 @@
-import { Checkbox, FormControlLabel, TextField } from "@mui/material";
-import React from "react";
+import { Checkbox, FormControlLabel, TextField } from '@mui/material';
+import React from 'react';
 
-import ImageUploader from "@/src/components/common/ImageUploader";
-import PasswordFields from "@/src/components/common/PasswordFields";
-import { FieldProps } from "@/src/types/propsTypes";
+import ImageUploader from '@/src/components/common/ImageUploader';
+import PasswordFields from '@/src/components/common/PasswordFields';
+import { FieldProps } from '@/src/types/propsTypes';
 
 export default function FormFieldRenderer({
   field,
@@ -11,11 +11,11 @@ export default function FormFieldRenderer({
   onChange,
   onBlur,
 }: FieldProps) {
-  if (field.type === "text") {
+  if (field.type === 'text') {
     return (
       <TextField
         label={field.label}
-        value={(value as string) ?? ""}
+        value={(value as string) ?? ''}
         onChange={(e) => onChange(e.target.value)}
         onBlur={onBlur}
         fullWidth
@@ -24,11 +24,11 @@ export default function FormFieldRenderer({
     );
   }
 
-  if (field.type === "number") {
+  if (field.type === 'number') {
     return (
       <TextField
         label={field.label}
-        value={(value as string) ?? ""}
+        value={(value as string) ?? ''}
         type="number"
         fullWidth
         required={field.required}
@@ -47,7 +47,7 @@ export default function FormFieldRenderer({
     );
   }
 
-  if (field.type === "boolean") {
+  if (field.type === 'boolean') {
     return (
       <FormControlLabel
         control={
@@ -62,11 +62,11 @@ export default function FormFieldRenderer({
     );
   }
 
-  if (field.type === "textarea") {
+  if (field.type === 'textarea') {
     return (
       <TextField
         label={field.label}
-        value={(value as string) ?? ""}
+        value={(value as string) ?? ''}
         onChange={(e) => onChange(e.target.value)}
         onBlur={onBlur}
         fullWidth
@@ -77,7 +77,7 @@ export default function FormFieldRenderer({
     );
   }
 
-  if (field.type === "password") {
+  if (field.type === 'password') {
     return (
       <PasswordFields
         password={{
@@ -91,7 +91,7 @@ export default function FormFieldRenderer({
     );
   }
 
-  if (field.type === "confirm") {
+  if (field.type === 'confirm') {
     return (
       <PasswordFields
         confirm={{
@@ -105,7 +105,7 @@ export default function FormFieldRenderer({
     );
   }
 
-  if (field.type === "images") {
+  if (field.type === 'images') {
     return (
       <ImageUploader
         initialImages={(field.initialValue as string[]) || []}

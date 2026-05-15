@@ -1,12 +1,12 @@
-"use client";
+'use client';
 
-import { useAuth } from "@/src/context/AuthContext";
-import DeleteIcon from "@mui/icons-material/Delete";
-import EditIcon from "@mui/icons-material/Edit";
-import { TableRow, TableCell } from "@mui/material";
+import DeleteIcon from '@mui/icons-material/Delete';
+import EditIcon from '@mui/icons-material/Edit';
+import { TableRow, TableCell } from '@mui/material';
 
-import { SecondaryRoundIconButton } from "@/src/styledComponents";
-import { ProductsRowProps } from "@/src/types/propsTypes";
+import { useAuth } from '@/src/context/AuthContext';
+import { SecondaryRoundIconButton } from '@/src/styledComponents';
+import { ProductsRowProps } from '@/src/types/propsTypes';
 
 export function ProductsRow({ product, onEdit, onDelete }: ProductsRowProps) {
   const { isAdmin } = useAuth();
@@ -18,7 +18,7 @@ export function ProductsRow({ product, onEdit, onDelete }: ProductsRowProps) {
       <TableCell
         align="center"
         sx={{
-          color: product.available === 0 ? "error.main" : "inherit",
+          color: product.available === 0 ? 'error.main' : 'inherit',
           fontWeight: product.available === 0 ? 600 : 400,
         }}
       >
@@ -27,14 +27,14 @@ export function ProductsRow({ product, onEdit, onDelete }: ProductsRowProps) {
 
       <TableCell>€ {product.price}</TableCell>
       <TableCell align="center">
-        {product.can_buy_units ? "Si" : "No"}
+        {product.can_buy_units ? 'Si' : 'No'}
       </TableCell>
 
       <TableCell align="center">{product.units_per_box}</TableCell>
 
-      <TableCell>{product.width ? `${product.width} cms` : "-"}</TableCell>
+      <TableCell>{product.width ? `${product.width} cms` : '-'}</TableCell>
 
-      <TableCell>{product.height ? `${product.height} cms` : "-"}</TableCell>
+      <TableCell>{product.height ? `${product.height} cms` : '-'}</TableCell>
 
       {isAdmin && (
         <TableCell align="center">
@@ -44,7 +44,7 @@ export function ProductsRow({ product, onEdit, onDelete }: ProductsRowProps) {
               borderColor: theme.palette.primary.main,
               color: theme.palette.primary.main,
 
-              "&:hover": {
+              '&:hover': {
                 borderColor: theme.palette.primary.dark,
                 color: theme.palette.primary.dark,
               },
@@ -63,7 +63,7 @@ export function ProductsRow({ product, onEdit, onDelete }: ProductsRowProps) {
               borderColor: theme.palette.error.main,
               color: theme.palette.error.main,
 
-              "&:hover": {
+              '&:hover': {
                 borderColor: theme.palette.error.dark,
                 color: theme.palette.error.dark,
               },

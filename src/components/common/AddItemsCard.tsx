@@ -1,3 +1,9 @@
+import ExpandLessOutlinedIcon from "@mui/icons-material/ExpandLessOutlined";
+import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
+import RemoveShoppingCartOutlinedIcon from "@mui/icons-material/RemoveShoppingCartOutlined";
+import { Stack, Typography } from "@mui/material";
+import React, { useEffect, useState } from "react";
+
 import IncrementDecrementButtons from "@/src/components/common/IncrementDecrementButtons";
 import { useCart } from "@/src/context/CartContext";
 import { splitUnitsToBoxes } from "@/src/helpers/helpers";
@@ -6,14 +12,8 @@ import {
   CustomAccordionText,
   SecondaryRoundIconButton,
 } from "@/src/styledComponents";
-import ExpandLessOutlinedIcon from "@mui/icons-material/ExpandLessOutlined";
-import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
-import RemoveShoppingCartOutlinedIcon from "@mui/icons-material/RemoveShoppingCartOutlined";
-import { PanelCard } from "@/src/styledComponents";
-import { Stack, Typography } from "@mui/material";
-import React, { useEffect, useState } from "react";
 
-export default function AddItemsCard({
+export default AddItemsCard = ({
   title,
   labelAdd,
   labelTotal,
@@ -23,8 +23,9 @@ export default function AddItemsCard({
   title?: string;
   labelAdd?: string;
   labelTotal?: string;
-  showClearCart: boolean;
-} {
+  showClearCart?: boolean;
+  productItem: unknown;
+} => {
   const { items, updateItemQuantity } = useCart();
 
   const cartItem = items.find((i) => i.id === productItem.id);
@@ -207,4 +208,4 @@ export default function AddItemsCard({
       )}
     </CartCard>
   );
-}
+};

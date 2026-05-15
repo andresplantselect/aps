@@ -1,5 +1,5 @@
-import { Link, Typography } from "@mui/material";
-import React from "react";
+import { Link, Typography } from '@mui/material';
+import React from 'react';
 
 type RedirectionLinkProps = {
   linkText: string;
@@ -14,12 +14,12 @@ export default function RedirectionLink({
 }: RedirectionLinkProps) {
   return (
     <Typography component="span" color="text.secondary">
-      {linkText}{" "}
+      {linkText}{' '}
       <Link
         component="button"
         underline="hover"
         onClick={onLinkClick}
-        sx={{ cursor: "pointer" }}
+        sx={{ cursor: 'pointer' }}
       >
         {linkTitle}
       </Link>

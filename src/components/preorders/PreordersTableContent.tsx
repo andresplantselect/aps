@@ -1,6 +1,5 @@
-"use client";
+'use client';
 
-import { splitUnitsToBoxes } from "@/src/helpers/helpers.tsx";
 import {
   Table,
   TableBody,
@@ -9,11 +8,12 @@ import {
   TableRow,
   Box,
   Typography,
-} from "@mui/material";
-import { useMemo } from "react";
+} from '@mui/material';
+import { useMemo } from 'react';
 
-import { useAuth } from "@/src/context/AuthContext";
-import { OrderType } from "@/src/types/types";
+import { useAuth } from '@/src/context/AuthContext';
+import { splitUnitsToBoxes } from '@/src/helpers/helpers';
+import { OrderType } from '@/src/types/types';
 
 interface PreordersTableContentProps {
   order: OrderType;
@@ -27,14 +27,14 @@ export function PreordersTableContent({ order }: PreordersTableContentProps) {
   return (
     <TableRow>
       <TableCell colSpan={isAdmin ? 9 : 6} sx={{ p: 0 }}>
-        <Box sx={{ px: 2, py: 2, bgcolor: "grey.50" }}>
+        <Box sx={{ px: 2, py: 2, bgcolor: 'grey.50' }}>
           <Table
             size="small"
             sx={{
-              width: "100%",
-              tableLayout: "fixed",
-              "& tbody tr:last-child td": {
-                borderBottom: "none",
+              width: '100%',
+              tableLayout: 'fixed',
+              '& tbody tr:last-child td': {
+                borderBottom: 'none',
               },
             }}
           >
@@ -75,7 +75,7 @@ export function PreordersTableContent({ order }: PreordersTableContentProps) {
                 return (
                   <TableRow
                     key={item.product_id ?? `${order.id}-${item.title}`}
-                    sx={{ verticalAlign: "top" }}
+                    sx={{ verticalAlign: 'top' }}
                   >
                     <TableCell>{item.title}</TableCell>
 

@@ -197,7 +197,6 @@ export type ProductsPageProps = {
 
 export type ProductsControlsProps = {
   availabilityFilter: DisponibilityType | "all";
-  isProductListEmpty: boolean;
   setAvailabilityFilter: Dispatch<SetStateAction<DisponibilityType | "all">>;
   searchTerm: string;
   setSearchTerm: Dispatch<SetStateAction<string>>;
@@ -205,7 +204,6 @@ export type ProductsControlsProps = {
 
 export type ProductsFiltersProps = {
   availabilityFilter: DisponibilityType | "all";
-  isProductListEmpty: boolean;
   onAvailabilityChange: (v: DisponibilityType | "all") => void;
   onSearchChange: (v: string) => void;
   searchFilter: string;

@@ -1,10 +1,10 @@
-import { Stack } from "@mui/material";
-import React, { useEffect, useMemo, useState } from "react";
+import { Stack } from '@mui/material';
+import React, { useEffect, useMemo, useState } from 'react';
 
-import ValidationErrorsList from "@/src/components/common/ValidationErrorsList";
-import FormFieldRenderer from "@/src/components/form/FormFieldRenderer";
-import { validateField, validateForm } from "@/src/helpers/validators";
-import { AnyFormField, FormField } from "@/src/types/types";
+import ValidationErrorsList from '@/src/components/common/ValidationErrorsList';
+import FormFieldRenderer from '@/src/components/form/FormFieldRenderer';
+import { validateField, validateForm } from '@/src/helpers/validators';
+import { AnyFormField, FormField } from '@/src/types/types';
 
 const prepareInitialState = <T extends Record<string, unknown>>(
   config: FormField<T>[],
@@ -41,7 +41,6 @@ export default function CommonForm<T extends Record<string, unknown>>({
   }, [form, formConfig, fillForm]);
 
   const handleFieldChange = (field: keyof T, value: unknown) => {
-
     const nextForm = { ...form, [field]: value };
     setForm(nextForm);
 
@@ -68,12 +67,12 @@ export default function CommonForm<T extends Record<string, unknown>>({
   const hasErrors = visibleErrors.length > 0;
 
   return (
-    <Stack alignItems="flex-start" spacing={2} sx={{ width: "100%" }}>
+    <Stack alignItems="flex-start" spacing={2} sx={{ width: '100%' }}>
       <Stack
         sx={{
           borderRadius: 2,
           backgroundColor: (theme) => theme.palette.background.paper,
-          width: "100%",
+          width: '100%',
         }}
         spacing={2}
       >

@@ -1,10 +1,11 @@
 "use client";
 
-import AddItemsCard from "@/src/components/common/AddItemsCard";
 import DeleteIcon from "@mui/icons-material/Delete";
 import EditIcon from "@mui/icons-material/Edit";
 import { Typography, Box, Stack, Divider } from "@mui/material";
 import React from "react";
+
+import AddItemsCard from "@/src/components/common/AddItemsCard";
 import ProductImages from "@/src/components/products/ProductImages";
 import ProductInfo from "@/src/components/products/ProductInfo";
 import { useAuth } from "@/src/context/AuthContext";
@@ -130,7 +131,7 @@ export default function ProductCard({
               productItem={product}
               labelAdd="Añadir a la reserva"
               labelTotal="Total en carrito"
-              showClearCart
+              showClearCart={true}
             />
           )}
         </Stack>

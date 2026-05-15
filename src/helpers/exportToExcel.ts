@@ -1,6 +1,6 @@
-import * as XLSX from "xlsx-js-style";
+import * as XLSX from 'xlsx-js-style';
 
-import { OrderType } from "@/src/types/types";
+import { OrderType } from '@/src/types/types';
 
 type ExcelCell = {
   v: string | number;
@@ -15,22 +15,22 @@ function createOrderRow(
   headerStyle: XLSX.CellStyle,
   clientStyle: XLSX.CellStyle,
 ) {
-  const empty = (): ExcelCell => ({ v: "", s: baseStyle });
+  const empty = (): ExcelCell => ({ v: '', s: baseStyle });
 
   if (!order) return [empty(), empty(), empty()];
 
   if (r === 0)
     return [
-      { v: order.profile_name?.toUpperCase() ?? "—", s: clientStyle },
+      { v: order.profile_name?.toUpperCase() ?? '—', s: clientStyle },
       empty(),
       empty(),
     ];
 
   if (r === 1)
     return [
-      { v: "Uds", s: headerStyle },
-      { v: "Articulo", s: headerStyle },
-      { v: "", s: headerStyle },
+      { v: 'Uds', s: headerStyle },
+      { v: 'Articulo', s: headerStyle },
+      { v: '', s: headerStyle },
     ];
 
   const item = order.items[r - 2];
@@ -41,7 +41,7 @@ function createOrderRow(
   return [
     {
       v: units,
-      s: { ...baseStyle, alignment: { horizontal: "center" as const } },
+      s: { ...baseStyle, alignment: { horizontal: 'center' as const } },
     },
     { v: item.title, s: baseStyle },
     empty(),
@@ -54,7 +54,7 @@ function applyOrderBorders(
   ordersPerRow: number,
   blockWidth: number,
 ) {
-  const thick = { style: "medium" as const, color: { rgb: "000000" } };
+  const thick = { style: 'medium' as const, color: { rgb: '000000' } };
 
   let rowPointer = 0;
 
@@ -100,10 +100,10 @@ export function exportOrdersToExcel(orders: OrderType[]) {
   const blockWidth = 3;
 
   const thinBorder = {
-    top: { style: "thin" as const, color: { rgb: "000000" } },
-    bottom: { style: "thin" as const, color: { rgb: "000000" } },
-    left: { style: "thin" as const, color: { rgb: "000000" } },
-    right: { style: "thin" as const, color: { rgb: "000000" } },
+    top: { style: 'thin' as const, color: { rgb: '000000' } },
+    bottom: { style: 'thin' as const, color: { rgb: '000000' } },
+    left: { style: 'thin' as const, color: { rgb: '000000' } },
+    right: { style: 'thin' as const, color: { rgb: '000000' } },
   };
 
   const baseStyle: XLSX.CellStyle = {
@@ -113,13 +113,13 @@ export function exportOrdersToExcel(orders: OrderType[]) {
 
   const headerStyle: XLSX.CellStyle = {
     font: { bold: true, sz: 12 },
-    alignment: { horizontal: "center" as const },
+    alignment: { horizontal: 'center' as const },
     border: thinBorder,
   };
 
   const clientStyle: XLSX.CellStyle = {
     font: { bold: true, underline: true, sz: 12 },
-    alignment: { horizontal: "left" },
+    alignment: { horizontal: 'left' },
     border: thinBorder,
   };
 
@@ -163,7 +163,7 @@ export function exportOrdersToExcel(orders: OrderType[]) {
 
   const ws = XLSX.utils.aoa_to_sheet(rows);
 
-  ws["!cols"] = [
+  ws['!cols'] = [
     { wch: 5 },
     { wch: 35 },
     { wch: 5 },
@@ -175,13 +175,13 @@ export function exportOrdersToExcel(orders: OrderType[]) {
     { wch: 5 },
   ];
 
-  ws["!merges"] = merges;
+  ws['!merges'] = merges;
 
   applyOrderBorders(ws, orders, ordersPerRow, blockWidth);
 
   const wb = XLSX.utils.book_new();
-  XLSX.utils.book_append_sheet(wb, ws, "Pedidos");
+  XLSX.utils.book_append_sheet(wb, ws, 'Pedidos');
 
-  const date = new Date().toISOString().split("T")[0];
+  const date = new Date().toISOString().split('T')[0];
   XLSX.writeFile(wb, `pedidos_${date}.xlsx`);
 }

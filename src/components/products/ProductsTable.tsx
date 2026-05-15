@@ -1,6 +1,5 @@
-"use client";
+'use client';
 
-import { useAuth } from "@/src/context/AuthContext.tsx";
 import {
   Table,
   TableBody,
@@ -9,12 +8,13 @@ import {
   TableContainer,
   Paper,
   TableSortLabel,
-} from "@mui/material";
+} from '@mui/material';
 
-import { TableHeaderCell } from "@/src/styledComponents";
-import { ProductsTableProps } from "@/src/types/propsTypes";
+import { useAuth } from '@/src/context/AuthContext';
+import { TableHeaderCell } from '@/src/styledComponents';
+import { ProductsTableProps } from '@/src/types/propsTypes';
 
-import { ProductsRow } from "./ProductsRow";
+import { ProductsRow } from './ProductsRow';
 
 export default function ProductsTable({
   products,
@@ -32,9 +32,9 @@ export default function ProductsTable({
           <TableRow>
             <TableHeaderCell>
               <TableSortLabel
-                active={sortBy === "title"}
+                active={sortBy === 'title'}
                 direction={sortDir}
-                onClick={() => toggleSort("title")}
+                onClick={() => toggleSort('title')}
               >
                 Artículo
               </TableSortLabel>
