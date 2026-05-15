@@ -6,7 +6,6 @@ import {
   Chip,
   ToggleButton,
   TableCell,
-  Typography,
 } from "@mui/material";
 import Button from "@mui/material/Button";
 import { styled } from "@mui/material/styles";
@@ -248,7 +247,7 @@ export const TableHeaderCell = styled(TableCell)(({ theme }) => ({
   },
 }));
 
-export const CartCard = styled(Typography)(({ theme }) => ({
+export const CartCard = styled(Box)(({ theme }) => ({
   position: "relative",
   fontSize: theme.typography.caption.fontSize,
   color: theme.palette.text.secondary,
