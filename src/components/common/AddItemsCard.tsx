@@ -1,15 +1,29 @@
-import IncrementDecrementButtons from "@/src/components/common/IncrementDecrementButtons.tsx";
+import IncrementDecrementButtons from "@/src/components/common/IncrementDecrementButtons";
 import { useCart } from "@/src/context/CartContext";
 import { splitUnitsToBoxes } from "@/src/helpers/helpers";
-import { CustomAccordionText } from "@/src/styledComponents";
+import {
+  CartCard,
+  CustomAccordionText,
+  SecondaryRoundIconButton,
+} from "@/src/styledComponents";
 import ExpandLessOutlinedIcon from "@mui/icons-material/ExpandLessOutlined";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
+import RemoveShoppingCartOutlinedIcon from "@mui/icons-material/RemoveShoppingCartOutlined";
+import { PanelCard } from "@/src/styledComponents";
 import { Stack, Typography } from "@mui/material";
 import React, { useEffect, useState } from "react";
 
-export default function AddItemsCard({ labelAdd, labelTotal, productItem }): {
+export default function AddItemsCard({
+  title,
+  labelAdd,
+  labelTotal,
+  productItem,
+  showClearCart = false,
+}): {
+  title?: string;
   labelAdd?: string;
   labelTotal?: string;
+  showClearCart: boolean;
 } {
   const { items, updateItemQuantity } = useCart();
 
@@ -27,17 +41,18 @@ export default function AddItemsCard({ labelAdd, labelTotal, productItem }): {
 
   const totalUnits = boxesQuantity * productItem.units_per_box + unitsQuantity;
   const totalPrice = totalUnits * productItem.price;
+  const disableUnitsAdd = totalUnits >= productItem.available;
+
+  const disableBoxesAdd =
+    totalUnits + productItem.units_per_box > productItem.available;
 
   useEffect(() => {
     setBoxesQuantity(boxes);
     setUnitsQuantity(units);
   }, [boxes, units]);
 
-  const handleBoxesChange = (value: number) => {
-    setBoxesQuantity(value);
-
-    const total = value * productItem.units_per_box + unitsQuantity;
-
+  const handleChange = (val: number, total: number, handler: () => void) => {
+    handler(val);
     updateItemQuantity(
       {
         id: productItem.id,
@@ -49,110 +64,147 @@ export default function AddItemsCard({ labelAdd, labelTotal, productItem }): {
       },
       total,
     );
+  };
+
+  const handleRemoveFromCard = () => {
+    setBoxesQuantity(0);
+    setUnitsQuantity(0);
+
+    updateItemQuantity(
+      {
+        id: productItem.id,
+        title: productItem.title,
+        price: productItem.price,
+        available: productItem.available,
+        can_buy_units: productItem.can_buy_units,
+        units_per_box: productItem.units_per_box,
+      },
+      0,
+    );
+  };
+
+  const handleBoxesChange = (value: number) => {
+    const total = value * productItem.units_per_box + unitsQuantity;
+
+    handleChange(value, total, setBoxesQuantity);
   };
 
   const handleUnitsChange = (value: number) => {
-    setUnitsQuantity(value);
-
     const total = boxesQuantity * productItem.units_per_box + value;
 
-    updateItemQuantity(
-      {
-        id: productItem.id,
-        title: productItem.title,
-        price: productItem.price,
-        available: productItem.available,
-        can_buy_units: productItem.can_buy_units,
-        units_per_box: productItem.units_per_box,
-      },
-      total,
-    );
+    handleChange(value, total, setUnitsQuantity);
   };
 
+  const ClearCart = (
+    <SecondaryRoundIconButton
+      disabled={totalUnits === 0}
+      onClick={handleRemoveFromCard}
+    >
+      <RemoveShoppingCartOutlinedIcon fontSize="small" />
+    </SecondaryRoundIconButton>
+  );
+
   return (
-    <Stack sx={{ mt: 2 }}>
-      <Typography variant="body2" sx={{ fontWeight: "bold" }}>
-        {labelAdd ?? "Añadir"}:
-      </Typography>
-      <Stack
-        direction="row"
-        alignItems="center"
-        justifyContent="space-between"
-        sx={{ width: 160 }}
-      >
-        <Typography variant="body2">Cajas:</Typography>
-        <IncrementDecrementButtons
-          inStock={productItem.available}
-          quantity={boxesQuantity}
-          onChange={handleBoxesChange}
-        />
-      </Stack>
-
-      {productItem.can_buy_units && (
-        <Stack
-          direction="row"
-          alignItems="center"
-          justifyContent="space-between"
-          sx={{ width: 160 }}
-        >
-          <Typography variant="body2">Unidades:</Typography>
-          <IncrementDecrementButtons
-            inStock={productItem.available}
-            quantity={unitsQuantity}
-            onChange={handleUnitsChange}
-          />
+    <CartCard sx={{ mt: 2 }}>
+      {title && (
+        <Stack direction="row" justifyContent="space-between">
+          <Typography sx={{ fontWeight: 600 }}>{title}</Typography>
+          {ClearCart}
         </Stack>
       )}
-      <Stack direction="row" spacing={0.5} sx={{ mt: 2 }}>
-        <Typography variant="body2" sx={{ fontWeight: "bold" }}>
-          {labelTotal ?? "Total"}:
-        </Typography>
-
-        <Stack direction="row" alignItems="center">
-          <Typography variant="body2">{totalUnits} Uds</Typography>
-
-          <Typography
-            variant="caption"
-            sx={{ cursor: "pointer" }}
-            onClick={() => setShowUnitsDetails((p) => !p)}
+      <Stack spacing={3}>
+        <Stack sx={{ height: 60 }}>
+          <Typography variant="body2" sx={{ fontWeight: "bold" }}>
+            {labelAdd ?? "Añadir"}:
+          </Typography>{" "}
+          <Stack
+            direction="row"
+            alignItems="center"
+            justifyContent="space-between"
+            sx={{ width: 160 }}
           >
-            {showUnitsDetails ? (
-              <ExpandLessOutlinedIcon fontSize="small" />
-            ) : (
-              <ExpandMoreIcon fontSize="small" />
-            )}
-          </Typography>
+            <Typography variant="body2">Cajas:</Typography>
+            <IncrementDecrementButtons
+              disableAdd={disableBoxesAdd}
+              quantity={boxesQuantity}
+              onChange={handleBoxesChange}
+            />
+          </Stack>
+          {productItem.can_buy_units && (
+            <Stack
+              direction="row"
+              alignItems="center"
+              justifyContent="space-between"
+              sx={{ width: 160 }}
+            >
+              <Typography variant="body2">Unidades:</Typography>
+              <IncrementDecrementButtons
+                disableAdd={disableUnitsAdd}
+                quantity={unitsQuantity}
+                onChange={handleUnitsChange}
+              />
+            </Stack>
+          )}
         </Stack>
 
-        <Stack direction="row" alignItems="center">
-          <Typography variant="body2">{totalPrice} €</Typography>
+        <Stack spacing={1}>
+          <Stack direction="row" spacing={0.5}>
+            <Typography variant="body2" sx={{ fontWeight: "bold" }}>
+              {labelTotal ?? "Total"}:
+            </Typography>
 
-          <Typography
-            variant="caption"
-            sx={{ cursor: "pointer" }}
-            onClick={() => setShowPriceDetails((p) => !p)}
-          >
-            {showPriceDetails ? (
-              <ExpandLessOutlinedIcon fontSize="small" />
-            ) : (
-              <ExpandMoreIcon fontSize="small" />
-            )}
-          </Typography>
+            <Stack direction="row" alignItems="center">
+              <Typography variant="body2">{totalUnits} Uds</Typography>
+
+              <Typography
+                variant="caption"
+                sx={{ cursor: "pointer" }}
+                onClick={() => setShowUnitsDetails((p) => !p)}
+              >
+                {showUnitsDetails ? (
+                  <ExpandLessOutlinedIcon fontSize="small" />
+                ) : (
+                  <ExpandMoreIcon fontSize="small" />
+                )}
+              </Typography>
+            </Stack>
+
+            <Stack direction="row" alignItems="center">
+              <Typography variant="body2">{totalPrice} €</Typography>
+
+              <Typography
+                variant="caption"
+                sx={{ cursor: "pointer" }}
+                onClick={() => setShowPriceDetails((p) => !p)}
+              >
+                {showPriceDetails ? (
+                  <ExpandLessOutlinedIcon fontSize="small" />
+                ) : (
+                  <ExpandMoreIcon fontSize="small" />
+                )}
+              </Typography>
+            </Stack>
+          </Stack>
+          {showUnitsDetails && (
+            <CustomAccordionText sx={{ mt: 1 }}>
+              {productItem.can_buy_units
+                ? `${boxesQuantity} Cajas × ${productItem.units_per_box} Uds + ${unitsQuantity} Uds = ${totalUnits} Uds`
+                : `${boxesQuantity} Cajas × ${productItem.units_per_box} Uds = ${totalUnits} Uds`}
+            </CustomAccordionText>
+          )}
+          {showPriceDetails && (
+            <CustomAccordionText sx={{ mt: 1 }}>
+              {totalUnits} Uds × {productItem.price} € ={" "}
+              {totalUnits * productItem.price} €
+            </CustomAccordionText>
+          )}
         </Stack>
       </Stack>
-      {showUnitsDetails && (
-        <CustomAccordionText sx={{ mt: 1 }}>
-          {productItem.can_buy_units
-            ? `${boxesQuantity} Cajas × ${productItem.units_per_box} Uds + ${unitsQuantity} Uds = ${totalUnits} Uds`
-            : `${boxesQuantity} Cajas × ${productItem.units_per_box} Uds = ${totalUnits} Uds`}
-        </CustomAccordionText>
+      {showClearCart && (
+        <Stack sx={{ position: "absolute", top: 8, right: 12 }}>
+          {ClearCart}
+        </Stack>
       )}
-      {showPriceDetails && (
-        <CustomAccordionText sx={{ mt: 1 }}>
-          {totalUnits} Uds × {productItem.price} € ={" "}
-          {totalUnits * productItem.price} €
-        </CustomAccordionText>
-      )}
-    </Stack>
+    </CartCard>
   );
 }

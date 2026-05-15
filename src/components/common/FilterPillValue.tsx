@@ -1,10 +1,10 @@
-'use client';
+"use client";
 
-import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown';
-import { Typography } from '@mui/material';
-import React from 'react';
+import KeyboardArrowDownIcon from "@mui/icons-material/KeyboardArrowDown";
+import { Typography } from "@mui/material";
+import React from "react";
 
-import { FilterPillBox } from '@/src/styledComponents';
+import { FilterPillBox } from "@/src/styledComponents";
 
 interface FilterPillValueProps {
   label: string;
@@ -18,8 +18,7 @@ export function FilterPillValue({ label, value }: FilterPillValueProps) {
         variant="body2"
         color="text.secondary"
         sx={{
-          whiteSpace: 'nowrap',
-          fontSize: 12,
+          whiteSpace: "nowrap",
         }}
       >
         {label}:
@@ -30,17 +29,16 @@ export function FilterPillValue({ label, value }: FilterPillValueProps) {
         sx={{
           ml: 0.5,
           fontWeight: 500,
-          fontSize: 12,
-          whiteSpace: 'nowrap',
-          overflow: 'hidden',
-          textOverflow: 'ellipsis',
+          whiteSpace: "nowrap",
+          overflow: "hidden",
+          textOverflow: "ellipsis",
         }}
       >
         {value}
       </Typography>
       <KeyboardArrowDownIcon
         fontSize="small"
-        sx={{ color: 'text.secondary', ml: 1 }}
+        sx={{ color: "text.secondary", ml: 1 }}
       />
     </FilterPillBox>
   );

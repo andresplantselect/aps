@@ -130,6 +130,7 @@ export default function ProductCard({
               productItem={product}
               labelAdd="Añadir a la reserva"
               labelTotal="Total en carrito"
+              showClearCart
             />
           )}
         </Stack>

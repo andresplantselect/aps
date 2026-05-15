@@ -248,10 +248,19 @@ export const TableHeaderCell = styled(TableCell)(({ theme }) => ({
   },
 }));
 
-export const CustomAccordionText = styled(Typography)(({ theme }) => ({
+export const CartCard = styled(Typography)(({ theme }) => ({
+  position: "relative",
   fontSize: theme.typography.caption.fontSize,
   color: theme.palette.text.secondary,
-  padding: theme.spacing(0.5, 2),
+  padding: theme.spacing(1, 1.5),
   borderRadius: 10,
   border: `1px solid ${theme.palette.divider}`,
+}));
+
+export const CustomAccordionText = styled(Card)(({ theme }) => ({
+  fontSize: theme.typography.caption.fontSize,
+  backgroundColor: theme.palette.divider,
+  color: theme.palette.text.secondary,
+  padding: theme.spacing(0.5, 1),
+  borderRadius: 5,
 }));

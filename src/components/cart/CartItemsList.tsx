@@ -22,14 +22,9 @@ export function CartItemsList({ items }: CartItemListProps) {
 
   return (
     <Box sx={{ flex: 1, overflowY: "auto" }}>
-      <Stack spacing={1}>
+      <Stack spacing={1.5}>
         {items.map((item) => (
-          <PanelCard key={item.id}>
-            <Stack spacing={1}>
-              <Typography sx={{ fontWeight: 600 }}>{item.title}</Typography>
-              <AddItemsCard productItem={item} />
-            </Stack>
-          </PanelCard>
+          <AddItemsCard key={item.id} productItem={item} title={item.title} />
         ))}
       </Stack>
     </Box>
