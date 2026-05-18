@@ -1,4 +1,4 @@
-import React, { Dispatch, ReactNode, SetStateAction } from "react";
+import React, { Dispatch, ReactNode, SetStateAction } from 'react';
 
 import {
   AlertType,
@@ -10,7 +10,8 @@ import {
   ProductSortKey,
   ProductsViewType,
   ProductType,
-} from "@/src/types/types";
+  VisibilityType,
+} from '@/src/types/types';
 
 export interface AdminProductFormProps {
   open: boolean;
@@ -28,6 +29,7 @@ export type ProductForm = {
   height: string;
   width: string;
   can_buy_units: boolean;
+  is_visible: boolean;
 } & Record<string, unknown>;
 
 export type FieldProps = {
@@ -46,7 +48,7 @@ export interface ProductCardProps {
 export type CartContextType = {
   items: CartItem[];
   updateItemQuantity: (
-    product: Omit<CartItem, "quantity">,
+    product: Omit<CartItem, 'quantity'>,
     quantity: number,
   ) => void;
   removeFromCart: (id: string) => void;
@@ -70,7 +72,7 @@ export type AuthFormProps = {
   onClose: () => void;
 };
 
-export type AuthMode = "signIn" | "forgotPassword";
+export type AuthMode = 'signIn' | 'forgotPassword';
 
 export interface CartItemCardProps {
   item: CartItem;
@@ -144,21 +146,13 @@ export type DeleteProductDialogProps = {
 };
 
 export type ProductsGridProps = {
-  products: ProductType[];
+  productsState: UseProductsStateProps;
   onDelete: (product: ProductType) => void;
   onEdit: (product: ProductType) => void;
 };
 
-export type ProductsViewToggleProps = {
-  value: ProductsViewType;
-  onChange: (v: "cards" | "table") => void;
-};
-
 export type ProductsTableProps = {
-  products: ProductType[];
-  sortBy: ProductSortKey;
-  sortDir: "asc" | "desc";
-  toggleSort: (key: ProductSortKey) => void;
+  productsState: UseProductsStateProps;
   onDelete: (product: ProductType) => void;
   onEdit: (product: ProductType) => void;
 };
@@ -170,41 +164,22 @@ export type ProductsRowProps = {
 };
 
 export type UseProductsStateProps = {
-  products: ProductType[];
+  visibleProducts: ProductType[];
   isProductListEmpty: boolean;
 
-  availabilityFilter: DisponibilityType | "all";
-  setAvailabilityFilter: Dispatch<SetStateAction<DisponibilityType | "all">>;
+  availabilityFilter: DisponibilityType | 'all';
+  setAvailabilityFilter: Dispatch<SetStateAction<DisponibilityType | 'all'>>;
+
+  visibilityFilter: VisibilityType | 'all';
+  setVisibilityFilter: Dispatch<SetStateAction<VisibilityType | 'all'>>;
 
   searchTerm: string;
   setSearchTerm: Dispatch<SetStateAction<string>>;
 
   sortBy: ProductSortKey;
-  sortDir: "asc" | "desc";
+  sortDir: 'asc' | 'desc';
   toggleSort: (key: ProductSortKey) => void;
 
   viewMode: ProductsViewType;
   setViewMode: Dispatch<SetStateAction<ProductsViewType>>;
-};
-
-export type ProductsPageProps = {
-  products: ProductType[];
-  sortBy: ProductSortKey;
-  sortDir: "asc" | "desc";
-  toggleSort: (key: ProductSortKey) => void;
-  viewMode: ProductsViewType;
-};
-
-export type ProductsControlsProps = {
-  availabilityFilter: DisponibilityType | "all";
-  setAvailabilityFilter: Dispatch<SetStateAction<DisponibilityType | "all">>;
-  searchTerm: string;
-  setSearchTerm: Dispatch<SetStateAction<string>>;
-};
-
-export type ProductsFiltersProps = {
-  availabilityFilter: DisponibilityType | "all";
-  onAvailabilityChange: (v: DisponibilityType | "all") => void;
-  onSearchChange: (v: string) => void;
-  searchFilter: string;
 };

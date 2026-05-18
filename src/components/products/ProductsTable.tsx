@@ -17,14 +17,13 @@ import { ProductsTableProps } from '@/src/types/propsTypes';
 import { ProductsRow } from './ProductsRow';
 
 export default function ProductsTable({
-  products,
-  sortBy,
-  sortDir,
-  toggleSort,
+  productsState,
   onDelete,
   onEdit,
 }: ProductsTableProps) {
   const { isAdmin } = useAuth();
+  const { visibleProducts, sortBy, sortDir, toggleSort } = productsState;
+
   return (
     <TableContainer component={Paper}>
       <Table>
@@ -50,6 +49,7 @@ export default function ProductsTable({
             <TableHeaderCell>Maceta</TableHeaderCell>
 
             <TableHeaderCell>Altura</TableHeaderCell>
+            {isAdmin && <TableHeaderCell>Visible en catálogo</TableHeaderCell>}
 
             {isAdmin && (
               <TableHeaderCell align="center">Editar</TableHeaderCell>
@@ -62,7 +62,7 @@ export default function ProductsTable({
         </TableHead>
 
         <TableBody>
-          {products.map((product) => (
+          {visibleProducts.map((product) => (
             <ProductsRow
               key={product.id}
               product={product}

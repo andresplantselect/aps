@@ -4,15 +4,20 @@ import { any, isNotNil } from 'ramda';
 
 import { DateRangePicker } from '@/src/components/common/DateRangePicker';
 import { FilterSelect } from '@/src/components/common/FilterSelect';
-import { orderStatusesDict } from '@/src/constants';
+import { deliveryStatusesDict, orderStatusesDict } from '@/src/constants';
 import { useAuth } from '@/src/context/AuthContext';
 import { usePreordersContext } from '@/src/context/PreordersContext';
 
 export function PreordersFilters() {
   const { isAdmin } = useAuth();
   const { filters, setFilters, users } = usePreordersContext();
-  const { statusFilter, userFilter, dateRange } = filters;
-  const { setStatusFilter, setUserFilter, setDateRange } = setFilters;
+  const { statusFilter, userFilter, dateRange, deliveryStatusFilter } = filters;
+  const {
+    setStatusFilter,
+    setUserFilter,
+    setDateRange,
+    setDeliveryStatusFilter,
+  } = setFilters;
 
   const isAnyDatePicked = any(isNotNil, dateRange);
 
@@ -23,6 +28,13 @@ export function PreordersFilters() {
         value={statusFilter}
         options={orderStatusesDict}
         onChange={(v) => setStatusFilter(v)}
+      />
+
+      <FilterSelect
+        label="Estado de entrega"
+        value={deliveryStatusFilter}
+        options={deliveryStatusesDict}
+        onChange={(v) => setDeliveryStatusFilter(v)}
       />
 
       {isAdmin && (

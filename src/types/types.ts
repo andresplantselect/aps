@@ -14,6 +14,7 @@ export interface ProductType {
   height?: string;
   width?: string;
   can_buy_units: boolean;
+  is_visible: boolean;
 }
 
 export interface UserType {
@@ -63,7 +64,13 @@ export interface OrderItem {
 }
 
 export type OrderStatusType = 'pending' | 'approved' | 'cancelled';
+export type DeliveryStatusType =
+  | 'not_applicable'
+  | 'waiting'
+  | 'delivered'
+  | 'failed';
 export type DisponibilityType = 'available' | 'outOfStock';
+export type VisibilityType = 'visible' | 'hidden';
 
 export interface OrderType {
   id: number;
@@ -75,6 +82,7 @@ export interface OrderType {
   status: OrderStatusType;
   created_at: string;
   profile_name?: string;
+  delivery_status: DeliveryStatusType;
 }
 
 export type AlertType = {
@@ -89,7 +97,8 @@ export type InputFieldType =
   | 'password'
   | 'textarea'
   | 'images'
-  | 'confirm';
+  | 'confirm'
+  | 'boolean';
 
 export type FormField<Form> = {
   disabled?: boolean;

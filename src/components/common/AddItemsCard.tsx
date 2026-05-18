@@ -1,31 +1,34 @@
-import ExpandLessOutlinedIcon from "@mui/icons-material/ExpandLessOutlined";
-import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
-import RemoveShoppingCartOutlinedIcon from "@mui/icons-material/RemoveShoppingCartOutlined";
-import { Stack, Typography } from "@mui/material";
-import React, { useEffect, useState } from "react";
+import ExpandLessOutlinedIcon from '@mui/icons-material/ExpandLessOutlined';
+import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
+import RemoveShoppingCartOutlinedIcon from '@mui/icons-material/RemoveShoppingCartOutlined';
+import { Stack, Typography } from '@mui/material';
+import React, { useEffect, useState } from 'react';
 
-import IncrementDecrementButtons from "@/src/components/common/IncrementDecrementButtons";
-import { useCart } from "@/src/context/CartContext";
-import { splitUnitsToBoxes } from "@/src/helpers/helpers";
+import IncrementDecrementButtons from '@/src/components/common/IncrementDecrementButtons';
+import { useCart } from '@/src/context/CartContext';
+import { splitUnitsToBoxes } from '@/src/helpers/helpers';
 import {
   CartCard,
   CustomAccordionText,
   SecondaryRoundIconButton,
-} from "@/src/styledComponents";
+} from '@/src/styledComponents';
+import { CartItem, ProductType } from '@/src/types/types';
 
-export default AddItemsCard = ({
+type AddItemsCardProps = {
+  title?: string;
+  labelAdd?: string;
+  labelTotal?: string;
+  showClearCart?: boolean;
+  productItem: ProductType | CartItem;
+};
+
+export default function AddItemsCard({
   title,
   labelAdd,
   labelTotal,
   productItem,
   showClearCart = false,
-}): {
-  title?: string;
-  labelAdd?: string;
-  labelTotal?: string;
-  showClearCart?: boolean;
-  productItem: unknown;
-} => {
+}: AddItemsCardProps) {
   const { items, updateItemQuantity } = useCart();
 
   const cartItem = items.find((i) => i.id === productItem.id);
@@ -52,7 +55,11 @@ export default AddItemsCard = ({
     setUnitsQuantity(units);
   }, [boxes, units]);
 
-  const handleChange = (val: number, total: number, handler: () => void) => {
+  const handleChange = (
+    val: number,
+    total: number,
+    handler: (value: number) => void,
+  ) => {
     handler(val);
     updateItemQuantity(
       {
@@ -115,9 +122,9 @@ export default AddItemsCard = ({
       )}
       <Stack spacing={3}>
         <Stack sx={{ height: 60 }}>
-          <Typography variant="body2" sx={{ fontWeight: "bold" }}>
-            {labelAdd ?? "Añadir"}:
-          </Typography>{" "}
+          <Typography variant="body2" sx={{ fontWeight: 'bold' }}>
+            {labelAdd ?? 'Añadir'}:
+          </Typography>{' '}
           <Stack
             direction="row"
             alignItems="center"
@@ -150,8 +157,8 @@ export default AddItemsCard = ({
 
         <Stack spacing={1}>
           <Stack direction="row" spacing={0.5}>
-            <Typography variant="body2" sx={{ fontWeight: "bold" }}>
-              {labelTotal ?? "Total"}:
+            <Typography variant="body2" sx={{ fontWeight: 'bold' }}>
+              {labelTotal ?? 'Total'}:
             </Typography>
 
             <Stack direction="row" alignItems="center">
@@ -159,7 +166,7 @@ export default AddItemsCard = ({
 
               <Typography
                 variant="caption"
-                sx={{ cursor: "pointer" }}
+                sx={{ cursor: 'pointer' }}
                 onClick={() => setShowUnitsDetails((p) => !p)}
               >
                 {showUnitsDetails ? (
@@ -175,7 +182,7 @@ export default AddItemsCard = ({
 
               <Typography
                 variant="caption"
-                sx={{ cursor: "pointer" }}
+                sx={{ cursor: 'pointer' }}
                 onClick={() => setShowPriceDetails((p) => !p)}
               >
                 {showPriceDetails ? (
@@ -195,17 +202,17 @@ export default AddItemsCard = ({
           )}
           {showPriceDetails && (
             <CustomAccordionText sx={{ mt: 1 }}>
-              {totalUnits} Uds × {productItem.price} € ={" "}
+              {totalUnits} Uds × {productItem.price} € ={' '}
               {totalUnits * productItem.price} €
             </CustomAccordionText>
           )}
         </Stack>
       </Stack>
       {showClearCart && (
-        <Stack sx={{ position: "absolute", top: 8, right: 12 }}>
+        <Stack sx={{ position: 'absolute', top: 8, right: 12 }}>
           {ClearCart}
         </Stack>
       )}
     </CartCard>
   );
-};
+}

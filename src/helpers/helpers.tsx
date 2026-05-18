@@ -1,9 +1,13 @@
 import EditIcon from '@mui/icons-material/Edit';
 import LogoutIcon from '@mui/icons-material/Logout';
 import PersonAddAlt1Icon from '@mui/icons-material/PersonAddAlt1';
+import RemoveCircleOutlineOutlinedIcon from '@mui/icons-material/RemoveCircleOutlineOutlined';
+import ScheduleOutlinedIcon from '@mui/icons-material/ScheduleOutlined';
+import WhereToVoteOutlinedIcon from '@mui/icons-material/WhereToVoteOutlined';
 import React from 'react';
 
 import { supabase } from '@/lib/supabase';
+import { DeliveryStatusType } from '@/src/types/types';
 
 export function getMenuActions({
   isAdmin,
@@ -51,3 +55,19 @@ export const splitUnitsToBoxes = (totalUnits: number, unitsPerBox: number) => {
     units,
   };
 };
+
+export const deliveryStatusesDict: Record<DeliveryStatusType, React.ReactNode> =
+  {
+    not_applicable: (
+      <RemoveCircleOutlineOutlinedIcon color="error" sx={{ fontSize: 20 }} />
+    ),
+    failed: (
+      <RemoveCircleOutlineOutlinedIcon color="error" sx={{ fontSize: 20 }} />
+    ),
+
+    waiting: <ScheduleOutlinedIcon color="warning" sx={{ fontSize: 20 }} />,
+
+    delivered: (
+      <WhereToVoteOutlinedIcon color="success" sx={{ fontSize: 20 }} />
+    ),
+  };

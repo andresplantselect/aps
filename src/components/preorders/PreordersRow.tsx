@@ -4,6 +4,8 @@ import CheckIcon from '@mui/icons-material/Check';
 import ClearIcon from '@mui/icons-material/Clear';
 import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown';
 import KeyboardArrowUpIcon from '@mui/icons-material/KeyboardArrowUp';
+import LocalShippingOutlinedIcon from '@mui/icons-material/LocalShippingOutlined';
+import RemoveSharpIcon from '@mui/icons-material/RemoveSharp';
 import {
   TableRow,
   TableCell,
@@ -11,19 +13,27 @@ import {
   Stack,
   Typography,
 } from '@mui/material';
+import { includes } from 'ramda';
 
 import { PreordersTableContent } from '@/src/components/preorders/PreordersTableContent';
 import { orderStatusesDict, statusColorsDict } from '@/src/constants';
 import { useAuth } from '@/src/context/AuthContext';
 import { usePreordersContext } from '@/src/context/PreordersContext';
+import { deliveryStatusesDict } from '@/src/helpers/helpers';
 import { StyledChip, RoundIconButton } from '@/src/styledComponents';
 import { OrderType } from '@/src/types/types';
 
 export function PreordersRow({ order }: { order: OrderType }) {
   const { isAdmin } = useAuth();
-  const { toggleExpand, expandedOrderId, openDialog } = usePreordersContext();
+  const { toggleExpand, expandedOrderId, openDialog, openDeliveryDialog } =
+    usePreordersContext();
 
   const expanded = expandedOrderId === order.id;
+
+  const willNotDeliverStatus = includes(order.delivery_status, [
+    'failed',
+    'not_applicable',
+  ]);
 
   return (
     <>
@@ -38,15 +48,18 @@ export function PreordersRow({ order }: { order: OrderType }) {
 
         {isAdmin && <TableCell>{order.profile_name || '—'}</TableCell>}
 
-        <TableCell>
+        <TableCell align="center">
           <StyledChip
             label={orderStatusesDict[order.status]}
             color={statusColorsDict[order.status]}
             variant="outlined"
           />
         </TableCell>
+        <TableCell align="center">
+          {deliveryStatusesDict[order.delivery_status]}
+        </TableCell>
 
-        <TableCell>€ {Number(order.total).toFixed(2)}</TableCell>
+        <TableCell width={100}>€ {Number(order.total).toFixed(2)}</TableCell>
 
         <TableCell>{new Date(order.created_at).toLocaleDateString()}</TableCell>
 
@@ -91,11 +104,30 @@ export function PreordersRow({ order }: { order: OrderType }) {
             </RoundIconButton>
           </TableCell>
         )}
+
+        {isAdmin && (
+          <TableCell align="center">
+            <RoundIconButton
+              size="small"
+              disabled={
+                order.status !== 'approved' ||
+                order.delivery_status !== 'waiting'
+              }
+              onClick={() => openDeliveryDialog(order)}
+            >
+              {willNotDeliverStatus ? (
+                <RemoveSharpIcon />
+              ) : (
+                <LocalShippingOutlinedIcon />
+              )}
+            </RoundIconButton>
+          </TableCell>
+        )}
       </TableRow>
 
       {expanded && (
         <TableRow>
-          <TableCell colSpan={isAdmin ? 9 : 7}>
+          <TableCell colSpan={isAdmin ? 11 : 8}>
             <PreordersTableContent order={order} />
           </TableCell>
         </TableRow>

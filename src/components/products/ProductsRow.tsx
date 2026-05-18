@@ -2,7 +2,10 @@
 
 import DeleteIcon from '@mui/icons-material/Delete';
 import EditIcon from '@mui/icons-material/Edit';
+import VisibilityOffOutlinedIcon from '@mui/icons-material/VisibilityOffOutlined';
+import VisibilityOutlinedIcon from '@mui/icons-material/VisibilityOutlined';
 import { TableRow, TableCell } from '@mui/material';
+import React from 'react';
 
 import { useAuth } from '@/src/context/AuthContext';
 import { SecondaryRoundIconButton } from '@/src/styledComponents';
@@ -35,6 +38,16 @@ export function ProductsRow({ product, onEdit, onDelete }: ProductsRowProps) {
       <TableCell>{product.width ? `${product.width} cms` : '-'}</TableCell>
 
       <TableCell>{product.height ? `${product.height} cms` : '-'}</TableCell>
+
+      {isAdmin && (
+        <TableCell align="center">
+          {product.is_visible ? (
+            <VisibilityOutlinedIcon sx={{ fontSize: 20 }} />
+          ) : (
+            <VisibilityOffOutlinedIcon sx={{ fontSize: 20 }} />
+          )}
+        </TableCell>
+      )}
 
       {isAdmin && (
         <TableCell align="center">

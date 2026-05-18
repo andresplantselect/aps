@@ -1,4 +1,4 @@
-// @ts-expect-error ok
+// @ts-expect-error
 import { serve } from 'https://deno.land/std@0.224.0/http/server.ts';
 
 serve(async (req: Request) => {
@@ -12,7 +12,7 @@ serve(async (req: Request) => {
       });
     }
 
-    // @ts-expect-error ok
+    // @ts-expect-error
     const supabaseUrl = Deno.env.get('SUPABASE_URL')!;
     // @ts-expect-error ok
     const serviceKey = Deno.env.get('SUPABASE_SERVICE_ROLE_KEY')!;
@@ -55,7 +55,7 @@ serve(async (req: Request) => {
     const res = await fetch('https://api.resend.com/emails', {
       method: 'POST',
       headers: {
-        // @ts-ignore ok
+        // @ts-ignore
         Authorization: `Bearer ${Deno.env.get('RESEND_API_KEY')}`,
         'Content-Type': 'application/json',
       },

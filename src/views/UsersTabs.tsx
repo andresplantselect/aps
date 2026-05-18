@@ -4,6 +4,7 @@ import { Box, Tabs, Tab } from '@mui/material';
 import * as R from 'ramda';
 import React, { JSX, useState } from 'react';
 
+import { useAuth } from '@/src/context/AuthContext';
 import PreordersTab from '@/src/views/PreordersTab';
 import ProductsTab from '@/src/views/ProductsTab';
 
@@ -14,13 +15,14 @@ interface TabItem {
 
 export default function UsersTabs() {
   const [tab, setTab] = useState(0);
+  const { isAdmin } = useAuth();
 
   const handleChange = (event: React.SyntheticEvent, newValue: number) => {
     setTab(newValue);
   };
 
   const tabs = [
-    { label: 'Articulos', content: <ProductsTab /> },
+    { label: isAdmin ? 'Articulos' : 'Catálogo', content: <ProductsTab /> },
     { label: 'Pedidos', content: <PreordersTab /> },
   ];
 

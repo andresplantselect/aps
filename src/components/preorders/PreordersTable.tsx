@@ -41,7 +41,8 @@ export function PreordersTable() {
 
             {isAdmin && <TableHeaderCell>Usuario</TableHeaderCell>}
 
-            <TableHeaderCell>Estado</TableHeaderCell>
+            <TableHeaderCell align="center">Estado</TableHeaderCell>
+            <TableHeaderCell align="center">Estado de entrega</TableHeaderCell>
 
             <TableHeaderCell>Total</TableHeaderCell>
 
@@ -62,6 +63,9 @@ export function PreordersTable() {
             )}
             {isAdmin && (
               <TableHeaderCell align="center">Rechazar</TableHeaderCell>
+            )}
+            {isAdmin && (
+              <TableHeaderCell align="center">Entregado</TableHeaderCell>
             )}
           </TableRow>
         </TableHead>

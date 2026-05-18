@@ -125,6 +125,15 @@ const formConfigFieldsDict: Record<string, AnyFormField> = {
     visibility: true,
     rules: [],
   },
+  is_visible: {
+    key: 'is_visible',
+    label: 'Visible en catálogo',
+    initialValue: '',
+    required: false,
+    type: 'boolean',
+    visibility: true,
+    rules: [],
+  },
   images: {
     key: 'images',
     initialValue: [],
@@ -163,13 +172,17 @@ export const AdminProductFormConfig = (
     ...formConfigFieldsDict.units_per_box,
     initialValue: product?.units_per_box ?? '',
   },
-  {
-    ...formConfigFieldsDict.can_buy_units,
-    initialValue: product?.can_buy_units ?? false,
-  },
   { ...formConfigFieldsDict.available, initialValue: product?.available ?? '' },
   { ...formConfigFieldsDict.width, initialValue: product?.width ?? '' },
   { ...formConfigFieldsDict.height, initialValue: product?.height ?? '' },
   { ...formConfigFieldsDict.comment, initialValue: product?.comment ?? '' },
+  {
+    ...formConfigFieldsDict.can_buy_units,
+    initialValue: product?.can_buy_units ?? false,
+  },
+  {
+    ...formConfigFieldsDict.is_visible,
+    initialValue: product?.is_visible ?? true,
+  },
   { ...formConfigFieldsDict.images, initialValue: product?.images ?? [] },
 ];

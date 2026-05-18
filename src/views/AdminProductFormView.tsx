@@ -28,6 +28,7 @@ export default function AdminProductFormView({
     height: '',
     width: '',
     can_buy_units: false,
+    is_visible: false,
   });
   const [isFormValid, setIsFormValid] = useState(false);
   const { showAlert } = useAlert();

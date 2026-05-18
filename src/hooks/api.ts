@@ -11,6 +11,7 @@ import {
   SignInFormType,
   SignUpFormType,
   ProductType,
+  DeliveryStatusType,
 } from '@/src/types/types';
 
 export const useSignIn = () => {
@@ -215,6 +216,28 @@ export const useUpdateOrderStatus = () => {
   };
 
   return { updateOrderStatus };
+};
+
+export const useUpdateDeliveryStatus = () => {
+  const { request } = useRequest();
+
+  const updateDeliveryStatus = async (
+    orderId: number,
+    nextDeliveryStatus: DeliveryStatusType,
+  ) => {
+    return request(
+      async () =>
+        supabase
+          .from('orders')
+          .update({
+            delivery_status: nextDeliveryStatus,
+          })
+          .eq('id', orderId),
+      ALERT_MESSAGES_DICT.success.deliveryStatusUpdated,
+    );
+  };
+
+  return { updateDeliveryStatus };
 };
 
 export const useCreateOrder = () => {

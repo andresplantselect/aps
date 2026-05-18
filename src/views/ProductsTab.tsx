@@ -2,7 +2,7 @@ import AddIcon from '@mui/icons-material/Add';
 import { Box, Stack, Typography } from '@mui/material';
 import React, { useState } from 'react';
 
-import ProductsControls from '@/src/components/products/ProductControls';
+import { ProductsFilters } from '@/src/components/products/ProductsFilters';
 import ProductsPage from '@/src/components/products/ProductsPage';
 import ProductsViewToggle from '@/src/components/products/ProductsViewToggle';
 import { useAuth } from '@/src/context/AuthContext';
@@ -28,11 +28,8 @@ export default function ProductsTab() {
           </PrimaryButton>
         )}
 
-        <ProductsControls {...productsState} />
-        <ProductsViewToggle
-          value={productsState.viewMode}
-          onChange={productsState.setViewMode}
-        />
+        <ProductsFilters {...productsState} />
+        <ProductsViewToggle {...productsState} />
 
         {productsState.isProductListEmpty && (
           <Typography textAlign="center" color="text.secondary">

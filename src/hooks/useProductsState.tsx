@@ -9,6 +9,7 @@ import type {
   DisponibilityType,
   ProductSortKey,
   ProductsViewType,
+  VisibilityType,
 } from '@/src/types/types';
 
 export function useProductsState(): UseProductsStateProps {
@@ -17,6 +18,9 @@ export function useProductsState(): UseProductsStateProps {
 
   const [availabilityFilter, setAvailabilityFilter] = useState<
     DisponibilityType | 'all'
+  >('all');
+  const [visibilityFilter, setVisibilityFilter] = useState<
+    VisibilityType | 'all'
   >('all');
 
   const [searchTerm, setSearchTerm] = useState('');
@@ -42,13 +46,18 @@ export function useProductsState(): UseProductsStateProps {
         (availabilityFilter === 'available' && product.available > 0) ||
         (availabilityFilter === 'outOfStock' && product.available === 0);
 
-      const userAccessOk = isAdmin || product.available > 0;
+      const visibilityOk =
+        visibilityFilter === 'all' ||
+        (visibilityFilter === 'visible' && product.is_visible) ||
+        (visibilityFilter === 'hidden' && !product.is_visible);
+
+      const userAccessOk = isAdmin || product.is_visible;
 
       const searchOk = product.title
         .toLowerCase()
         .includes(searchTerm.toLowerCase());
 
-      return availabilityOk && userAccessOk && searchOk;
+      return availabilityOk && visibilityOk && userAccessOk && searchOk;
     });
 
     return [...filtered].sort((a, b) => {
@@ -60,16 +69,27 @@ export function useProductsState(): UseProductsStateProps {
 
       return sortDir === 'asc' ? result : -result;
     });
-  }, [products, availabilityFilter, searchTerm, sortBy, sortDir, isAdmin]);
+  }, [
+    products,
+    availabilityFilter,
+    visibilityFilter,
+    searchTerm,
+    sortBy,
+    sortDir,
+    isAdmin,
+  ]);
 
   const isProductListEmpty = visibleProducts.length === 0;
 
   return {
-    products: visibleProducts,
+    visibleProducts,
     isProductListEmpty,
 
     availabilityFilter,
     setAvailabilityFilter,
+
+    visibilityFilter,
+    setVisibilityFilter,
 
     searchTerm,
     setSearchTerm,

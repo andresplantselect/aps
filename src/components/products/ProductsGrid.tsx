@@ -4,10 +4,12 @@ import ProductCard from '@/src/components/products/ProductCard';
 import { ProductsGridProps } from '@/src/types/propsTypes';
 
 export default function ProductsGrid({
-  products,
   onDelete,
   onEdit,
+  productsState,
 }: ProductsGridProps) {
+  const { visibleProducts } = productsState;
+
   return (
     <Box sx={{ width: '100%', display: 'flex', justifyContent: 'center' }}>
       <Box sx={{ width: '100%', maxWidth: 1400 }}>
@@ -19,7 +21,7 @@ export default function ProductsGrid({
             justifyContent: 'center',
           }}
         >
-          {products.map((product) => (
+          {visibleProducts.map((product) => (
             <ProductCard
               key={product.id}
               product={product}
