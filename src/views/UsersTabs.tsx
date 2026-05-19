@@ -5,6 +5,7 @@ import * as R from 'ramda';
 import React, { JSX, useState } from 'react';
 
 import { useAuth } from '@/src/context/AuthContext';
+import ImagesTab from '@/src/views/ImagesTab';
 import PreordersTab from '@/src/views/PreordersTab';
 import ProductsTab from '@/src/views/ProductsTab';
 
@@ -23,6 +24,7 @@ export default function UsersTabs() {
 
   const tabs = [
     { label: isAdmin ? 'Articulos' : 'Catálogo', content: <ProductsTab /> },
+    { label: 'Imágenes', content: <ImagesTab /> },
     { label: 'Pedidos', content: <PreordersTab /> },
   ];
 

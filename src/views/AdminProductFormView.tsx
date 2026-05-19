@@ -1,6 +1,5 @@
 "use client";
 
-import { parseNumberInput } from "@/src/helpers/helpers";
 import GrassIcon from "@mui/icons-material/Grass";
 import React, { useMemo, useState } from "react";
 
@@ -8,6 +7,7 @@ import { AppDrawer } from "@/src/components/common/AppDrawer";
 import CommonForm from "@/src/components/form/CommonForm";
 import { AdminProductFormConfig } from "@/src/components/form/formConfigs";
 import { useAlert } from "@/src/context/AlertContext";
+import { parseNumberInput } from "@/src/helpers/helpers";
 import { useCreateProduct, useUpdateProduct } from "@/src/hooks/api";
 import { AdminProductFormProps, ProductForm } from "@/src/types/propsTypes";
 import { FormField } from "@/src/types/types";
@@ -38,7 +38,7 @@ export default function AdminProductFormView({
   const { createProduct } = useCreateProduct();
   const { updateProduct } = useUpdateProduct();
 
-  const normalizedProduct = (form) => ({
+  const normalizedProduct = (form: ProductForm) => ({
     ...form,
     price: parseNumberInput(form.price) ?? "0",
     units_per_box: parseNumberInput(form.units_per_box) ?? "0",

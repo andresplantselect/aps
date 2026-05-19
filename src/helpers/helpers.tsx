@@ -1,13 +1,13 @@
-import EditIcon from "@mui/icons-material/Edit";
-import LogoutIcon from "@mui/icons-material/Logout";
-import PersonAddAlt1Icon from "@mui/icons-material/PersonAddAlt1";
-import RemoveCircleOutlineOutlinedIcon from "@mui/icons-material/RemoveCircleOutlineOutlined";
-import ScheduleOutlinedIcon from "@mui/icons-material/ScheduleOutlined";
-import WhereToVoteOutlinedIcon from "@mui/icons-material/WhereToVoteOutlined";
-import React from "react";
+import EditIcon from '@mui/icons-material/Edit';
+import LogoutIcon from '@mui/icons-material/Logout';
+import PersonAddAlt1Icon from '@mui/icons-material/PersonAddAlt1';
+import RemoveCircleOutlineOutlinedIcon from '@mui/icons-material/RemoveCircleOutlineOutlined';
+import ScheduleOutlinedIcon from '@mui/icons-material/ScheduleOutlined';
+import WhereToVoteOutlinedIcon from '@mui/icons-material/WhereToVoteOutlined';
+import React from 'react';
 
-import { supabase } from "@/lib/supabase";
-import { DeliveryStatusType } from "@/src/types/types";
+import { supabase } from '@/lib/supabase';
+import { DeliveryStatusType } from '@/src/types/types';
 
 export function getMenuActions({
   isAdmin,
@@ -20,22 +20,22 @@ export function getMenuActions({
 }) {
   return [
     {
-      value: "invite",
-      label: "Crear invitación",
+      value: 'invite',
+      label: 'Crear invitación',
       icon: <PersonAddAlt1Icon fontSize="small" />,
       visibility: isAdmin,
       onClick: openInvite,
     },
     {
-      value: "edit",
-      label: "Editar perfil",
+      value: 'edit',
+      label: 'Editar perfil',
       icon: <EditIcon fontSize="small" />,
       visibility: true,
       onClick: openUser,
     },
     {
-      value: "logout",
-      label: "Salir",
+      value: 'logout',
+      label: 'Salir',
       icon: <LogoutIcon fontSize="small" />,
       visibility: true,
       onClick: async () => {
@@ -57,11 +57,11 @@ export const splitUnitsToBoxes = (totalUnits: number, unitsPerBox: number) => {
 };
 
 export const parseNumberInput = (value: unknown): number | null => {
-  if (value === "" || value === null || value === undefined) {
+  if (value === '' || value === null || value === undefined) {
     return null;
   }
 
-  const normalized = String(value).trim().replace(",", ".");
+  const normalized = String(value).trim().replace(',', '.');
 
   if (!/^\d+(\.\d+)?$/.test(normalized)) {
     return null;
