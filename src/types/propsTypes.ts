@@ -1,4 +1,4 @@
-import React, { Dispatch, ReactNode, SetStateAction } from 'react';
+import React, { Dispatch, ReactNode, SetStateAction } from "react";
 
 import {
   AlertType,
@@ -11,7 +11,7 @@ import {
   ProductsViewType,
   ProductType,
   VisibilityType,
-} from '@/src/types/types';
+} from "@/src/types/types";
 
 export interface AdminProductFormProps {
   open: boolean;
@@ -48,7 +48,7 @@ export interface ProductCardProps {
 export type CartContextType = {
   items: CartItem[];
   updateItemQuantity: (
-    product: Omit<CartItem, 'quantity'>,
+    product: Omit<CartItem, "quantity">,
     quantity: number,
   ) => void;
   removeFromCart: (id: string) => void;
@@ -72,12 +72,7 @@ export type AuthFormProps = {
   onClose: () => void;
 };
 
-export type AuthMode = 'signIn' | 'forgotPassword';
-
-export interface CartItemCardProps {
-  item: CartItem;
-  updateItemQuantity: (item: CartItem, q: number) => void;
-}
+export type AuthMode = "signIn" | "forgotPassword";
 
 export interface CartItemListProps {
   items: CartItem[];
@@ -167,17 +162,17 @@ export type UseProductsStateProps = {
   visibleProducts: ProductType[];
   isProductListEmpty: boolean;
 
-  availabilityFilter: DisponibilityType | 'all';
-  setAvailabilityFilter: Dispatch<SetStateAction<DisponibilityType | 'all'>>;
+  availabilityFilter: DisponibilityType | "all";
+  setAvailabilityFilter: Dispatch<SetStateAction<DisponibilityType | "all">>;
 
-  visibilityFilter: VisibilityType | 'all';
-  setVisibilityFilter: Dispatch<SetStateAction<VisibilityType | 'all'>>;
+  visibilityFilter: VisibilityType | "all";
+  setVisibilityFilter: Dispatch<SetStateAction<VisibilityType | "all">>;
 
   searchTerm: string;
   setSearchTerm: Dispatch<SetStateAction<string>>;
 
   sortBy: ProductSortKey;
-  sortDir: 'asc' | 'desc';
+  sortDir: "asc" | "desc";
   toggleSort: (key: ProductSortKey) => void;
 
   viewMode: ProductsViewType;

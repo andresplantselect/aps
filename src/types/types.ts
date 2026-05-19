@@ -93,7 +93,6 @@ export type AlertType = {
 
 export type InputFieldType =
   | 'text'
-  | 'number'
   | 'password'
   | 'textarea'
   | 'images'
