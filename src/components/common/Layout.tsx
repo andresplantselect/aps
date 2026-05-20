@@ -7,7 +7,7 @@ import CustomAlert from '@/src/components/common/CustomAlert';
 import Loader from '@/src/components/common/Loader';
 import Logo from '@/src/components/common/Logo';
 import { useAlert } from '@/src/context/AlertContext';
-import { useLoading } from '@/src/context/LoadingContext';
+import { useRequest } from '@/src/hooks/useRequest';
 
 interface LayoutProps {
   actions?: ReactNode;
@@ -16,7 +16,7 @@ interface LayoutProps {
 
 export default function Layout({ actions, children }: LayoutProps) {
   const { alert, clearAlert } = useAlert();
-  const { loading } = useLoading();
+  const { loading } = useRequest();
 
   return (
     <Stack

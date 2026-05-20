@@ -1,7 +1,9 @@
 import AddIcon from '@mui/icons-material/Add';
-import { Box, Stack, Typography } from '@mui/material';
+import YardOutlinedIcon from '@mui/icons-material/YardOutlined';
+import { Box, LinearProgress, Stack } from '@mui/material';
 import React, { useState } from 'react';
 
+import EmptyStateMessage from '@/src/components/common/EmptyStateMessage';
 import { ProductsFilters } from '@/src/components/products/ProductsFilters';
 import ProductsPage from '@/src/components/products/ProductsPage';
 import ProductsViewToggle from '@/src/components/products/ProductsViewToggle';
@@ -18,7 +20,7 @@ export default function ProductsTab() {
 
   return (
     <Box>
-      <Stack spacing={2}>
+      <Stack spacing={1}>
         {isAdmin && (
           <PrimaryButton
             onClick={() => setShowForm(true)}
@@ -31,13 +33,19 @@ export default function ProductsTab() {
         <ProductsFilters {...productsState} />
         <ProductsViewToggle {...productsState} />
 
-        {productsState.isProductListEmpty && (
-          <Typography textAlign="center" color="text.secondary">
-            No hay productos disponibles.
-          </Typography>
-        )}
+        {!productsState.isProductsLoading &&
+          productsState.isProductListEmpty && (
+            <EmptyStateMessage
+              message="No hay productos disponibles"
+              icon={<YardOutlinedIcon />}
+            />
+          )}
 
-        <ProductsPage {...productsState} />
+        {productsState.isProductsLoading ? (
+          <LinearProgress />
+        ) : (
+          <ProductsPage {...productsState} />
+        )}
       </Stack>
 
       {showForm && (

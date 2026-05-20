@@ -29,7 +29,7 @@ export function ProductsFilters({
   const { isAdmin } = useAuth();
 
   return (
-    <Stack spacing={2} sx={{ width: '100%' }}>
+    <Stack spacing={1} sx={{ width: '100%' }}>
       <OutlinedInput
         size="small"
         value={searchTerm}

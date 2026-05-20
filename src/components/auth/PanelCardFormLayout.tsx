@@ -6,7 +6,7 @@ import React from 'react';
 import CustomAlert from '@/src/components/common/CustomAlert';
 import Loader from '@/src/components/common/Loader';
 import Logo from '@/src/components/common/Logo';
-import { useLoading } from '@/src/context/LoadingContext';
+import { useRequest } from '@/src/hooks/useRequest';
 import { PanelCard, PrimaryButton } from '@/src/styledComponents';
 import { PanelCardFormLayoutProps } from '@/src/types/propsTypes';
 
@@ -16,7 +16,8 @@ export default function PanelCardFormLayout({
   children,
   submit,
 }: PanelCardFormLayoutProps) {
-  const { loading } = useLoading();
+  const { loading } = useRequest();
+
   return (
     <Stack
       sx={{ height: '100vh', position: 'relative' }}

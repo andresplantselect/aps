@@ -59,14 +59,14 @@ export default function CommonForm<T extends Record<string, unknown>>({
       [field]: true,
     }));
 
-    const fieldConfig = configMap[field as string];
-
-    const errors = validateField(form[field], form, fieldConfig?.rules ?? []);
-
-    setValidationErrors((prev) => ({
-      ...prev,
-      [field]: errors,
-    }));
+    // const fieldConfig = configMap[field as string];
+    //
+    // const errors = validateField(form[field], form, fieldConfig?.rules ?? []);
+    //
+    // setValidationErrors((prev) => ({
+    //   ...prev,
+    //   [field]: errors,
+    // }));
   };
 
   const visibleErrors = Object.entries(validationErrors)

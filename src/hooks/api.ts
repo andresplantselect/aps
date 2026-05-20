@@ -1,10 +1,10 @@
-import { AlertColor } from "@mui/material";
-import { Session, User } from "@supabase/auth-js";
+import { AlertColor } from '@mui/material';
+import { Session, User } from '@supabase/auth-js';
 
-import { supabase } from "@/lib/supabase";
-import { ALERT_MESSAGES_DICT, RESET_PASSWORD_URL } from "@/src/constants";
-import { useRequest } from "@/src/hooks/useRequest";
-import { ProductForm } from "@/src/types/propsTypes";
+import { supabase } from '@/lib/supabase';
+import { ALERT_MESSAGES_DICT, RESET_PASSWORD_URL } from '@/src/constants';
+import { useRequest } from '@/src/hooks/useRequest';
+import { ProductForm } from '@/src/types/propsTypes';
 import {
   OrderItem,
   OrderStatusType,
@@ -12,7 +12,7 @@ import {
   SignUpFormType,
   ProductType,
   DeliveryStatusType,
-} from "@/src/types/types";
+} from '@/src/types/types';
 
 export const useSignIn = () => {
   const { request } = useRequest();
@@ -72,7 +72,7 @@ export const useUpdateUserName = () => {
 
   const updateUserName = (name: string, userId: string) =>
     request(
-      async () => supabase.from("profiles").update({ name }).eq("id", userId),
+      async () => supabase.from('profiles').update({ name }).eq('id', userId),
       ALERT_MESSAGES_DICT.success.nameUpdated,
     );
 
@@ -84,7 +84,7 @@ export const useInviteToken = () => {
 
   const checkInviteToken = (token: string) =>
     request<string>(async () => {
-      const res = await supabase.functions.invoke("check-invite", {
+      const res = await supabase.functions.invoke('check-invite', {
         body: { invite: token },
       });
 
@@ -102,7 +102,7 @@ export const useConsumeInvite = () => {
 
   const consumeInvite = (body: { inviteId: string; userId: string }) =>
     request<{ inviteId: string }>(async () => {
-      const res = await supabase.functions.invoke("consume-invite", { body });
+      const res = await supabase.functions.invoke('consume-invite', { body });
 
       return {
         data: res.data as { inviteId: string },
@@ -118,7 +118,7 @@ export const useCreateProduct = () => {
 
   const createProduct = (form: ProductForm) =>
     request(
-      async () => supabase.from("products").insert([form]).select().single(),
+      async () => supabase.from('products').insert([form]).select().single(),
       ALERT_MESSAGES_DICT.success.productCreated(form.title),
     );
 
@@ -132,9 +132,9 @@ export const useUpdateProduct = () => {
     request(
       async () =>
         supabase
-          .from("products")
+          .from('products')
           .update(form)
-          .eq("id", productId)
+          .eq('id', productId)
           .select()
           .single(),
       ALERT_MESSAGES_DICT.success.productUpdated(form.title),
@@ -152,19 +152,19 @@ export const useDeleteProduct = () => {
     );
 
     const { error } = await request(async () =>
-      supabase.from("products").delete().eq("id", selectedProduct.id),
+      supabase.from('products').delete().eq('id', selectedProduct.id),
     );
 
     if (error) return { success: null, error };
 
     if (selectedProduct.images?.length) {
       const filePaths = selectedProduct.images
-        .map((url: string) => url.split("product-images/")[1])
+        .map((url: string) => url.split('product-images/')[1])
         .filter(Boolean);
 
       if (filePaths.length) {
         const result = await request(async () =>
-          supabase.storage.from("product-images").remove(filePaths),
+          supabase.storage.from('product-images').remove(filePaths),
         );
 
         if (result.error) return result;
@@ -174,7 +174,7 @@ export const useDeleteProduct = () => {
     return {
       success: {
         message: successMessage,
-        severity: "success" as AlertColor,
+        severity: 'success' as AlertColor,
       },
       error: null,
     };
@@ -191,10 +191,10 @@ export const useUpdateOrderStatus = () => {
     nextStatus: OrderStatusType,
     adminComment?: string,
   ) => {
-    if (nextStatus === "approved") {
+    if (nextStatus === 'approved') {
       return request(
         async () =>
-          supabase.rpc("approve_order", {
+          supabase.rpc('approve_order', {
             p_order_id: orderId,
             p_admin_comment: adminComment || null,
           }),
@@ -205,12 +205,12 @@ export const useUpdateOrderStatus = () => {
     return request(
       async () =>
         supabase
-          .from("orders")
+          .from('orders')
           .update({
-            status: "cancelled",
+            status: 'cancelled',
             admin_comment: adminComment || null,
           })
-          .eq("id", orderId),
+          .eq('id', orderId),
       ALERT_MESSAGES_DICT.success.orderCancelled,
     );
   };
@@ -228,11 +228,11 @@ export const useUpdateDeliveryStatus = () => {
     return request(
       async () =>
         supabase
-          .from("orders")
+          .from('orders')
           .update({
             delivery_status: nextDeliveryStatus,
           })
-          .eq("id", orderId),
+          .eq('id', orderId),
       ALERT_MESSAGES_DICT.success.deliveryStatusUpdated,
     );
   };
@@ -256,20 +256,20 @@ export const useCreateOrder = () => {
         success: null,
         error: {
           message: ALERT_MESSAGES_DICT.error.notAuthenticated,
-          severity: "error" as AlertColor,
+          severity: 'error' as AlertColor,
         },
       };
     }
 
     return request(
       async () =>
-        supabase.from("orders").insert([
+        supabase.from('orders').insert([
           {
             user_id: userId,
             items,
             total: Number(total.toFixed(2)),
             comment: comment || null,
-            status: "pending",
+            status: 'pending',
           },
         ]),
       ALERT_MESSAGES_DICT.success.cart,
@@ -285,10 +285,10 @@ export const useGetImages = () => {
   const getImages = async () =>
     request<string[]>(async () => {
       const { data, error } = await supabase.storage
-        .from("product-images")
-        .list("gallery", {
+        .from('product-images')
+        .list('gallery', {
           limit: 100,
-          sortBy: { column: "created_at", order: "desc" },
+          sortBy: { column: 'created_at', order: 'desc' },
         });
 
       if (error) {
@@ -301,7 +301,7 @@ export const useGetImages = () => {
       const urls =
         data?.map((file) => {
           const { data } = supabase.storage
-            .from("product-images")
+            .from('product-images')
             .getPublicUrl(`gallery/${file.name}`);
 
           return data.publicUrl;
@@ -329,13 +329,13 @@ export const useUploadImages = () => {
         const filePath = `gallery/${Date.now()}_${file.name}`;
 
         const { error } = await supabase.storage
-          .from("product-images")
+          .from('product-images')
           .upload(filePath, file);
 
         if (error) throw error;
 
         const { data } = supabase.storage
-          .from("product-images")
+          .from('product-images')
           .getPublicUrl(filePath);
 
         if (data.publicUrl) {
@@ -360,10 +360,10 @@ export const useDeleteImages = () => {
     request(async () => {
       const filePaths = urls
         .map((url) =>
-          decodeURIComponent(url.split("/object/public/product-images/")[1]),
+          decodeURIComponent(url.split('/object/public/product-images/')[1]),
         )
         .filter(Boolean);
-      return supabase.storage.from("product-images").remove(filePaths);
+      return supabase.storage.from('product-images').remove(filePaths);
     });
 
   return { deleteImages };

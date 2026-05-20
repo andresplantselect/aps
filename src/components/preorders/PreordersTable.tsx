@@ -1,5 +1,6 @@
 'use client';
 
+import TextSnippetOutlinedIcon from '@mui/icons-material/TextSnippetOutlined';
 import {
   Table,
   TableBody,
@@ -9,8 +10,12 @@ import {
   TablePagination,
   Paper,
   TableSortLabel,
+  LinearProgress,
 } from '@mui/material';
+import { isEmpty } from 'ramda';
+import React from 'react';
 
+import EmptyStateMessage from '@/src/components/common/EmptyStateMessage';
 import { useAuth } from '@/src/context/AuthContext';
 import { usePreordersContext } from '@/src/context/PreordersContext';
 import { TableHeaderCell } from '@/src/styledComponents';
@@ -28,11 +33,13 @@ export function PreordersTable() {
     setPage,
     setRowsPerPage,
     sortedOrders,
+    isOrdersLoading,
   } = usePreordersContext();
   const { isAdmin } = useAuth();
 
   return (
     <TableContainer component={Paper}>
+      {isOrdersLoading && <LinearProgress />}
       <Table>
         <TableHead>
           <TableRow>
@@ -70,10 +77,13 @@ export function PreordersTable() {
           </TableRow>
         </TableHead>
         <TableBody>
-          {orders.length === 0 ? (
+          {!isOrdersLoading && isEmpty(orders) ? (
             <TableRow>
-              <TableHeaderCell colSpan={isAdmin ? 9 : 6} align="center">
-                No hay pedidos todavía
+              <TableHeaderCell colSpan={isAdmin ? 11 : 8} align="center">
+                <EmptyStateMessage
+                  message="No hay pedidos todavía"
+                  icon={<TextSnippetOutlinedIcon />}
+                />
               </TableHeaderCell>
             </TableRow>
           ) : (

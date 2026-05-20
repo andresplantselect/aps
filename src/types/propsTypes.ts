@@ -63,7 +63,7 @@ export interface CartPanelProps {
 
 export interface OrdersContextType {
   orders: OrderType[];
-  loading: boolean;
+  isOrdersLoading: boolean;
   refreshOrders: () => Promise<void>;
 }
 
@@ -159,6 +159,7 @@ export type ProductsRowProps = {
 };
 
 export type UseProductsStateProps = {
+  isProductsLoading: boolean;
   visibleProducts: ProductType[];
   isProductListEmpty: boolean;
 

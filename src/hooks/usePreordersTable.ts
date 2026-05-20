@@ -8,7 +8,7 @@ import { useOrders } from '@/src/context/OrdersContext';
 import { DeliveryStatusType, OrderStatusType } from '@/src/types/types';
 
 export const usePreordersTable = () => {
-  const { orders } = useOrders();
+  const { orders, isOrdersLoading } = useOrders();
   const { isAdmin } = useAuth();
 
   const [statusFilter, setStatusFilter] = useState<OrderStatusType | 'all'>(
@@ -144,6 +144,7 @@ export const usePreordersTable = () => {
     toggleSort,
     expandedOrderId,
     toggleExpand,
+    isOrdersLoading,
     filters: {
       deliveryStatusFilter,
       statusFilter,

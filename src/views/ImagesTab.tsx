@@ -1,6 +1,6 @@
 'use client';
 
-import ImageNotSupportedIcon from '@mui/icons-material/ImageNotSupported';
+import ImageOutlinedIcon from '@mui/icons-material/ImageOutlined';
 import { Stack, Box, Checkbox } from '@mui/material';
 import { isEmpty } from 'ramda';
 import React, { useEffect, useState } from 'react';
@@ -83,9 +83,7 @@ export default function ImagesTab() {
       {images.length === 0 ? (
         <EmptyStateMessage
           message="No hay imágenes"
-          icon={
-            <ImageNotSupportedIcon sx={{ fontSize: 32, color: 'grey.500' }} />
-          }
+          icon={<ImageOutlinedIcon />}
         />
       ) : (
         <Box

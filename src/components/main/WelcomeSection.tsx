@@ -34,7 +34,7 @@ export default function WelcomeSection({
       />
 
       <Stack spacing={2} sx={{ marginTop: 0, zIndex: 2, padding: 3 }}>
-        <Typography variant="h5">Bienvenido a Andrés Plant Select!</Typography>
+        <Typography variant="h6">Bienvenido a Andrés Plant Select!</Typography>
 
         <Typography color="text.secondary">
           Aquí puedes explorar la lista de artículos disponibles, que se

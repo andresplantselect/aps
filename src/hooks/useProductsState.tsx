@@ -13,7 +13,7 @@ import type {
 } from '@/src/types/types';
 
 export function useProductsState(): UseProductsStateProps {
-  const { products } = useProducts();
+  const { products, isProductsLoading } = useProducts();
   const { isAdmin } = useAuth();
 
   const [availabilityFilter, setAvailabilityFilter] = useState<
@@ -82,6 +82,8 @@ export function useProductsState(): UseProductsStateProps {
   const isProductListEmpty = visibleProducts.length === 0;
 
   return {
+    isProductsLoading,
+
     visibleProducts,
     isProductListEmpty,
 

@@ -17,9 +17,9 @@ export default function EmptyStateMessage({
         minHeight: 300,
       }}
     >
-      {icon}
+      <Stack sx={{ color: 'grey.500', fontSize: 32 }}>{icon}</Stack>
 
-      <Typography variant="h6">{message}</Typography>
+      <Typography color={'grey.500'}>{message}</Typography>
     </Stack>
   );
 }
