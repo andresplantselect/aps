@@ -3,18 +3,18 @@ import TableViewIcon from '@mui/icons-material/TableView';
 import { ToggleButtonGroup } from '@mui/material';
 
 import { TogglePillButton } from '@/src/styledComponents';
-import { ProductsViewToggleProps } from '@/src/types/propsTypes';
+import { UseProductsStateProps } from '@/src/types/propsTypes';
 
 export default function ProductsViewToggle({
-  value,
-  onChange,
-}: ProductsViewToggleProps) {
+  viewMode,
+  setViewMode,
+}: UseProductsStateProps) {
   return (
     <ToggleButtonGroup
       size="small"
-      value={value}
+      value={viewMode}
       exclusive
-      onChange={(_, v) => v && onChange(v)}
+      onChange={(_, v) => v && setViewMode(v)}
     >
       <TogglePillButton value="cards">
         <DragIndicatorIcon fontSize="small" />

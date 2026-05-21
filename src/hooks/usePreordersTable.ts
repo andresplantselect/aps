@@ -5,18 +5,24 @@ import { useMemo, useState, useEffect } from 'react';
 
 import { useAuth } from '@/src/context/AuthContext';
 import { useOrders } from '@/src/context/OrdersContext';
-import { OrderStatusType } from '@/src/types/types';
+import { DeliveryStatusType, OrderStatusType } from '@/src/types/types';
 
 export const usePreordersTable = () => {
-  const { orders } = useOrders();
+  const { orders, isOrdersLoading } = useOrders();
   const { isAdmin } = useAuth();
 
   const [statusFilter, setStatusFilter] = useState<OrderStatusType | 'all'>(
     'all',
   );
+  const [deliveryStatusFilter, setDeliveryStatusFilter] = useState<
+    DeliveryStatusType | 'all'
+  >('all');
+
   const [userFilter, setUserFilter] = useState('all');
 
-  const [sortBy, setSortBy] = useState<'date' | 'status' | 'user'>('date');
+  const [sortBy, setSortBy] = useState<
+    'date' | 'status' | 'user' | 'delivery_status'
+  >('date');
   const [sortDir, setSortDir] = useState<'asc' | 'desc'>('desc');
 
   const [page, setPage] = useState(0);
@@ -33,7 +39,7 @@ export const usePreordersTable = () => {
 
   useEffect(() => {
     setPage(0);
-  }, [statusFilter, userFilter, dateFrom, dateTo]);
+  }, [statusFilter, deliveryStatusFilter, userFilter, dateFrom, dateTo]);
 
   const toggleExpand = (orderId: number) => {
     setExpandedOrderId((prev) => (prev === orderId ? null : orderId));
@@ -42,6 +48,9 @@ export const usePreordersTable = () => {
   const filteredOrders = useMemo(() => {
     return orders.filter((order) => {
       const statusOk = statusFilter === 'all' || order.status === statusFilter;
+      const deliveryStatusOk =
+        deliveryStatusFilter === 'all' ||
+        order.delivery_status === deliveryStatusFilter;
 
       const userOk =
         !isAdmin || userFilter === 'all' || order.profile_name === userFilter;
@@ -51,9 +60,17 @@ export const usePreordersTable = () => {
       const dateFromOk = !dateFrom || orderDate >= startOfDay(dateFrom);
       const dateToOk = !dateTo || orderDate <= endOfDay(dateTo);
 
-      return statusOk && userOk && dateFromOk && dateToOk;
+      return statusOk && deliveryStatusOk && userOk && dateFromOk && dateToOk;
     });
-  }, [orders, statusFilter, userFilter, isAdmin, dateFrom, dateTo]);
+  }, [
+    orders,
+    statusFilter,
+    deliveryStatusFilter,
+    userFilter,
+    isAdmin,
+    dateFrom,
+    dateTo,
+  ]);
 
   const users = useMemo(() => {
     const set = new Set<string>();
@@ -81,6 +98,11 @@ export const usePreordersTable = () => {
           return sortDir === 'asc'
             ? a.status.localeCompare(b.status)
             : b.status.localeCompare(a.status);
+
+        case 'delivery_status':
+          return sortDir === 'asc'
+            ? a.delivery_status.localeCompare(b.delivery_status)
+            : b.delivery_status.localeCompare(a.delivery_status);
 
         case 'user':
           return sortDir === 'asc'
@@ -122,12 +144,15 @@ export const usePreordersTable = () => {
     toggleSort,
     expandedOrderId,
     toggleExpand,
+    isOrdersLoading,
     filters: {
+      deliveryStatusFilter,
       statusFilter,
       userFilter,
       dateRange,
     },
     setFilters: {
+      setDeliveryStatusFilter,
       setStatusFilter,
       setUserFilter,
       setDateRange,

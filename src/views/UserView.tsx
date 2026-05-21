@@ -13,7 +13,7 @@ export default function UserView() {
 
   const { items } = useCart();
 
-  const totalItems = items.reduce((sum, item) => sum + item.quantity, 0);
+  const totalItems = items.length;
 
   const handleToggleCart = () => setCartOpen((prev) => !prev);
 

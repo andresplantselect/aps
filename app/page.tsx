@@ -27,7 +27,7 @@ export default function Page() {
   const [inviteUrl, setInviteUrl] = useState<string | null>(null);
 
   const {
-    loading,
+    isAuthLoading,
     name,
     isAdmin = false,
     isUser = false,
@@ -54,7 +54,7 @@ export default function Page() {
   const closeDialog = (key: keyof typeof dialogs) =>
     setDialogs((prev) => ({ ...prev, [key]: false }));
 
-  if (loading) {
+  if (isAuthLoading) {
     return <Loader />;
   }
 

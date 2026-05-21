@@ -2,6 +2,7 @@
 
 import React from 'react';
 
+import { PreordersDeliveryStatusDialog } from '@/src/components/preorders/PreoprdersDeliveryStatusDialog';
 import { PreordersStatusDialog } from '@/src/components/preorders/PreordersStatusDialog';
 import { PreordersTable } from '@/src/components/preorders/PreordersTable';
 import { PreordersToolbar } from '@/src/components/preorders/PreordersToolbar';
@@ -15,6 +16,7 @@ export default function PreordersTab() {
       <PreordersTable />
 
       <PreordersStatusDialog />
+      <PreordersDeliveryStatusDialog />
     </PreordersProvider>
   );
 }

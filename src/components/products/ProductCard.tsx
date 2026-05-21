@@ -2,10 +2,12 @@
 
 import DeleteIcon from '@mui/icons-material/Delete';
 import EditIcon from '@mui/icons-material/Edit';
+import VisibilityOffOutlinedIcon from '@mui/icons-material/VisibilityOffOutlined';
+import VisibilityOutlinedIcon from '@mui/icons-material/VisibilityOutlined';
 import { Typography, Box, Stack, Divider } from '@mui/material';
 import React from 'react';
 
-import IncrementDecrementButtons from '@/src/components/common/IncrementDecrementButtons';
+import AddItemsCard from '@/src/components/common/AddItemsCard';
 import ProductImages from '@/src/components/products/ProductImages';
 import ProductInfo from '@/src/components/products/ProductInfo';
 import { useAuth } from '@/src/context/AuthContext';
@@ -23,25 +25,11 @@ export default function ProductCard({
   onEdit,
 }: ProductCardProps) {
   const { isAdmin, isUser } = useAuth();
-  const { items, updateItemQuantity } = useCart();
+  const { items } = useCart();
 
   const cartItem = items.find((i) => i.id === product.id);
   const quantity = cartItem?.quantity ?? 0;
-  const totalUnits = product.pots_count * quantity;
   const availableStock = product.available - quantity;
-
-  const handleQuantityChange = (q: number) => {
-    updateItemQuantity(
-      {
-        id: product.id,
-        title: product.title,
-        price: product.price,
-        available: product.available,
-        pots_count: product.pots_count,
-      },
-      q,
-    );
-  };
 
   return (
     <PanelCard
@@ -53,19 +41,34 @@ export default function ProductCard({
       <Stack sx={{ height: '100%', p: 0.5 }} justifyContent="space-between">
         <Stack spacing={2.5}>
           <Stack spacing={1}>
-            <Typography
-              sx={{
-                lineHeight: 1.35,
-                display: '-webkit-box',
-                WebkitLineClamp: 2,
-                WebkitBoxOrient: 'vertical',
-                overflow: 'hidden',
-                fontWeight: 600,
-                fontSize: 20,
-              }}
+            <Stack
+              direction="row"
+              justifyContent="space-between"
+              alignItems="center"
             >
-              {product.title}
-            </Typography>
+              <Typography
+                sx={{
+                  lineHeight: 1.35,
+                  display: '-webkit-box',
+                  WebkitLineClamp: 2,
+                  WebkitBoxOrient: 'vertical',
+                  overflow: 'hidden',
+                  fontWeight: 600,
+                  fontSize: 20,
+                }}
+              >
+                {product.title}
+              </Typography>
+              {isAdmin && (
+                <>
+                  {product.is_visible ? (
+                    <VisibilityOutlinedIcon sx={{ fontSize: 20 }} />
+                  ) : (
+                    <VisibilityOffOutlinedIcon sx={{ fontSize: 20 }} />
+                  )}
+                </>
+              )}
+            </Stack>
 
             <Typography
               variant="body2"
@@ -141,22 +144,12 @@ export default function ProductCard({
             </Stack>
           )}
           {isUser && (
-            <Stack spacing={2} sx={{ mt: 2 }}>
-              <Stack direction="row" spacing={1} alignItems="center">
-                <Typography variant="body1">Pedir:</Typography>
-                <IncrementDecrementButtons
-                  inStock={product.available}
-                  quantity={quantity}
-                  onChange={handleQuantityChange}
-                />
-              </Stack>
-              <Typography variant="body1">
-                {totalUnits
-                  ? `Total : ${quantity} Cajas x ${product.pots_count} Uds = 
-                ${totalUnits} Uds`
-                  : 'Total: 0 Uds'}
-              </Typography>
-            </Stack>
+            <AddItemsCard
+              productItem={product}
+              labelAdd="Añadir a la reserva"
+              labelTotal="Total en carrito"
+              showClearCart={true}
+            />
           )}
         </Stack>
       </Stack>

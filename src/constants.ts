@@ -1,6 +1,10 @@
 import { ChipProps } from '@mui/material';
 
-import { DisponibilityType, OrderStatusType } from '@/src/types/types';
+import {
+  DisponibilityType,
+  OrderStatusType,
+  VisibilityType,
+} from '@/src/types/types';
 
 export const orderStatusesDict: Record<OrderStatusType, string> = {
   pending: 'pendiente',
@@ -8,9 +12,20 @@ export const orderStatusesDict: Record<OrderStatusType, string> = {
   cancelled: 'rechazado',
 };
 
+export const deliveryStatusesDict = {
+  not_applicable: 'Sin entrega',
+  waiting: 'Pendiente',
+  delivered: 'Entregado',
+  failed: 'Cancelado',
+};
+
 export const availabilityStatusesDict: Record<DisponibilityType, string> = {
   available: 'Disponibles',
   outOfStock: 'Fuera de stock',
+};
+export const visibilityStatusesDict: Record<VisibilityType, string> = {
+  visible: 'Visible en catálogo',
+  hidden: 'Oculto para clientes',
 };
 
 export const statusColorsDict: Record<OrderStatusType, ChipProps['color']> = {
@@ -54,6 +69,7 @@ export const ALERT_MESSAGES_DICT = {
     productDeleted: (title: string) => `Artículo ${title} eliminado.`,
     orderApproved: 'Pedido aprobado.',
     orderCancelled: 'Pedido rechazado.',
+    deliveryStatusUpdated: 'Pedido entregado.',
   },
 
   error: {

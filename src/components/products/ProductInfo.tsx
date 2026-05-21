@@ -2,6 +2,7 @@
 import BlockIcon from '@mui/icons-material/Block';
 import GrassIcon from '@mui/icons-material/Grass';
 import HeightIcon from '@mui/icons-material/Height';
+import YardOutlinedIcon from '@mui/icons-material/YardOutlined';
 import { Typography, Stack, Box } from '@mui/material';
 import React from 'react';
 
@@ -35,7 +36,15 @@ export default function ProductInfo({ product }: { product: ProductType }) {
             <GrassIcon fontSize="small" />
             <Stack>
               <Typography variant="body2">
-                Uds x caja: {product.pots_count}
+                Uds × Caja: {product.units_per_box}
+              </Typography>{' '}
+            </Stack>
+          </Stack>
+          <Stack direction="row" spacing={0.5}>
+            <YardOutlinedIcon fontSize="small" />
+            <Stack>
+              <Typography variant="body2">
+                Disponible por Uds: {product.can_buy_units ? 'Si' : 'No'}
               </Typography>{' '}
             </Stack>
           </Stack>

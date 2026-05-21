@@ -14,13 +14,13 @@ import { ProductType } from '@/src/types/types';
 
 interface ProductsContextType {
   products: ProductType[];
-  loading: boolean;
+  isProductsLoading: boolean;
   refreshProducts: () => Promise<void>;
 }
 
 const ProductsContext = createContext<ProductsContextType>({
   products: [],
-  loading: true,
+  isProductsLoading: true,
   refreshProducts: async () => {},
 });
 
@@ -28,10 +28,10 @@ export const useProducts = () => useContext(ProductsContext);
 
 export function ProductsProvider({ children }: { children: ReactNode }) {
   const [products, setProducts] = useState<ProductType[]>([]);
-  const [loading, setLoading] = useState(true);
+  const [isProductsLoading, setIsProductLoading] = useState(true);
 
   const fetchProducts = useCallback(async () => {
-    setLoading(true);
+    setIsProductLoading(true);
 
     const { data, error } = await supabase
       .from('products')
@@ -47,7 +47,7 @@ export function ProductsProvider({ children }: { children: ReactNode }) {
         : [];
       setProducts(productsData);
     }
-    setLoading(false);
+    setIsProductLoading(false);
   }, []);
 
   useEffect(() => {
@@ -89,7 +89,7 @@ export function ProductsProvider({ children }: { children: ReactNode }) {
     <ProductsContext.Provider
       value={{
         products,
-        loading,
+        isProductsLoading,
         refreshProducts: fetchProducts,
       }}
     >

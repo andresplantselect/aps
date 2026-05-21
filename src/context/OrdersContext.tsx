@@ -16,7 +16,7 @@ import { OrderType } from '@/src/types/types';
 
 const OrdersContext = createContext<OrdersContextType>({
   orders: [],
-  loading: true,
+  isOrdersLoading: true,
   refreshOrders: async () => {},
 });
 
@@ -26,16 +26,16 @@ export const OrdersProvider = ({ children }: { children: ReactNode }) => {
   const { userId, isAdmin } = useAuth();
 
   const [orders, setOrders] = useState<OrderType[]>([]);
-  const [loading, setLoading] = useState(true);
+  const [isOrdersLoading, setIsOrdersLoading] = useState(true);
 
   const loadOrders = useCallback(async () => {
     if (!userId) {
       setOrders([]);
-      setLoading(false);
+      setIsOrdersLoading(false);
       return;
     }
 
-    setLoading(true);
+    setIsOrdersLoading(true);
 
     try {
       let query = supabase
@@ -57,7 +57,7 @@ export const OrdersProvider = ({ children }: { children: ReactNode }) => {
 
       setOrders((data ?? []) as OrderType[]);
     } finally {
-      setLoading(false);
+      setIsOrdersLoading(false);
     }
   }, [userId, isAdmin]);
 
@@ -86,7 +86,7 @@ export const OrdersProvider = ({ children }: { children: ReactNode }) => {
     <OrdersContext.Provider
       value={{
         orders,
-        loading,
+        isOrdersLoading,
         refreshOrders: loadOrders,
       }}
     >

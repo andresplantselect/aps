@@ -53,11 +53,20 @@ export default function CommonForm<T extends Record<string, unknown>>({
     }));
   };
 
-  const handleFieldBlur = (field: string) => {
+  const handleFieldBlur = (field: keyof T) => {
     setTouched((prev) => ({
       ...prev,
       [field]: true,
     }));
+
+    // const fieldConfig = configMap[field as string];
+    //
+    // const errors = validateField(form[field], form, fieldConfig?.rules ?? []);
+    //
+    // setValidationErrors((prev) => ({
+    //   ...prev,
+    //   [field]: errors,
+    // }));
   };
 
   const visibleErrors = Object.entries(validationErrors)
