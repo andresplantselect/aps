@@ -11,6 +11,7 @@ import {
   SignInFormType,
   SignUpFormType,
   ProductType,
+  DeliveryStatusType,
 } from '@/src/types/types';
 
 export const useSignIn = () => {
@@ -217,6 +218,28 @@ export const useUpdateOrderStatus = () => {
   return { updateOrderStatus };
 };
 
+export const useUpdateDeliveryStatus = () => {
+  const { request } = useRequest();
+
+  const updateDeliveryStatus = async (
+    orderId: number,
+    nextDeliveryStatus: DeliveryStatusType,
+  ) => {
+    return request(
+      async () =>
+        supabase
+          .from('orders')
+          .update({
+            delivery_status: nextDeliveryStatus,
+          })
+          .eq('id', orderId),
+      ALERT_MESSAGES_DICT.success.deliveryStatusUpdated,
+    );
+  };
+
+  return { updateDeliveryStatus };
+};
+
 export const useCreateOrder = () => {
   const { request } = useRequest();
 
@@ -254,4 +277,94 @@ export const useCreateOrder = () => {
   };
 
   return { createOrder };
+};
+
+export const useGetImages = () => {
+  const { request } = useRequest();
+
+  const getImages = async () =>
+    request<string[]>(async () => {
+      const { data, error } = await supabase.storage
+        .from('product-images')
+        .list('gallery', {
+          limit: 100,
+          sortBy: { column: 'created_at', order: 'desc' },
+        });
+
+      if (error) {
+        return {
+          data: [],
+          error,
+        };
+      }
+
+      const urls =
+        data?.map((file) => {
+          const { data } = supabase.storage
+            .from('product-images')
+            .getPublicUrl(`gallery/${file.name}`);
+
+          return data.publicUrl;
+        }) || [];
+
+      return {
+        data: urls,
+        error: null,
+      };
+    });
+
+  return { getImages };
+};
+
+export const useUploadImages = () => {
+  const { request } = useRequest();
+
+  const uploadImages = async (files: FileList) => {
+    return request(async () => {
+      const uploaded: string[] = [];
+
+      for (let i = 0; i < files.length; i++) {
+        const file = files[i];
+
+        const filePath = `gallery/${Date.now()}_${file.name}`;
+
+        const { error } = await supabase.storage
+          .from('product-images')
+          .upload(filePath, file);
+
+        if (error) throw error;
+
+        const { data } = supabase.storage
+          .from('product-images')
+          .getPublicUrl(filePath);
+
+        if (data.publicUrl) {
+          uploaded.push(data.publicUrl);
+        }
+      }
+
+      return {
+        data: uploaded,
+        error: null,
+      };
+    });
+  };
+
+  return { uploadImages };
+};
+
+export const useDeleteImages = () => {
+  const { request } = useRequest();
+
+  const deleteImages = async (urls: string[]) =>
+    request(async () => {
+      const filePaths = urls
+        .map((url) =>
+          decodeURIComponent(url.split('/object/public/product-images/')[1]),
+        )
+        .filter(Boolean);
+      return supabase.storage.from('product-images').remove(filePaths);
+    });
+
+  return { deleteImages };
 };

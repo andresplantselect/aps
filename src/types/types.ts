@@ -7,12 +7,14 @@ export interface ProductType {
   price: number;
   created_at: string;
   comment?: string;
-  pots_count: number;
+  units_per_box: number;
   images: string[];
   totalOrdered: number;
   available: number;
   height?: string;
   width?: string;
+  can_buy_units: boolean;
+  is_visible: boolean;
 }
 
 export interface UserType {
@@ -49,7 +51,8 @@ export interface CartItem {
   price: number;
   quantity: number;
   available: number;
-  pots_count: number;
+  units_per_box: number;
+  can_buy_units: boolean;
 }
 
 export interface OrderItem {
@@ -57,11 +60,17 @@ export interface OrderItem {
   title: string;
   price: number;
   quantity: number;
-  pots_count: number;
+  units_per_box: number;
 }
 
 export type OrderStatusType = 'pending' | 'approved' | 'cancelled';
+export type DeliveryStatusType =
+  | 'not_applicable'
+  | 'waiting'
+  | 'delivered'
+  | 'failed';
 export type DisponibilityType = 'available' | 'outOfStock';
+export type VisibilityType = 'visible' | 'hidden';
 
 export interface OrderType {
   id: number;
@@ -73,6 +82,7 @@ export interface OrderType {
   status: OrderStatusType;
   created_at: string;
   profile_name?: string;
+  delivery_status: DeliveryStatusType;
 }
 
 export type AlertType = {
@@ -83,11 +93,11 @@ export type AlertType = {
 
 export type InputFieldType =
   | 'text'
-  | 'number'
   | 'password'
   | 'textarea'
   | 'images'
-  | 'confirm';
+  | 'confirm'
+  | 'boolean';
 
 export type FormField<Form> = {
   disabled?: boolean;

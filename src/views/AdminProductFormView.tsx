@@ -7,6 +7,7 @@ import { AppDrawer } from '@/src/components/common/AppDrawer';
 import CommonForm from '@/src/components/form/CommonForm';
 import { AdminProductFormConfig } from '@/src/components/form/formConfigs';
 import { useAlert } from '@/src/context/AlertContext';
+import { parseNumberInput } from '@/src/helpers/helpers';
 import { useCreateProduct, useUpdateProduct } from '@/src/hooks/api';
 import { AdminProductFormProps, ProductForm } from '@/src/types/propsTypes';
 import { FormField } from '@/src/types/types';
@@ -22,11 +23,13 @@ export default function AdminProductFormView({
     title: '',
     price: '',
     comment: '',
-    pots_count: '',
+    units_per_box: '',
     images: [],
     available: '',
     height: '',
     width: '',
+    can_buy_units: false,
+    is_visible: false,
   });
   const [isFormValid, setIsFormValid] = useState(false);
   const { showAlert } = useAlert();
@@ -35,10 +38,19 @@ export default function AdminProductFormView({
   const { createProduct } = useCreateProduct();
   const { updateProduct } = useUpdateProduct();
 
+  const normalizedProduct = (form: ProductForm) => ({
+    ...form,
+    price: parseNumberInput(form.price) ?? '0',
+    units_per_box: parseNumberInput(form.units_per_box) ?? '0',
+    available: parseNumberInput(form.available) ?? '0',
+  });
+
   const handleCreate = async () => {
     if (!isFormValid) return;
 
-    const { error, success } = await createProduct(productForm);
+    const { error, success } = await createProduct(
+      normalizedProduct(productForm),
+    );
 
     if (error) {
       showAlert(error);
@@ -54,7 +66,10 @@ export default function AdminProductFormView({
   const handleUpdate = async () => {
     if (!isFormValid || !product?.id) return;
 
-    const { error, success } = await updateProduct(productForm, product?.id);
+    const { error, success } = await updateProduct(
+      normalizedProduct(productForm),
+      product?.id,
+    );
 
     if (error) {
       showAlert(error);

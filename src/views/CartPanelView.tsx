@@ -17,7 +17,7 @@ import { CartPanelProps } from '@/src/types/propsTypes';
 export default function CartPanelView({ open, onClose }: CartPanelProps) {
   const [comment, setComment] = useState('');
 
-  const { items, total, updateItemQuantity, clearCart } = useCart();
+  const { items, total, clearCart } = useCart();
   const { createOrder } = useCreateOrder();
   const { showAlert } = useAlert();
   const { refreshOrders } = useOrders();
@@ -30,7 +30,8 @@ export default function CartPanelView({ open, onClose }: CartPanelProps) {
       title: i.title,
       price: i.price,
       quantity: i.quantity,
-      pots_count: i.pots_count,
+      can_buy_units: i.can_buy_units,
+      units_per_box: i.units_per_box,
     }));
 
     const { success, error } = await createOrder(orderItems, total, comment);
@@ -68,7 +69,7 @@ export default function CartPanelView({ open, onClose }: CartPanelProps) {
       }}
     >
       <Stack justifyContent="space-between" sx={{ height: '100%' }}>
-        <CartItemsList items={items} updateItemQuantity={updateItemQuantity} />
+        <CartItemsList items={items} />
 
         {!isCartEmpty && (
           <CartItemSummary

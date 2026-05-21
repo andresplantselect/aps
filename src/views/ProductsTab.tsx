@@ -1,8 +1,10 @@
 import AddIcon from '@mui/icons-material/Add';
-import { Box, Stack, Typography } from '@mui/material';
+import YardOutlinedIcon from '@mui/icons-material/YardOutlined';
+import { Box, LinearProgress, Stack } from '@mui/material';
 import React, { useState } from 'react';
 
-import ProductsControls from '@/src/components/products/ProductControls';
+import EmptyStateMessage from '@/src/components/common/EmptyStateMessage';
+import { ProductsFilters } from '@/src/components/products/ProductsFilters';
 import ProductsPage from '@/src/components/products/ProductsPage';
 import ProductsViewToggle from '@/src/components/products/ProductsViewToggle';
 import { useAuth } from '@/src/context/AuthContext';
@@ -18,7 +20,7 @@ export default function ProductsTab() {
 
   return (
     <Box>
-      <Stack spacing={2}>
+      <Stack spacing={1}>
         {isAdmin && (
           <PrimaryButton
             onClick={() => setShowForm(true)}
@@ -28,19 +30,22 @@ export default function ProductsTab() {
           </PrimaryButton>
         )}
 
-        <ProductsControls {...productsState} />
-        <ProductsViewToggle
-          value={productsState.viewMode}
-          onChange={productsState.setViewMode}
-        />
+        <ProductsFilters {...productsState} />
+        <ProductsViewToggle {...productsState} />
 
-        {productsState.isProductListEmpty && (
-          <Typography textAlign="center" color="text.secondary">
-            No hay productos disponibles.
-          </Typography>
+        {!productsState.isProductsLoading &&
+          productsState.isProductListEmpty && (
+            <EmptyStateMessage
+              message="No hay productos disponibles"
+              icon={<YardOutlinedIcon />}
+            />
+          )}
+
+        {productsState.isProductsLoading ? (
+          <LinearProgress />
+        ) : (
+          <ProductsPage {...productsState} />
         )}
-
-        <ProductsPage {...productsState} />
       </Stack>
 
       {showForm && (

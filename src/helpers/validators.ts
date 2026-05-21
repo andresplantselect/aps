@@ -1,3 +1,4 @@
+import { parseNumberInput } from '@/src/helpers/helpers';
 import { FormField, ValidationRule } from '@/src/types/types';
 
 export function validateField<Form>(
@@ -35,6 +36,28 @@ export const validationRules = {
   password: (value: unknown) => {
     if (typeof value !== 'string') return 'Invalid password';
     return value.length >= 8 ? null : 'Min 8 characters';
+  },
+
+  number: (value: unknown) => {
+    if (value === '' || value === null || value === undefined) {
+      return null;
+    }
+
+    const parsed = parseNumberInput(value);
+
+    if (parsed === null) {
+      return 'Invalid number value';
+    }
+
+    return Number.isInteger(parsed) ? null : 'Invalid number value';
+  },
+
+  decimalNumber: (value: unknown) => {
+    if (value === '' || value === null || value === undefined) {
+      return null;
+    }
+
+    return parseNumberInput(value) === null ? 'Invalid number value' : null;
   },
 
   confirmPassword: (value: unknown, form: unknown) => {

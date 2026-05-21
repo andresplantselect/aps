@@ -1,13 +1,10 @@
 import { Box, Stack, Typography } from '@mui/material';
 import React from 'react';
 
-import { CartItemCard } from '@/src/components/cart/CartItemCard';
+import AddItemsCard from '@/src/components/common/AddItemsCard';
 import { CartItemListProps } from '@/src/types/propsTypes';
 
-export function CartItemsList({
-  items,
-  updateItemQuantity,
-}: CartItemListProps) {
+export function CartItemsList({ items }: CartItemListProps) {
   if (!items.length) {
     return (
       <Stack
@@ -24,13 +21,9 @@ export function CartItemsList({
 
   return (
     <Box sx={{ flex: 1, overflowY: 'auto' }}>
-      <Stack spacing={1}>
+      <Stack spacing={1.5}>
         {items.map((item) => (
-          <CartItemCard
-            key={item.id}
-            item={item}
-            updateItemQuantity={updateItemQuantity}
-          />
+          <AddItemsCard key={item.id} productItem={item} title={item.title} />
         ))}
       </Stack>
     </Box>

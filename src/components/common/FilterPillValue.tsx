@@ -19,7 +19,6 @@ export function FilterPillValue({ label, value }: FilterPillValueProps) {
         color="text.secondary"
         sx={{
           whiteSpace: 'nowrap',
-          fontSize: 12,
         }}
       >
         {label}:
@@ -30,7 +29,6 @@ export function FilterPillValue({ label, value }: FilterPillValueProps) {
         sx={{
           ml: 0.5,
           fontWeight: 500,
-          fontSize: 12,
           whiteSpace: 'nowrap',
           overflow: 'hidden',
           textOverflow: 'ellipsis',

@@ -4,17 +4,11 @@ import React, { useState } from 'react';
 import DeleteProductDialog from '@/src/components/products/DeleteProductDialog';
 import ProductsGrid from '@/src/components/products/ProductsGrid';
 import ProductsTable from '@/src/components/products/ProductsTable';
-import { ProductsPageProps } from '@/src/types/propsTypes';
+import { UseProductsStateProps } from '@/src/types/propsTypes';
 import { ProductType } from '@/src/types/types';
 import AdminProductFormView from '@/src/views/AdminProductFormView';
 
-export default function ProductsPage({
-  products,
-  viewMode,
-  sortBy,
-  sortDir,
-  toggleSort,
-}: ProductsPageProps) {
+export default function ProductsPage(productsState: UseProductsStateProps) {
   const [selectedProduct, setSelectedProduct] = useState<ProductType | null>(
     null,
   );
@@ -22,6 +16,8 @@ export default function ProductsPage({
     edit: false,
     delete: false,
   });
+
+  const { viewMode } = productsState;
 
   const handleUpdateTrigger = (
     p: ProductType | null,
@@ -36,7 +32,7 @@ export default function ProductsPage({
     <Box>
       {viewMode === 'cards' && (
         <ProductsGrid
-          products={products}
+          productsState={productsState}
           onDelete={(p) => handleUpdateTrigger(p, 'delete', true)}
           onEdit={(p) => handleUpdateTrigger(p, 'edit', true)}
         />
@@ -44,12 +40,9 @@ export default function ProductsPage({
 
       {viewMode === 'table' && (
         <ProductsTable
-          products={products}
+          productsState={productsState}
           onDelete={(p) => handleUpdateTrigger(p, 'delete', true)}
           onEdit={(p) => handleUpdateTrigger(p, 'edit', true)}
-          sortBy={sortBy}
-          sortDir={sortDir}
-          toggleSort={toggleSort}
         />
       )}
 

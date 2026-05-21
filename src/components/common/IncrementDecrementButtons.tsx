@@ -1,21 +1,21 @@
 import { Add, Remove } from '@mui/icons-material';
-import { Box, IconButton, Typography } from '@mui/material';
+import { Stack, IconButton, Typography } from '@mui/material';
 import { equals } from 'ramda';
 import React from 'react';
 
 interface PreorderButtonProps {
-  inStock: number;
   quantity: number;
   onChange: (q: number) => void;
+  disableAdd: boolean;
 }
 
 export default function IncrementDecrementButtons({
-  inStock,
   quantity,
   onChange,
+  disableAdd,
 }: PreorderButtonProps) {
   const increment = () => {
-    if (quantity > inStock) return;
+    if (disableAdd) return;
     return onChange(quantity + 1);
   };
 
@@ -25,7 +25,12 @@ export default function IncrementDecrementButtons({
   };
 
   return (
-    <Box display="flex" alignItems="center" gap={1}>
+    <Stack
+      direction="row"
+      alignItems="center"
+      justifyContent="space-between"
+      sx={{ width: 70 }}
+    >
       <IconButton
         disabled={equals(quantity, 0)}
         onClick={decrement}
@@ -43,7 +48,7 @@ export default function IncrementDecrementButtons({
       <Typography>{quantity}</Typography>
 
       <IconButton
-        disabled={quantity >= inStock}
+        disabled={disableAdd}
         onClick={increment}
         size="small"
         sx={{
@@ -55,6 +60,6 @@ export default function IncrementDecrementButtons({
       >
         <Add sx={{ width: 15, height: 15 }} />
       </IconButton>
-    </Box>
+    </Stack>
   );
 }

@@ -6,28 +6,28 @@ import {
   Chip,
   ToggleButton,
   TableCell,
-} from '@mui/material';
-import Button from '@mui/material/Button';
-import { styled } from '@mui/material/styles';
+} from "@mui/material";
+import Button from "@mui/material/Button";
+import { styled } from "@mui/material/styles";
 
 export const PrimaryButton = styled(Button)(({ theme }) => ({
   backgroundColor: theme.palette.primary.main,
   color: theme.palette.primary.contrastText,
-  textTransform: 'none',
-  fontWeight: 600,
-  fontSize: 16,
-  padding: theme.spacing(0.5, 2),
+  textTransform: "none",
+  fontWeight: 500,
+  fontSize: 14,
+  padding: theme.spacing(0.4, 1.6),
   borderRadius: 999,
   border: `1px solid ${theme.palette.primary.main}`,
-  transition: 'background-color 0.2s ease',
-  width: 'fit-content',
+  transition: "background-color 0.2s ease",
+  width: "fit-content",
 
-  '&:hover': {
+  "&:hover": {
     backgroundColor: theme.palette.primary.dark,
     border: `1px solid ${theme.palette.primary.dark}`,
   },
 
-  '&.Mui-disabled': {
+  "&.Mui-disabled": {
     backgroundColor: theme.palette.grey[200],
     border: `1px solid ${theme.palette.grey[200]}`,
     color: theme.palette.grey[400],
@@ -35,59 +35,62 @@ export const PrimaryButton = styled(Button)(({ theme }) => ({
 }));
 
 export const SecondaryButton = styled(Button)(({ theme }) => ({
-  backgroundColor: 'transparent',
+  backgroundColor: "transparent",
   color: theme.palette.text.primary,
-  textTransform: 'none',
-  fontWeight: 600,
-  fontSize: 16,
-  padding: theme.spacing(0.5, 2),
+  textTransform: "none",
+  fontWeight: 500,
+  fontSize: 14,
+  padding: theme.spacing(0.4, 1.6),
   borderRadius: 999,
   border: `1px solid ${theme.palette.divider}`,
-  transition: 'background-color 0.2s ease, border-color 0.2s ease',
-  width: 'fit-content',
+  transition: "background-color 0.2s ease, border-color 0.2s ease",
+  width: "fit-content",
 
-  '&:hover': {
+  "&:hover": {
     backgroundColor: theme.palette.action.hover,
     borderColor: theme.palette.divider,
   },
 
-  '&.Mui-disabled': {
+  "&.Mui-disabled": {
     borderColor: theme.palette.grey[200],
     color: theme.palette.grey[400],
   },
 }));
 
 export const Row = styled(Stack)({
-  width: '100%',
-  flexDirection: 'row',
-  alignItems: 'center',
-  justifyContent: 'space-between',
+  width: "100%",
+  flexDirection: "row",
+  alignItems: "center",
+  justifyContent: "space-between",
 });
 
 export const PanelCard = styled(Card)(({ theme }) => ({
   borderRadius: 16,
-  border: '1px solid',
+  border: "1px solid",
   borderColor: theme.palette.grey[200],
-  boxShadow: 'none',
+  boxShadow: "none",
   padding: 16,
-  width: '100%',
+  width: "100%",
 }));
 
 export const RoundIconButton = styled(IconButton)(({ theme }) => ({
-  width: 36,
-  height: 36,
-
-  borderRadius: '50%',
+  width: 28,
+  height: 28,
+  borderRadius: "50%",
   backgroundColor: theme.palette.primary.main,
   color: theme.palette.primary.contrastText,
+  transition: "background-color 0.2s ease",
 
-  transition: 'background-color 0.2s ease',
+  svg: {
+    fontWeight: 400,
+    fontSize: "18px",
+  },
 
-  '&:hover': {
+  "&:hover": {
     backgroundColor: theme.palette.primary.dark,
   },
 
-  '&.Mui-disabled': {
+  "&.Mui-disabled": {
     backgroundColor: theme.palette.grey[200],
     color: theme.palette.grey[400],
   },
@@ -96,104 +99,99 @@ export const RoundIconButton = styled(IconButton)(({ theme }) => ({
 export const SecondaryRoundIconButton = styled(IconButton)(({ theme }) => ({
   width: 36,
   height: 36,
-  borderRadius: '50%',
-  backgroundColor: 'transparent',
+  borderRadius: "50%",
+  backgroundColor: "transparent",
   color: theme.palette.text.secondary,
 
   border: `1px solid ${theme.palette.divider}`,
 
-  transition: 'background-color 0.2s ease, color 0.2s ease',
+  transition: "background-color 0.2s ease, color 0.2s ease",
 
-  '&:hover': {
+  "&:hover": {
     backgroundColor: theme.palette.action.hover,
     color: theme.palette.primary.main,
   },
 
-  '&.Mui-disabled': {
+  "&.Mui-disabled": {
     borderColor: theme.palette.grey[200],
     color: theme.palette.grey[400],
   },
 }));
 
 export const CardEditButton = styled(Button)(({ theme }) => ({
-  textTransform: 'none',
-  fontSize: '14px',
+  textTransform: "none",
+  fontSize: 14,
   fontWeight: 500,
   color: theme.palette.primary.main,
   padding: theme.spacing(0.5, 2),
-  minWidth: 'auto',
+  minWidth: "auto",
   borderRadius: 999,
-  backgroundColor: 'transparent',
+  backgroundColor: "transparent",
 
-  '& .MuiButton-startIcon': {
+  "& .MuiButton-startIcon": {
     marginRight: theme.spacing(0.5),
   },
 
-  '&:hover': {
+  "&:hover": {
     backgroundColor: theme.palette.success.light,
   },
 }));
 
 export const CardDeleteButton = styled(Button)(({ theme }) => ({
-  textTransform: 'none',
-  fontSize: '14px',
+  textTransform: "none",
+  fontSize: 14,
   fontWeight: 500,
   color: theme.palette.error.main,
   padding: theme.spacing(0.5, 2),
-  minWidth: 'auto',
+  minWidth: "auto",
   borderRadius: 999,
-  backgroundColor: 'transparent',
+  backgroundColor: "transparent",
 
-  '& .MuiButton-startIcon': {
+  "& .MuiButton-startIcon": {
     marginRight: theme.spacing(0.5),
   },
 
-  '&:hover': {
+  "&:hover": {
     backgroundColor: theme.palette.error.light,
   },
 }));
 
-export const VisuallyHiddenInput = styled('input')({
+export const VisuallyHiddenInput = styled("input")({
   border: 0,
   height: 1,
   margin: -1,
-  overflow: 'hidden',
+  overflow: "hidden",
   padding: 0,
-  position: 'absolute',
-  whiteSpace: 'nowrap',
+  position: "absolute",
+  whiteSpace: "nowrap",
   width: 1,
 });
 
 export const WelcomeBox = styled(Stack)(({ theme }) => ({
-  width: '100%',
+  width: "100%",
   maxWidth: 600,
   marginBottom: theme.spacing(3),
   borderRadius: theme.shape.borderRadius * 2,
   border: `1px solid ${theme.palette.divider}`,
-  boxShadow: '0 2px 12px rgba(0,0,0,0.06)',
-  position: 'relative',
-  overflow: 'hidden',
+  boxShadow: "0 2px 12px rgba(0,0,0,0.06)",
+  position: "relative",
+  overflow: "hidden",
 
-  '& h5': {
-    fontWeight: 600,
-    color: theme.palette.text.primary,
-  },
-
-  [theme.breakpoints.down('sm')]: {
+  [theme.breakpoints.down("sm")]: {
     marginBottom: theme.spacing(2),
   },
 }));
 
 export const FilterPillBox = styled(Box)(({ theme }) => ({
-  display: 'flex',
-  alignItems: 'center',
+  display: "flex",
+  alignItems: "center",
   padding: theme.spacing(0.2, 1.5),
   borderRadius: 999,
-  border: '1px dashed',
+  border: "1px dashed",
   borderColor: theme.palette.text.secondary,
-  transition: 'border-color 0.2s ease, background-color 0.2s ease',
-  overflow: 'hidden',
-  maxWidth: '100%',
+  transition: "border-color 0.2s ease, background-color 0.2s ease",
+  overflow: "hidden",
+  maxWidth: "100%",
 }));
 
 export const StyledChip = styled(Chip)(() => ({
@@ -209,22 +207,22 @@ export const TogglePillButton = styled(ToggleButton)(({ theme }) => ({
   height: 32,
 
   color: theme.palette.text.secondary,
-  backgroundColor: 'transparent',
+  backgroundColor: "transparent",
 
   transition:
-    'background-color 0.2s ease, color 0.2s ease, border-color 0.2s ease',
+    "background-color 0.2s ease, color 0.2s ease, border-color 0.2s ease",
 
-  '&:hover': {
+  "&:hover": {
     backgroundColor: theme.palette.action.hover,
     color: theme.palette.primary.main,
   },
 
-  '&.Mui-selected': {
+  "&.Mui-selected": {
     backgroundColor: theme.palette.primary.main,
     color: theme.palette.primary.contrastText,
     borderColor: theme.palette.primary.main,
 
-    '&:hover': {
+    "&:hover": {
       backgroundColor: theme.palette.primary.dark,
       borderColor: theme.palette.primary.dark,
     },
@@ -232,17 +230,34 @@ export const TogglePillButton = styled(ToggleButton)(({ theme }) => ({
 }));
 
 export const TableHeaderCell = styled(TableCell)(({ theme }) => ({
-  fontSize: 13,
+  fontSize: 14,
   fontWeight: 600,
-  letterSpacing: '0.04em',
+  letterSpacing: "0.04em",
   color: theme.palette.text.secondary,
 
-  '& .MuiTableSortLabel-root': {
+  "& .MuiTableSortLabel-root": {
     fontWeight: 600,
-    fontSize: 13,
+    fontSize: 14,
   },
 
-  '& .MuiTableSortLabel-icon': {
+  "& .MuiTableSortLabel-icon": {
     opacity: 0.6,
   },
+}));
+
+export const CartCard = styled(Box)(({ theme }) => ({
+  position: "relative",
+  fontSize: theme.typography.caption.fontSize,
+  color: theme.palette.text.secondary,
+  padding: theme.spacing(1, 1.5),
+  borderRadius: 10,
+  border: `1px solid ${theme.palette.divider}`,
+}));
+
+export const CustomAccordionText = styled(Card)(({ theme }) => ({
+  fontSize: theme.typography.caption.fontSize,
+  backgroundColor: theme.palette.divider,
+  color: theme.palette.text.secondary,
+  padding: theme.spacing(0.5, 1),
+  borderRadius: 5,
 }));

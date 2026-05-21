@@ -10,7 +10,7 @@ type AuthContextType = {
   userId: string | null;
   user: UserType | null;
   name: string | null;
-  loading: boolean;
+  isAuthLoading: boolean;
   isAdmin: boolean;
   isUser: boolean;
   isUnknownUser: boolean;
@@ -21,7 +21,7 @@ const AuthContext = createContext<AuthContextType>({
   user: null,
   userId: null,
   name: null,
-  loading: true,
+  isAuthLoading: true,
   isAdmin: false,
   isUser: false,
   isUnknownUser: true,
@@ -36,7 +36,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   const [isUser, setIsUser] = useState(false);
   const [isUnknownUser, setIsUnknownUser] = useState(true);
 
-  const [loading, setLoading] = useState(true);
+  const [isAuthLoading, setIsAuthLoading] = useState(true);
 
   async function loadProfile(userId: string) {
     const { data: profile } = await supabase
@@ -85,7 +85,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
       setName(null);
     }
 
-    setLoading(false);
+    setIsAuthLoading(false);
   }
 
   const refreshProfile = async () => {
@@ -101,7 +101,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
         setUser(null);
         applyRole('none');
         setName(null);
-        setLoading(false);
+        setIsAuthLoading(false);
         return;
       }
 
@@ -115,7 +115,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
         user,
         userId: user?.id ?? null,
         name,
-        loading,
+        isAuthLoading,
         isAdmin,
         isUser,
         isUnknownUser,

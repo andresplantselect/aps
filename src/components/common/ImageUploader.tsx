@@ -1,109 +1,77 @@
 'use client';
 
 import CloseIcon from '@mui/icons-material/Close';
-import CloudUploadIcon from '@mui/icons-material/CloudUpload';
 import { Stack, Typography, IconButton } from '@mui/material';
-import { useEffect, useRef, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 
-import { supabase } from '@/lib/supabase';
-import { SecondaryButton, VisuallyHiddenInput } from '@/src/styledComponents';
+import ImageInput from '@/src/components/form/ImageInput';
+import {
+  useDeleteImages,
+  useGetImages,
+  useUploadImages,
+} from '@/src/hooks/api';
 
 interface ImageUploaderProps {
   initialImages?: string[];
   onChange: (images: string[]) => void;
 }
 
-interface UploadedFile {
-  name: string;
-  url: string;
-}
-
 export default function ImageUploader({
   onChange,
   initialImages = [],
 }: ImageUploaderProps) {
-  const [files, setFiles] = useState<UploadedFile[]>(
-    initialImages.map((url, i) => ({
-      url,
-      name: `file-${i + 1}`,
-    })),
+  const { getImages } = useGetImages();
+  const { uploadImages } = useUploadImages();
+  const { deleteImages } = useDeleteImages();
+
+  const [images, setImages] = useState<string[]>(initialImages);
+
+  const files = useMemo(
+    () =>
+      images.map((url, i) => ({
+        url,
+        name: url.split('/').pop() || `file-${i + 1}`,
+      })),
+    [images],
   );
 
-  const fileInputRef = useRef<HTMLInputElement>(null);
+  const fetchImages = async () => {
+    const { data } = await getImages();
+
+    if (data) {
+      setImages(data);
+    }
+  };
 
   useEffect(() => {
-    setFiles(
-      initialImages.map((url, i) => ({
-        url,
-        name: `file-${i + 1}`,
-      })),
-    );
+    void fetchImages();
   }, []);
 
   useEffect(() => {
-    onChange(files.map((f) => f.url));
-  }, [files]);
-
-  const uploadImages = async (fileList: FileList) => {
-    const uploaded: UploadedFile[] = [];
-
-    for (let i = 0; i < fileList.length; i++) {
-      const file = fileList[i];
-      const filePath = `product-images/${Date.now()}_${file.name}`;
-
-      const { error } = await supabase.storage
-        .from('product-images')
-        .upload(filePath, file);
-
-      if (error) {
-        console.error('Error uploading:', error.message);
-        continue;
-      }
-
-      const { data } = supabase.storage
-        .from('product-images')
-        .getPublicUrl(filePath);
-
-      if (data?.publicUrl) {
-        uploaded.push({
-          name: file.name || `file-${Date.now()}`,
-          url: data.publicUrl,
-        });
-      }
-    }
-
-    return uploaded;
-  };
+    onChange(images);
+  }, [images]);
 
   const handleFilesChange = async (fileList: FileList | null) => {
     if (!fileList) return;
-    const uploaded = await uploadImages(fileList);
-    setFiles((prev) => [...prev, ...uploaded]);
+
+    const { error } = await uploadImages(fileList);
+
+    if (!error) {
+      await fetchImages();
+    }
   };
 
-  const handleRemove = (index: number) => {
-    setFiles((prev) => prev.filter((_, i) => i !== index));
+  const handleRemove = async (url: string) => {
+    const { error } = await deleteImages([url]);
+
+    if (!error) {
+      await fetchImages();
+    }
   };
 
   return (
     <Stack>
-      <SecondaryButton
-        as="label"
-        variant="outlined"
-        sx={{ width: 200, justifyContent: 'flex-start', padding: '8px' }}
-      >
-        <Stack direction="row" spacing={1} alignItems="center">
-          <CloudUploadIcon />
-          <Typography>Añadir imágenes</Typography>
-        </Stack>
-
-        <VisuallyHiddenInput
-          type="file"
-          multiple
-          ref={fileInputRef}
-          onChange={(e) => handleFilesChange(e.target.files)}
-        />
-      </SecondaryButton>
+      <ImageInput onChange={handleFilesChange} />
 
       {files.length > 0 && (
         <Stack spacing={0.5} mt={1}>
@@ -116,11 +84,15 @@ export default function ImageUploader({
             >
               <Typography
                 variant="body2"
-                sx={{ maxWidth: '80%', wordBreak: 'break-all' }}
+                sx={{
+                  maxWidth: '80%',
+                  wordBreak: 'break-all',
+                }}
               >
                 {file.name}
               </Typography>
-              <IconButton size="small" onClick={() => handleRemove(i)}>
+
+              <IconButton size="small" onClick={() => handleRemove(file.url)}>
                 <CloseIcon fontSize="small" />
               </IconButton>
             </Stack>

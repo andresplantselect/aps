@@ -6,7 +6,7 @@ import React from 'react';
 
 import CustomAlert from '@/src/components/common/CustomAlert';
 import Loader from '@/src/components/common/Loader';
-import { useLoading } from '@/src/context/LoadingContext';
+import { useRequest } from '@/src/hooks/useRequest';
 import { PrimaryButton, SecondaryButton } from '@/src/styledComponents';
 import { AppDrawerProps } from '@/src/types/propsTypes';
 
@@ -22,7 +22,7 @@ export function AppDrawer({
   secondaryButton,
   setAlertState,
 }: AppDrawerProps) {
-  const { loading } = useLoading();
+  const { loading } = useRequest();
 
   return (
     <Drawer

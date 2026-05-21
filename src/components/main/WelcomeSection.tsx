@@ -14,48 +14,27 @@ export default function WelcomeSection({
   return (
     <WelcomeBox sx={{ mt: 2, height: '100%' }}>
       <Box
-        style={{
-          position: 'absolute',
-          width: '100%',
-          height: '100%',
-          overflow: 'hidden',
-          backgroundImage: 'url(/background.png)',
-          backgroundSize: 'cover',
-          backgroundPosition: 'center',
-        }}
-      />
-      <Box
-        sx={{
-          position: 'absolute',
-          inset: 0,
-          background: `
-            linear-gradient(
-              to bottom,
-              rgba(255,255,255,0.95) 0%,
-              rgba(255,255,255,0.85) 75%,
-              rgba(255,255,255,0.6) 85%,
-              rgba(255,255,255,0.2) 90%,
-              rgba(255,255,255,0) 100%
-            )
-          `,
-        }}
-      />
-      <Box
         component="img"
-        src="/orchid.png"
-        alt="orchid"
+        src="/plants.png"
+        alt="plants"
         sx={{
           position: 'absolute',
-          right: '-30%',
-          bottom: '-5%',
-          pointerEvents: 'none',
-          zIndex: 0,
-          opacity: 0.3,
+          right: '-90px',
+          bottom: '-120px',
+          width: '115%',
+
+          // DESKTOP
+          '@media (min-width:900px)': {
+            right: '-120px',
+            bottom: '-260px',
+            width: 520,
+          },
+          opacity: 0.7,
         }}
       />
 
       <Stack spacing={2} sx={{ marginTop: 0, zIndex: 2, padding: 3 }}>
-        <Typography variant="h5">Bienvenido a Andrés Plant Select!</Typography>
+        <Typography variant="h6">Bienvenido a Andrés Plant Select!</Typography>
 
         <Typography color="text.secondary">
           Aquí puedes explorar la lista de artículos disponibles, que se

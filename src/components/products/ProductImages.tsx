@@ -4,17 +4,9 @@ import ArrowBackIosNewIcon from '@mui/icons-material/ArrowBackIosNew';
 import ArrowForwardIosIcon from '@mui/icons-material/ArrowForwardIos';
 import CloseIcon from '@mui/icons-material/Close';
 import ImageNotSupportedIcon from '@mui/icons-material/ImageNotSupported';
-import {
-  Box,
-  Stack,
-  Modal,
-  IconButton,
-  Typography,
-  useMediaQuery,
-} from '@mui/material';
-import { useTheme } from '@mui/material/styles';
+import { Box, Stack, Modal, IconButton, Typography } from '@mui/material';
 import Image from 'next/image';
-import React, { useRef, useState } from 'react';
+import React, { useState } from 'react';
 
 interface ProductImagesProps {
   images: string[];
@@ -24,10 +16,6 @@ interface ProductImagesProps {
 export default function ProductImages({ images, title }: ProductImagesProps) {
   const [index, setIndex] = useState(0);
   const [open, setOpen] = useState(false);
-  const startX = useRef<number | null>(null);
-
-  const theme = useTheme();
-  const isDesktop = useMediaQuery(theme.breakpoints.up('md'));
 
   const hasImages = images && images.length > 0;
   const hasMany = images?.length > 1;
@@ -42,26 +30,9 @@ export default function ProductImages({ images, title }: ProductImagesProps) {
     setIndex((prev) => prev - 1);
   };
 
-  const handleTouchStart = (e: React.TouchEvent) => {
-    startX.current = e.touches[0].clientX;
-  };
-
-  const handleTouchEnd = (e: React.TouchEvent) => {
-    if (startX.current === null) return;
-    const diff = e.changedTouches[0].clientX - startX.current;
-    if (diff > 50) prev();
-    if (diff < -50) next();
-    startX.current = null;
-  };
-
   const handleClose = () => {
     setOpen(false);
     setIndex(0);
-    startX.current = null;
-  };
-
-  const handleBackdropClick = () => {
-    if (!isDesktop) void handleClose();
   };
 
   if (!hasImages) {
@@ -108,8 +79,6 @@ export default function ProductImages({ images, title }: ProductImagesProps) {
           },
         }}
         onClick={() => setOpen(true)}
-        onTouchStart={handleTouchStart}
-        onTouchEnd={handleTouchEnd}
       >
         <Image
           src={images[index]}
@@ -121,35 +90,7 @@ export default function ProductImages({ images, title }: ProductImagesProps) {
           }}
         />
 
-        {/* Dots for mobile */}
-        {hasMany && !isDesktop && (
-          <Stack
-            direction="row"
-            spacing={0.5}
-            sx={{
-              position: 'absolute',
-              bottom: 6,
-              left: '50%',
-              transform: 'translateX(-50%)',
-            }}
-          >
-            {images.map((_, i) => (
-              <Box
-                key={i}
-                sx={{
-                  width: 6,
-                  height: 6,
-                  borderRadius: '50%',
-                  bgcolor: i === index ? 'rgba(0,0,0,0.8)' : 'rgba(0,0,0,0.3)',
-                  transition: 'background-color 0.3s',
-                }}
-              />
-            ))}
-          </Stack>
-        )}
-
-        {/* Desktop indicator */}
-        {hasMany && isDesktop && (
+        {hasMany && (
           <Typography
             onClick={() => setOpen(true)}
             sx={{
@@ -173,7 +114,6 @@ export default function ProductImages({ images, title }: ProductImagesProps) {
         )}
       </Box>
 
-      {/* FULLSCREEN */}
       <Modal open={open} onClose={handleClose}>
         <Box
           sx={{
@@ -184,9 +124,8 @@ export default function ProductImages({ images, title }: ProductImagesProps) {
             display: 'flex',
             alignItems: 'center',
             justifyContent: 'center',
-            cursor: hasMany && !isDesktop ? 'grab' : 'default',
           }}
-          onClick={handleBackdropClick}
+          onClick={handleClose}
         >
           <Box
             sx={{
@@ -195,8 +134,6 @@ export default function ProductImages({ images, title }: ProductImagesProps) {
               height: '90%',
               transition: 'opacity 0.2s ease',
             }}
-            onTouchStart={handleTouchStart}
-            onTouchEnd={handleTouchEnd}
           >
             <Image
               src={images[index]}
@@ -209,27 +146,28 @@ export default function ProductImages({ images, title }: ProductImagesProps) {
             />
           </Box>
 
-          {/* Close button только desktop */}
-          {isDesktop && (
-            <IconButton
-              onClick={handleClose}
-              sx={{
-                position: 'absolute',
-                top: 16,
-                right: 16,
-                bgcolor: 'rgba(255,255,255,0.8)',
-                '&:hover': { bgcolor: 'rgba(255,255,255,1)' },
-              }}
-            >
-              <CloseIcon />
-            </IconButton>
-          )}
+          {/* Close button */}
+          <IconButton
+            onClick={handleClose}
+            sx={{
+              position: 'absolute',
+              top: 16,
+              right: 16,
+              bgcolor: 'rgba(255,255,255,0.8)',
+              '&:hover': { bgcolor: 'rgba(255,255,255,1)' },
+            }}
+          >
+            <CloseIcon />
+          </IconButton>
 
-          {/* Fullscreen arrows для desktop */}
-          {hasMany && isDesktop && (
+          {/* Fullscreen arrows */}
+          {hasMany && (
             <>
               <IconButton
-                onClick={prev}
+                onClick={(e) => {
+                  e.stopPropagation();
+                  prev();
+                }}
                 disabled={index === 0}
                 sx={{
                   position: 'absolute',
@@ -247,7 +185,10 @@ export default function ProductImages({ images, title }: ProductImagesProps) {
               </IconButton>
 
               <IconButton
-                onClick={next}
+                onClick={(e) => {
+                  e.stopPropagation();
+                  next();
+                }}
                 disabled={index === images.length - 1}
                 sx={{
                   position: 'absolute',

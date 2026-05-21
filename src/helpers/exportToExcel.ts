@@ -36,11 +36,9 @@ function createOrderRow(
   const item = order.items[r - 2];
   if (!item) return [empty(), empty(), empty()];
 
-  const units = item.quantity * item.pots_count;
-
   return [
     {
-      v: units,
+      v: item.quantity,
       s: { ...baseStyle, alignment: { horizontal: 'center' as const } },
     },
     { v: item.title, s: baseStyle },

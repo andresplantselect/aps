@@ -1,4 +1,4 @@
-import { TextField } from '@mui/material';
+import { Checkbox, FormControlLabel, TextField } from '@mui/material';
 import React from 'react';
 
 import ImageUploader from '@/src/components/common/ImageUploader';
@@ -24,25 +24,17 @@ export default function FormFieldRenderer({
     );
   }
 
-  if (field.type === 'number') {
+  if (field.type === 'boolean') {
     return (
-      <TextField
+      <FormControlLabel
+        control={
+          <Checkbox
+            checked={(value as boolean) ?? false}
+            required={field.required}
+            onChange={(e) => onChange(e.target.checked)}
+          />
+        }
         label={field.label}
-        value={(value as string) ?? ''}
-        type="number"
-        fullWidth
-        required={field.required}
-        onChange={(e) => {
-          const val = Number(e.target.value);
-          if (Number.isNaN(val) || val < 0) return;
-          onChange(val);
-        }}
-        onBlur={onBlur}
-        onWheel={(e) => e.currentTarget.blur()}
-        inputProps={{
-          min: 0,
-          ...field.inputProps,
-        }}
       />
     );
   }
