@@ -1,5 +1,5 @@
-import { parseNumberInput } from '@/src/helpers/helpers';
-import { FormField, ValidationRule } from '@/src/types/types';
+import { parseNumberInput } from "@/src/helpers/helpers";
+import { FormField, ValidationRule } from "@/src/types/types";
 
 export function validateField<Form>(
   value: unknown,
@@ -24,50 +24,66 @@ export const validateForm = <Form extends Record<string, unknown>>(
 
 export const validationRules = {
   required: (value: unknown) => {
-    if (!value) return 'Required';
+    if (!value) return "Campo obligatorio";
     return null;
   },
 
-  email: (value: unknown) => {
-    if (typeof value !== 'string') return 'Invalid email';
-    return /\S+@\S+\.\S+/.test(value) ? null : 'Invalid email';
-  },
-
-  password: (value: unknown) => {
-    if (typeof value !== 'string') return 'Invalid password';
-    return value.length >= 8 ? null : 'Min 8 characters';
-  },
-
-  number: (value: unknown) => {
-    if (value === '' || value === null || value === undefined) {
+  moreThan: (compareNum: number) => (value: unknown) => {
+    if (value === "" || value === null || value === undefined) {
       return null;
     }
 
     const parsed = parseNumberInput(value);
 
     if (parsed === null) {
-      return 'Invalid number value';
+      return "Valor numérico inválido";
     }
 
-    return Number.isInteger(parsed) ? null : 'Invalid number value';
+    return parsed > compareNum
+      ? null
+      : `El valor debe ser mayor que ${compareNum}`;
   },
 
-  decimalNumber: (value: unknown) => {
-    if (value === '' || value === null || value === undefined) {
+  email: (value: unknown) => {
+    if (typeof value !== "string") return "Correo electrónico inválido";
+    return /\S+@\S+\.\S+/.test(value) ? null : "Correo electrónico inválido";
+  },
+
+  password: (value: unknown) => {
+    if (typeof value !== "string") return "Contraseña inválida";
+    return value.length >= 8 ? null : "Mínimo 8 caracteres";
+  },
+
+  number: (value: unknown) => {
+    if (value === "" || value === null || value === undefined) {
       return null;
     }
 
-    return parseNumberInput(value) === null ? 'Invalid number value' : null;
+    const parsed = parseNumberInput(value);
+
+    if (parsed === null) {
+      return "Valor numérico inválido";
+    }
+
+    return Number.isInteger(parsed) ? null : "Valor numérico inválido";
   },
 
-  confirmPassword: (value: unknown, form: unknown) => {
+  decimalNumber: (value: unknown) => {
+    if (value === "" || value === null || value === undefined) {
+      return null;
+    }
+
+    return parseNumberInput(value) === null ? "Valor numérico inválido" : null;
+  },
+
+  confirm: (value: unknown, form: unknown) => {
     if (
-      typeof form === 'object' &&
+      typeof form === "object" &&
       form !== null &&
-      'password' in form &&
+      "password" in form &&
       value !== (form as { password?: unknown }).password
     ) {
-      return 'Passwords do not match';
+      return "Las contraseñas no coinciden";
     }
 
     return null;

@@ -90,7 +90,7 @@ export default function ImagesTab() {
           sx={{
             width: '100%',
             display: 'flex',
-            justifyContent: 'center',
+            justifyContent: 'flex-start',
           }}
         >
           <Box

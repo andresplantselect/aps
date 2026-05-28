@@ -7,6 +7,7 @@ import VisibilityOutlinedIcon from '@mui/icons-material/VisibilityOutlined';
 import { TableRow, TableCell } from '@mui/material';
 import React from 'react';
 
+import { EMPTY_VALUE } from '@/src/constants';
 import { useAuth } from '@/src/context/AuthContext';
 import { SecondaryRoundIconButton } from '@/src/styledComponents';
 import { ProductsRowProps } from '@/src/types/propsTypes';
@@ -35,9 +36,13 @@ export function ProductsRow({ product, onEdit, onDelete }: ProductsRowProps) {
 
       <TableCell align="center">{product.units_per_box}</TableCell>
 
-      <TableCell>{product.width ? `${product.width} cms` : '-'}</TableCell>
+      <TableCell align="center">
+        {product.width ? `${product.width} cms` : EMPTY_VALUE}
+      </TableCell>
 
-      <TableCell>{product.height ? `${product.height} cms` : '-'}</TableCell>
+      <TableCell align="center">
+        {product.height ? `${product.height} cms` : EMPTY_VALUE}
+      </TableCell>
 
       {isAdmin && (
         <TableCell align="center">

@@ -16,7 +16,11 @@ import {
 import { includes } from 'ramda';
 
 import { PreordersTableContent } from '@/src/components/preorders/PreordersTableContent';
-import { orderStatusesDict, statusColorsDict } from '@/src/constants';
+import {
+  EMPTY_VALUE,
+  orderStatusesDict,
+  statusColorsDict,
+} from '@/src/constants';
 import { useAuth } from '@/src/context/AuthContext';
 import { usePreordersContext } from '@/src/context/PreordersContext';
 import { deliveryStatusesDict } from '@/src/helpers/helpers';
@@ -46,7 +50,7 @@ export function PreordersRow({ order }: { order: OrderType }) {
 
         <TableCell>{order.id}</TableCell>
 
-        {isAdmin && <TableCell>{order.profile_name || '—'}</TableCell>}
+        {isAdmin && <TableCell>{order.profile_name || EMPTY_VALUE}</TableCell>}
 
         <TableCell align="center">
           <StyledChip

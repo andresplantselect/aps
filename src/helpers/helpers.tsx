@@ -47,7 +47,6 @@ export function getMenuActions({
 
 export const splitUnitsToBoxes = (totalUnits: number, unitsPerBox: number) => {
   const boxes = Math.floor(totalUnits / unitsPerBox);
-
   const units = totalUnits % unitsPerBox;
 
   return {
@@ -74,9 +73,6 @@ export const parseNumberInput = (value: unknown): number | null => {
 
 export const deliveryStatusesDict: Record<DeliveryStatusType, React.ReactNode> =
   {
-    not_applicable: (
-      <RemoveCircleOutlineOutlinedIcon color="error" sx={{ fontSize: 20 }} />
-    ),
     failed: (
       <RemoveCircleOutlineOutlinedIcon color="error" sx={{ fontSize: 20 }} />
     ),

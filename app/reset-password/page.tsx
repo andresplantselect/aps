@@ -1,20 +1,20 @@
-'use client';
+"use client";
 
-import { useRouter } from 'next/navigation';
-import React, { useState, useEffect } from 'react';
+import { useRouter } from "next/navigation";
+import React, { useState, useEffect } from "react";
 
-import { supabase } from '@/lib/supabase';
-import PanelCardFormLayout from '@/src/components/auth/PanelCardFormLayout';
-import CommonForm from '@/src/components/form/CommonForm';
-import { ResetPasswordFormConfig } from '@/src/components/form/formConfigs';
-import { useAlert } from '@/src/context/AlertContext';
-import { useUpdatePassword } from '@/src/hooks/api';
-import { AlertType, FormField, PasswordFormType } from '@/src/types/types';
+import { supabase } from "@/lib/supabase";
+import PanelCardFormLayout from "@/src/components/auth/PanelCardFormLayout";
+import CommonForm from "@/src/components/form/CommonForm";
+import { ResetPasswordFormConfig } from "@/src/components/form/formConfigs";
+import { useAlert } from "@/src/context/AlertContext";
+import { useUpdatePassword } from "@/src/hooks/api";
+import { AlertType, FormField, PasswordFormType } from "@/src/types/types";
 
 export default function Page() {
   const [passwordForm, setPasswordForm] = useState<PasswordFormType>({
-    password: '',
-    confirmPassword: '',
+    password: "",
+    confirm: "",
   });
   const [isFormValid, setIsFormValid] = useState(false);
   const [alert, setAlert] = useState<AlertType>(null);
@@ -23,13 +23,15 @@ export default function Page() {
   const { updatePassword } = useUpdatePassword();
   const { showAlert } = useAlert();
 
+  const resetPasswordFormConfig = ResetPasswordFormConfig(passwordForm);
+
   useEffect(() => {
     const hash = window.location.hash;
-    const params = new URLSearchParams(hash.replace('#', '?'));
-    const access_token = params.get('access_token');
-    const type = params.get('type');
+    const params = new URLSearchParams(hash.replace("#", "?"));
+    const access_token = params.get("access_token");
+    const type = params.get("type");
 
-    if (access_token && type === 'recovery') {
+    if (access_token && type === "recovery") {
       supabase.auth.setSession({
         access_token,
         refresh_token: access_token,
@@ -48,7 +50,7 @@ export default function Page() {
     }
 
     if (success) showAlert(success);
-    router.push('/');
+    router.push("/");
   };
 
   return (
@@ -56,7 +58,7 @@ export default function Page() {
       alert={alert}
       setAlert={(v) => setAlert(v)}
       submit={{
-        title: 'Actualizar',
+        title: "Actualizar",
         handler: handleSubmit,
       }}
     >
@@ -65,7 +67,7 @@ export default function Page() {
           setPasswordForm(form);
           setIsFormValid(isValid);
         }}
-        formConfig={ResetPasswordFormConfig as FormField<PasswordFormType>[]}
+        formConfig={resetPasswordFormConfig as FormField<PasswordFormType>[]}
       />
     </PanelCardFormLayout>
   );

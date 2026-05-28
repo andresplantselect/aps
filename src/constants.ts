@@ -6,6 +6,7 @@ import {
   VisibilityType,
 } from '@/src/types/types';
 
+export const EMPTY_VALUE = '—';
 export const orderStatusesDict: Record<OrderStatusType, string> = {
   pending: 'pendiente',
   approved: 'aprobado',

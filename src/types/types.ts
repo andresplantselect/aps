@@ -1,5 +1,5 @@
-import { AlertColor } from '@mui/material';
-import React from 'react';
+import { AlertColor } from "@mui/material";
+import React from "react";
 
 export interface ProductType {
   id: string;
@@ -20,7 +20,7 @@ export interface ProductType {
 export interface UserType {
   id: string;
   name?: string;
-  role?: 'user' | 'admin';
+  role?: "user" | "admin";
   created_at?: string;
   email?: string;
 }
@@ -36,7 +36,7 @@ export type ForgotPasswordFormType = {
 
 export type PasswordFormType = {
   password: string;
-  confirmPassword: string;
+  confirm: string;
 };
 
 export type SignUpFormType = {
@@ -63,14 +63,10 @@ export interface OrderItem {
   units_per_box: number;
 }
 
-export type OrderStatusType = 'pending' | 'approved' | 'cancelled';
-export type DeliveryStatusType =
-  | 'not_applicable'
-  | 'waiting'
-  | 'delivered'
-  | 'failed';
-export type DisponibilityType = 'available' | 'outOfStock';
-export type VisibilityType = 'visible' | 'hidden';
+export type OrderStatusType = "pending" | "approved" | "cancelled";
+export type DeliveryStatusType = "waiting" | "delivered" | "failed";
+export type DisponibilityType = "available" | "outOfStock";
+export type VisibilityType = "visible" | "hidden";
 
 export interface OrderType {
   id: number;
@@ -92,12 +88,12 @@ export type AlertType = {
 } | null;
 
 export type InputFieldType =
-  | 'text'
-  | 'password'
-  | 'textarea'
-  | 'images'
-  | 'confirm'
-  | 'boolean';
+  | "text"
+  | "password"
+  | "textarea"
+  | "images"
+  | "confirm"
+  | "boolean";
 
 export type FormField<Form> = {
   disabled?: boolean;
@@ -108,6 +104,7 @@ export type FormField<Form> = {
   visibility: boolean;
   rules: ValidationRule<unknown>[];
   required?: boolean;
+  helperText?: string;
   inputProps?: Record<string, unknown>;
 };
 
@@ -115,6 +112,17 @@ export type ValidationRule<Form = unknown> = (
   value: unknown,
   form: Form,
 ) => string | null;
+
+export type DictEntry = {
+  key: string;
+  label?: string;
+  initialValue: unknown;
+  type: InputFieldType;
+  visibility: boolean;
+  rules: ValidationRule<unknown>[];
+  required?: boolean;
+  helperText?: string;
+};
 
 export type AnyFormField = FormField<Record<string, unknown>>;
 
@@ -132,6 +140,6 @@ export type MenuAction = {
   visibility: boolean;
 };
 
-export type ProductsViewType = 'cards' | 'table';
+export type ProductsViewType = "cards" | "table";
 
-export type ProductSortKey = 'title' | 'available' | 'price';
+export type ProductSortKey = "title" | "available" | "price";

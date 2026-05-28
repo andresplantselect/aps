@@ -6,6 +6,7 @@ import YardOutlinedIcon from '@mui/icons-material/YardOutlined';
 import { Typography, Stack, Box } from '@mui/material';
 import React from 'react';
 
+import { EMPTY_VALUE } from '@/src/constants';
 import { ProductType } from '@/src/types/types';
 
 export default function ProductInfo({ product }: { product: ProductType }) {
@@ -23,13 +24,13 @@ export default function ProductInfo({ product }: { product: ProductType }) {
           <Stack direction="row" spacing={0.5}>
             <BlockIcon fontSize="small" />
             <Typography variant="body2">
-              Maceta: {product.width ? `${product.width} cms` : '--'}
+              Maceta: {product.width ? `${product.width} cms` : EMPTY_VALUE}
             </Typography>
           </Stack>
           <Stack direction="row" spacing={0.5}>
             <HeightIcon fontSize="small" />
             <Typography variant="body2">
-              Altura: {product.height ? `${product.height} cms` : '--'}
+              Altura: {product.height ? `${product.height} cms` : EMPTY_VALUE}
             </Typography>
           </Stack>
           <Stack direction="row" spacing={0.5}>

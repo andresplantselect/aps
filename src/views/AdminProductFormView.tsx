@@ -21,11 +21,11 @@ export default function AdminProductFormView({
 
   const [productForm, setProductForm] = useState<ProductForm>({
     title: '',
-    price: '',
+    price: 0,
     comment: '',
-    units_per_box: '',
+    units_per_box: 1,
     images: [],
-    available: '',
+    available: 0,
     height: '',
     width: '',
     can_buy_units: false,
@@ -41,7 +41,6 @@ export default function AdminProductFormView({
   const normalizedProduct = (form: ProductForm) => ({
     ...form,
     price: parseNumberInput(form.price) ?? '0',
-    units_per_box: parseNumberInput(form.units_per_box) ?? '0',
     available: parseNumberInput(form.available) ?? '0',
   });
 

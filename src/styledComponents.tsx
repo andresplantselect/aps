@@ -97,15 +97,18 @@ export const RoundIconButton = styled(IconButton)(({ theme }) => ({
 }));
 
 export const SecondaryRoundIconButton = styled(IconButton)(({ theme }) => ({
-  width: 36,
-  height: 36,
+  width: 28,
+  height: 28,
   borderRadius: '50%',
   backgroundColor: 'transparent',
   color: theme.palette.text.secondary,
-
   border: `1px solid ${theme.palette.divider}`,
-
   transition: 'background-color 0.2s ease, color 0.2s ease',
+
+  svg: {
+    fontWeight: 400,
+    fontSize: '18px',
+  },
 
   '&:hover': {
     backgroundColor: theme.palette.action.hover,

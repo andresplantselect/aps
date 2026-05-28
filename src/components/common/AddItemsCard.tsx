@@ -48,7 +48,7 @@ export default function AddItemsCard({
   const disableUnitsAdd = totalUnits >= productItem.available;
 
   const disableBoxesAdd =
-    totalUnits + productItem.units_per_box > productItem.available;
+    totalUnits + productItem.units_per_box >= productItem.available;
 
   useEffect(() => {
     setBoxesQuantity(boxes);

@@ -11,12 +11,10 @@ export type PasswordFieldsRef = {
 
 interface PasswordFieldsProps {
   confirm?: {
-    onBlur?: () => void;
     onChange: (value: string) => void;
     value: string;
   };
   password?: {
-    onBlur?: () => void;
     onChange: (value: string) => void;
     value: string;
   };
@@ -45,7 +43,6 @@ const PasswordFields = forwardRef<PasswordFieldsRef, PasswordFieldsProps>(
             value={
               !password.value && disabled ? '00000000000000' : password.value
             }
-            onBlur={() => password?.onBlur?.()}
             onChange={(e) => password?.onChange(e.target.value)}
             fullWidth
             required={required}
@@ -74,7 +71,6 @@ const PasswordFields = forwardRef<PasswordFieldsRef, PasswordFieldsProps>(
             label="Confirmar Contraseña"
             type={showConfirmPassword ? 'text' : 'password'}
             value={confirm.value}
-            onBlur={() => confirm?.onBlur?.()}
             onChange={(e) => confirm?.onChange(e.target.value)}
             fullWidth
             required={required}
