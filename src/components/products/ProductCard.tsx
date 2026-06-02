@@ -122,7 +122,7 @@ export default function ProductCard({
             >
               <CardEditButton
                 onClick={() => onEdit(product)}
-                startIcon={<EditIcon fontSize="small" />}
+                startIcon={<EditIcon sx={{ fontSize: 18 }} />}
               >
                 Editar
               </CardEditButton>
@@ -137,7 +137,7 @@ export default function ProductCard({
 
               <CardDeleteButton
                 onClick={() => onDelete(product)}
-                startIcon={<DeleteIcon fontSize="small" />}
+                startIcon={<DeleteIcon sx={{ fontSize: 18 }} />}
               >
                 Eliminar
               </CardDeleteButton>

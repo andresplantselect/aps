@@ -36,7 +36,7 @@ export type ForgotPasswordFormType = {
 
 export type PasswordFormType = {
   password: string;
-  confirmPassword: string;
+  confirm: string;
 };
 
 export type SignUpFormType = {
@@ -64,11 +64,7 @@ export interface OrderItem {
 }
 
 export type OrderStatusType = 'pending' | 'approved' | 'cancelled';
-export type DeliveryStatusType =
-  | 'not_applicable'
-  | 'waiting'
-  | 'delivered'
-  | 'failed';
+export type DeliveryStatusType = 'waiting' | 'delivered' | 'failed';
 export type DisponibilityType = 'available' | 'outOfStock';
 export type VisibilityType = 'visible' | 'hidden';
 
@@ -108,6 +104,7 @@ export type FormField<Form> = {
   visibility: boolean;
   rules: ValidationRule<unknown>[];
   required?: boolean;
+  helperText?: string;
   inputProps?: Record<string, unknown>;
 };
 
@@ -115,6 +112,17 @@ export type ValidationRule<Form = unknown> = (
   value: unknown,
   form: Form,
 ) => string | null;
+
+export type DictEntry = {
+  key: string;
+  label?: string;
+  initialValue: unknown;
+  type: InputFieldType;
+  visibility: boolean;
+  rules: ValidationRule<unknown>[];
+  required?: boolean;
+  helperText?: string;
+};
 
 export type AnyFormField = FormField<Record<string, unknown>>;
 

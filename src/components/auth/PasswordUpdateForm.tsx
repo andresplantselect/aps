@@ -22,7 +22,7 @@ export default function PasswordUpdateForm() {
   const { showAlert } = useAlert();
 
   const handleSavePassword = async () => {
-    const form = { password, confirmPassword: confirm };
+    const form = { password, confirm: confirm };
 
     const errors = [
       ...validateField(password, form, [
@@ -31,7 +31,7 @@ export default function PasswordUpdateForm() {
       ]),
       ...validateField(confirm, form, [
         validationRules.required,
-        validationRules.confirmPassword,
+        validationRules.confirm,
       ]),
     ];
 

@@ -24,18 +24,34 @@ export const validateForm = <Form extends Record<string, unknown>>(
 
 export const validationRules = {
   required: (value: unknown) => {
-    if (!value) return 'Required';
+    if (!value) return 'Campo obligatorio';
     return null;
   },
 
+  moreThan: (compareNum: number) => (value: unknown) => {
+    if (value === '' || value === null || value === undefined) {
+      return null;
+    }
+
+    const parsed = parseNumberInput(value);
+
+    if (parsed === null) {
+      return 'Valor numérico inválido';
+    }
+
+    return parsed > compareNum
+      ? null
+      : `El valor debe ser mayor que ${compareNum}`;
+  },
+
   email: (value: unknown) => {
-    if (typeof value !== 'string') return 'Invalid email';
-    return /\S+@\S+\.\S+/.test(value) ? null : 'Invalid email';
+    if (typeof value !== 'string') return 'Correo electrónico inválido';
+    return /\S+@\S+\.\S+/.test(value) ? null : 'Correo electrónico inválido';
   },
 
   password: (value: unknown) => {
-    if (typeof value !== 'string') return 'Invalid password';
-    return value.length >= 8 ? null : 'Min 8 characters';
+    if (typeof value !== 'string') return 'Contraseña inválida';
+    return value.length >= 8 ? null : 'Mínimo 8 caracteres';
   },
 
   number: (value: unknown) => {
@@ -46,10 +62,10 @@ export const validationRules = {
     const parsed = parseNumberInput(value);
 
     if (parsed === null) {
-      return 'Invalid number value';
+      return 'Valor numérico inválido';
     }
 
-    return Number.isInteger(parsed) ? null : 'Invalid number value';
+    return Number.isInteger(parsed) ? null : 'Valor numérico inválido';
   },
 
   decimalNumber: (value: unknown) => {
@@ -57,17 +73,17 @@ export const validationRules = {
       return null;
     }
 
-    return parseNumberInput(value) === null ? 'Invalid number value' : null;
+    return parseNumberInput(value) === null ? 'Valor numérico inválido' : null;
   },
 
-  confirmPassword: (value: unknown, form: unknown) => {
+  confirm: (value: unknown, form: unknown) => {
     if (
       typeof form === 'object' &&
       form !== null &&
       'password' in form &&
       value !== (form as { password?: unknown }).password
     ) {
-      return 'Passwords do not match';
+      return 'Las contraseñas no coinciden';
     }
 
     return null;

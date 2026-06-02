@@ -3,7 +3,7 @@
 import ArrowBackIosNewIcon from '@mui/icons-material/ArrowBackIosNew';
 import ArrowForwardIosIcon from '@mui/icons-material/ArrowForwardIos';
 import CloseIcon from '@mui/icons-material/Close';
-import ImageNotSupportedIcon from '@mui/icons-material/ImageNotSupported';
+import ImageOutlinedIcon from '@mui/icons-material/ImageOutlined';
 import { Box, Stack, Modal, IconButton, Typography } from '@mui/material';
 import Image from 'next/image';
 import React, { useState } from 'react';
@@ -52,7 +52,7 @@ export default function ProductImages({ images, title }: ProductImagesProps) {
         justifyContent="center"
         spacing={0.5}
       >
-        <ImageNotSupportedIcon sx={{ fontSize: 28, color: 'grey.500' }} />
+        <ImageOutlinedIcon sx={{ fontSize: 28, color: 'grey.500' }} />
         <Typography
           color="text.secondary"
           variant="body2"
@@ -106,6 +106,7 @@ export default function ProductImages({ images, title }: ProductImagesProps) {
               fontWeight: 500,
               cursor: 'pointer',
               transition: 'background-color 0.2s',
+
               '&:hover': { bgcolor: 'rgba(255,255,255,0.9)' },
             }}
           >

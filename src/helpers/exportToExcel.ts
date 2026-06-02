@@ -1,5 +1,6 @@
 import * as XLSX from 'xlsx-js-style';
 
+import { EMPTY_VALUE } from '@/src/constants';
 import { OrderType } from '@/src/types/types';
 
 type ExcelCell = {
@@ -21,7 +22,7 @@ function createOrderRow(
 
   if (r === 0)
     return [
-      { v: order.profile_name?.toUpperCase() ?? '—', s: clientStyle },
+      { v: order.profile_name?.toUpperCase() ?? EMPTY_VALUE, s: clientStyle },
       empty(),
       empty(),
     ];

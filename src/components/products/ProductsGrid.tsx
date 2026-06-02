@@ -11,14 +11,14 @@ export default function ProductsGrid({
   const { visibleProducts } = productsState;
 
   return (
-    <Box sx={{ width: '100%', display: 'flex', justifyContent: 'center' }}>
+    <Box sx={{ width: '100%', display: 'flex', justifyContent: 'flex-start' }}>
       <Box sx={{ width: '100%', maxWidth: 1400 }}>
         <Box
           sx={{
             display: 'grid',
             gridTemplateColumns: 'repeat(auto-fill, minmax(300px, 350px))',
             gap: 2,
-            justifyContent: 'center',
+            justifyContent: 'flex-start',
           }}
         >
           {visibleProducts.map((product) => (

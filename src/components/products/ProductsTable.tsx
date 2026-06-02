@@ -46,9 +46,9 @@ export default function ProductsTable({
 
             <TableHeaderCell align="center">Uds × caja</TableHeaderCell>
 
-            <TableHeaderCell>Maceta</TableHeaderCell>
+            <TableHeaderCell align="center">Maceta</TableHeaderCell>
 
-            <TableHeaderCell>Altura</TableHeaderCell>
+            <TableHeaderCell align="center">Altura</TableHeaderCell>
             {isAdmin && <TableHeaderCell>Visible en catálogo</TableHeaderCell>}
 
             {isAdmin && (

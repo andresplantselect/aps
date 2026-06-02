@@ -48,7 +48,7 @@ export default function AddItemsCard({
   const disableUnitsAdd = totalUnits >= productItem.available;
 
   const disableBoxesAdd =
-    totalUnits + productItem.units_per_box > productItem.available;
+    totalUnits + productItem.units_per_box >= productItem.available;
 
   useEffect(() => {
     setBoxesQuantity(boxes);
@@ -138,7 +138,7 @@ export default function AddItemsCard({
               onChange={handleBoxesChange}
             />
           </Stack>
-          {productItem.can_buy_units && (
+          {productItem.can_buy_units && productItem.units_per_box > 1 && (
             <Stack
               direction="row"
               alignItems="center"

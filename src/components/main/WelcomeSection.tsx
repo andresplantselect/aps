@@ -23,7 +23,6 @@ export default function WelcomeSection({
           bottom: '-120px',
           width: '115%',
 
-          // DESKTOP
           '@media (min-width:900px)': {
             right: '-120px',
             bottom: '-260px',

@@ -36,7 +36,6 @@ export type FieldProps = {
   field: AnyFormField;
   value: unknown;
   onChange: (value: unknown) => void;
-  onBlur: () => void;
 };
 
 export interface ProductCardProps {

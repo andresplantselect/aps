@@ -14,7 +14,7 @@ import { AlertType, FormField, PasswordFormType } from '@/src/types/types';
 export default function Page() {
   const [passwordForm, setPasswordForm] = useState<PasswordFormType>({
     password: '',
-    confirmPassword: '',
+    confirm: '',
   });
   const [isFormValid, setIsFormValid] = useState(false);
   const [alert, setAlert] = useState<AlertType>(null);
@@ -22,6 +22,8 @@ export default function Page() {
   const router = useRouter();
   const { updatePassword } = useUpdatePassword();
   const { showAlert } = useAlert();
+
+  const resetPasswordFormConfig = ResetPasswordFormConfig(passwordForm);
 
   useEffect(() => {
     const hash = window.location.hash;
@@ -65,7 +67,7 @@ export default function Page() {
           setPasswordForm(form);
           setIsFormValid(isValid);
         }}
-        formConfig={ResetPasswordFormConfig as FormField<PasswordFormType>[]}
+        formConfig={resetPasswordFormConfig as FormField<PasswordFormType>[]}
       />
     </PanelCardFormLayout>
   );

@@ -6,6 +6,7 @@ import {
   VisibilityType,
 } from '@/src/types/types';
 
+export const EMPTY_VALUE = '—';
 export const orderStatusesDict: Record<OrderStatusType, string> = {
   pending: 'pendiente',
   approved: 'aprobado',
@@ -49,8 +50,7 @@ export const AuthTitlesDict = {
   },
 };
 
-export const RESET_PASSWORD_URL =
-  'https://andresplantselect.netlify.app/reset-password';
+export const RESET_PASSWORD_URL = 'https://andresplantselect.es/reset-password';
 
 export const ALERT_MESSAGES_DICT = {
   success: {

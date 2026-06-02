@@ -1,6 +1,8 @@
 // @ts-expect-error
 import { serve } from 'https://deno.land/std@0.224.0/http/server.ts';
 
+const EMPTY_VALUE = '—';
+
 serve(async (req: Request) => {
   try {
     const { order } = await req.json();
@@ -28,7 +30,7 @@ serve(async (req: Request) => {
     );
 
     const profiles = await profileRes.json();
-    const profileName = profiles?.[0]?.name ?? '—';
+    const profileName = profiles?.[0]?.name ?? EMPTY_VALUE;
 
     const itemsHtml = order.items
       .map((i: unknown) => `<li>${i.title} × ${i.quantity} un.</li>`)
@@ -60,7 +62,7 @@ serve(async (req: Request) => {
         'Content-Type': 'application/json',
       },
       body: JSON.stringify({
-        from: 'Andres Plant Select <pedidos@andresplantselect.com>',
+        from: 'Andres Plant Select <pedidos@andresplantselect.es>',
         to: adminEmails,
         subject: `#${order.id}: Nuevo pedido de ${profileName}`,
         html,

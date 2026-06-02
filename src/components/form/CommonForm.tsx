@@ -2,9 +2,10 @@ import { Stack } from '@mui/material';
 import React, { useEffect, useMemo, useState } from 'react';
 
 import ValidationErrorsList from '@/src/components/common/ValidationErrorsList';
+import { formConfigFieldsDict } from '@/src/components/form/formConfigs';
 import FormFieldRenderer from '@/src/components/form/FormFieldRenderer';
 import { validateField, validateForm } from '@/src/helpers/validators';
-import { AnyFormField, FormField } from '@/src/types/types';
+import { AnyFormField, DictEntry, FormField } from '@/src/types/types';
 
 const prepareInitialState = <T extends Record<string, unknown>>(
   config: FormField<T>[],
@@ -25,16 +26,18 @@ export default function CommonForm<T extends Record<string, unknown>>({
     () => prepareInitialState(formConfig) as T,
   );
 
-  const [validationErrors, setValidationErrors] = useState<
-    Record<string, string[]>
-  >({});
+  const validationErrors = useMemo(() => {
+    return formConfig.reduce<Record<string, string[]>>((acc, field) => {
+      const value = form[field.key];
+      const errors = validateField(value, form, field.rules);
 
-  const [touched, setTouched] = useState<Record<string, boolean>>({});
+      if (errors.length > 0) {
+        acc[String(field.key)] = errors;
+      }
 
-  const configMap: Record<string, FormField<T>> = useMemo(
-    () => Object.fromEntries(formConfig.map((f) => [f.key, f])),
-    [formConfig],
-  );
+      return acc;
+    }, {});
+  }, [form, formConfig]);
 
   useEffect(() => {
     fillForm(form, validateForm(form, formConfig));
@@ -43,35 +46,15 @@ export default function CommonForm<T extends Record<string, unknown>>({
   const handleFieldChange = (field: keyof T, value: unknown) => {
     const nextForm = { ...form, [field]: value };
     setForm(nextForm);
-
-    const fieldConfig = configMap[field as string];
-    const errors = validateField(value, nextForm, fieldConfig?.rules);
-
-    setValidationErrors((prev) => ({
-      ...prev,
-      [field]: errors,
-    }));
   };
 
-  const handleFieldBlur = (field: keyof T) => {
-    setTouched((prev) => ({
-      ...prev,
-      [field]: true,
-    }));
-
-    // const fieldConfig = configMap[field as string];
-    //
-    // const errors = validateField(form[field], form, fieldConfig?.rules ?? []);
-    //
-    // setValidationErrors((prev) => ({
-    //   ...prev,
-    //   [field]: errors,
-    // }));
-  };
-
-  const visibleErrors = Object.entries(validationErrors)
-    .filter(([key]) => touched[key])
-    .flatMap(([, errors]) => errors);
+  const visibleErrors = Object.entries(validationErrors).flatMap(
+    ([key, errors]) =>
+      errors.map(
+        (error) =>
+          `${(formConfigFieldsDict as Record<string, DictEntry>)[key].label}: ${error}`,
+      ),
+  );
 
   const hasErrors = visibleErrors.length > 0;
 
@@ -94,7 +77,6 @@ export default function CommonForm<T extends Record<string, unknown>>({
                 field={field as unknown as AnyFormField}
                 value={form[field.key]}
                 onChange={(value) => handleFieldChange(field.key, value)}
-                onBlur={() => handleFieldBlur(String(field.key))}
               />
             ))}
         </Stack>

@@ -9,7 +9,6 @@ export default function FormFieldRenderer({
   field,
   value,
   onChange,
-  onBlur,
 }: FieldProps) {
   if (field.type === 'text') {
     return (
@@ -17,9 +16,9 @@ export default function FormFieldRenderer({
         label={field.label}
         value={(value as string) ?? ''}
         onChange={(e) => onChange(e.target.value)}
-        onBlur={onBlur}
         fullWidth
         required={field.required}
+        helperText={field.helperText || ''}
       />
     );
   }
@@ -45,7 +44,6 @@ export default function FormFieldRenderer({
         label={field.label}
         value={(value as string) ?? ''}
         onChange={(e) => onChange(e.target.value)}
-        onBlur={onBlur}
         fullWidth
         required={field.required}
         multiline
@@ -60,7 +58,6 @@ export default function FormFieldRenderer({
         password={{
           value: value as string,
           onChange: onChange as (v: string) => void,
-          onBlur,
         }}
         disabled={field.disabled}
         required={field.required}
@@ -74,7 +71,6 @@ export default function FormFieldRenderer({
         confirm={{
           value: value as string,
           onChange: onChange as (v: string) => void,
-          onBlur,
         }}
         disabled={field.disabled}
         required={field.required}
