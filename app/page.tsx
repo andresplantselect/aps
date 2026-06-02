@@ -7,6 +7,7 @@ import InviteDialog from '@/src/components/auth/InviteDialog';
 import Layout from '@/src/components/common/Layout';
 import Loader from '@/src/components/common/Loader';
 import HeaderActions from '@/src/components/main/HeaderActions';
+import MobileNavDrawer from '@/src/components/main/MobileNavDrawer';
 import WelcomeSection from '@/src/components/main/WelcomeSection';
 import { useAuth } from '@/src/context/AuthContext';
 import { getMenuActions } from '@/src/helpers/helpers';
@@ -23,6 +24,8 @@ export default function Page() {
     help: false,
     invite: false,
   });
+
+  const [mobileNavOpen, setMobileNavOpen] = useState(false);
 
   const [inviteUrl, setInviteUrl] = useState<string | null>(null);
 
@@ -79,10 +82,23 @@ export default function Page() {
     <Layout
       actions={
         !isUnknownUser && (
-          <HeaderActions name={name as string} actions={actions} />
+          <HeaderActions
+            name={name as string}
+            actions={actions}
+            onMobileMenuOpen={() => setMobileNavOpen(true)}
+          />
         )
       }
     >
+      {!isUnknownUser && (
+        <MobileNavDrawer
+          open={mobileNavOpen}
+          onClose={() => setMobileNavOpen(false)}
+          actions={actions}
+          name={name as string}
+        />
+      )}
+
       {isAdmin && <UsersTabs />}
       {isUser && <UserView />}
 

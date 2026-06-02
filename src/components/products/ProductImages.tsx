@@ -41,9 +41,7 @@ export default function ProductImages({ images, title }: ProductImagesProps) {
         sx={{
           width: '100%',
           aspectRatio: '1 / 1',
-          border: '1px solid',
-          borderColor: (theme) => theme.palette.grey[300],
-          borderRadius: 1,
+          borderRadius: 'inherit',
           bgcolor: (theme) => theme.palette.grey[100],
           px: 1,
           py: 1,
@@ -73,6 +71,7 @@ export default function ProductImages({ images, title }: ProductImagesProps) {
           width: '100%',
           aspectRatio: '1 / 1',
           overflow: 'hidden',
+          borderRadius: 'inherit',
           cursor: hasMany ? 'pointer' : 'default',
           '&:hover img': {
             transform: hasMany ? 'scale(1.05)' : 'none',

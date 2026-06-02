@@ -6,7 +6,7 @@ import React from 'react';
 
 import NameUpdateForm from '@/src/components/auth/NameUpdateForm';
 import PasswordUpdateForm from '@/src/components/auth/PasswordUpdateForm';
-import { AppDrawer } from '@/src/components/common/AppDrawer';
+import { AppDialog } from '@/src/components/common/AppDialog';
 
 interface UpdateUserProps {
   open: boolean;
@@ -15,7 +15,7 @@ interface UpdateUserProps {
 
 export default function UpdateUserView({ open, onClose }: UpdateUserProps) {
   return (
-    <AppDrawer
+    <AppDialog
       open={open}
       onClose={onClose}
       title="Configuración de usuario"
@@ -25,6 +25,6 @@ export default function UpdateUserView({ open, onClose }: UpdateUserProps) {
         <NameUpdateForm />
         <PasswordUpdateForm />
       </Stack>
-    </AppDrawer>
+    </AppDialog>
   );
 }

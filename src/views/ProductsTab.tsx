@@ -31,7 +31,7 @@ export default function ProductsTab() {
         )}
 
         <ProductsFilters {...productsState} />
-        <ProductsViewToggle {...productsState} />
+        {isAdmin && <ProductsViewToggle {...productsState} />}
 
         {!productsState.isProductsLoading &&
           productsState.isProductListEmpty && (

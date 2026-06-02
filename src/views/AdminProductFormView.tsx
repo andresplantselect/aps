@@ -3,7 +3,7 @@
 import GrassIcon from '@mui/icons-material/Grass';
 import React, { useMemo, useState } from 'react';
 
-import { AppDrawer } from '@/src/components/common/AppDrawer';
+import { AppDialog } from '@/src/components/common/AppDialog';
 import CommonForm from '@/src/components/form/CommonForm';
 import { AdminProductFormConfig } from '@/src/components/form/formConfigs';
 import { useAlert } from '@/src/context/AlertContext';
@@ -82,7 +82,7 @@ export default function AdminProductFormView({
   };
 
   return (
-    <AppDrawer
+    <AppDialog
       open={open}
       onClose={onClose}
       title={isEdit ? 'Editar articulo' : 'Agregar articulo'}
@@ -100,6 +100,6 @@ export default function AdminProductFormView({
         }}
         formConfig={formConfig as FormField<ProductForm>[]}
       />
-    </AppDrawer>
+    </AppDialog>
   );
 }
