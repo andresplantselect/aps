@@ -57,7 +57,7 @@ serve(async (req: Request) => {
         'Content-Type': 'application/json',
       },
       body: JSON.stringify({
-        from: 'Andres Plant Select <pedidos@andresplantselect.com>',
+        from: 'Andres Plant Select <pedidos@andresplantselect.es>',
         to: [email],
         subject: `Estado del pedido #${order.id} de ${orderDate}`,
         html,
