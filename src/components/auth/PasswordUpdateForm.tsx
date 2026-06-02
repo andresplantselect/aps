@@ -1,21 +1,21 @@
-import CheckIcon from "@mui/icons-material/Check";
-import CloseIcon from "@mui/icons-material/Close";
-import EditIcon from "@mui/icons-material/Edit";
-import { Stack } from "@mui/material";
-import React, { useRef, useState } from "react";
+import CheckIcon from '@mui/icons-material/Check';
+import CloseIcon from '@mui/icons-material/Close';
+import EditIcon from '@mui/icons-material/Edit';
+import { Stack } from '@mui/material';
+import React, { useRef, useState } from 'react';
 
 import PasswordFields, {
   PasswordFieldsRef,
-} from "@/src/components/common/PasswordFields";
-import { useAlert } from "@/src/context/AlertContext";
-import { validateField, validationRules } from "@/src/helpers/validators";
-import { useUpdatePassword } from "@/src/hooks/api";
-import { RoundIconButton } from "@/src/styledComponents";
+} from '@/src/components/common/PasswordFields';
+import { useAlert } from '@/src/context/AlertContext';
+import { validateField, validationRules } from '@/src/helpers/validators';
+import { useUpdatePassword } from '@/src/hooks/api';
+import { RoundIconButton } from '@/src/styledComponents';
 
 export default function PasswordUpdateForm() {
   const [editingPassword, setEditingPassword] = useState(false);
-  const [password, setPassword] = useState("");
-  const [confirm, setConfirm] = useState("");
+  const [password, setPassword] = useState('');
+  const [confirm, setConfirm] = useState('');
 
   const passwordRef = useRef<PasswordFieldsRef>(null);
   const { updatePassword } = useUpdatePassword();
@@ -36,7 +36,7 @@ export default function PasswordUpdateForm() {
     ];
 
     if (errors.length) {
-      showAlert({ message: errors[0], severity: "error" });
+      showAlert({ message: errors[0], severity: 'error' });
       return;
     }
 
@@ -48,25 +48,25 @@ export default function PasswordUpdateForm() {
     }
 
     setEditingPassword(false);
-    setPassword("");
-    setConfirm("");
+    setPassword('');
+    setConfirm('');
 
     if (success) showAlert(success);
   };
 
   const handleCancelPassword = () => {
     setEditingPassword(false);
-    setPassword("");
-    setConfirm("");
+    setPassword('');
+    setConfirm('');
 
     passwordRef.current?.resetVisibility();
   };
 
   return (
     <Stack
-      direction={editingPassword ? "column" : "row"}
+      direction={editingPassword ? 'column' : 'row'}
       spacing={1}
-      alignItems={editingPassword ? "flex-start" : "center"}
+      alignItems={editingPassword ? 'flex-start' : 'center'}
     >
       <PasswordFields
         ref={passwordRef}

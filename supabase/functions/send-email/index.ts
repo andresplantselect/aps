@@ -1,7 +1,7 @@
 // @ts-expect-error
 import { serve } from 'https://deno.land/std@0.224.0/http/server.ts';
 
-import { EMPTY_VALUE } from '../../../src/constants';
+const EMPTY_VALUE = '—';
 
 serve(async (req: Request) => {
   try {
@@ -62,7 +62,7 @@ serve(async (req: Request) => {
         'Content-Type': 'application/json',
       },
       body: JSON.stringify({
-        from: 'Andres Plant Select <pedidos@andresplantselect.com>',
+        from: 'Andres Plant Select <pedidos@andresplantselect.es>',
         to: adminEmails,
         subject: `#${order.id}: Nuevo pedido de ${profileName}`,
         html,
