@@ -12,23 +12,32 @@ export default function WelcomeSection({
   onHelp: () => void;
 }) {
   return (
-    <WelcomeBox sx={{ mt: 2, height: '100%' }}>
+    <WelcomeBox
+      sx={{
+        mt: 2,
+        height: '100%',
+        border: 'none',
+        boxShadow: 'none',
+        borderRadius: 0,
+      }}
+    >
       <Box
         component="img"
         src="/plants.png"
         alt="plants"
         sx={{
-          position: 'absolute',
-          right: '-90px',
-          bottom: '-120px',
-          width: '115%',
-
+          position: 'fixed',
+          right: '-10vw',
+          bottom: '-25vh',
+          width: '100vw',
           '@media (min-width:900px)': {
-            right: '-120px',
-            bottom: '-260px',
-            width: 520,
+            width: '55vw',
+            right: '-8vw',
+            bottom: '-30vh',
           },
-          opacity: 0.7,
+          opacity: 0.2,
+          zIndex: 0,
+          pointerEvents: 'none',
         }}
       />
 
@@ -42,7 +51,7 @@ export default function WelcomeSection({
 
         <RedirectionLink
           linkText="Primera vez aquí?"
-          linkTitle="Aprende cómo funciona la aplicación →"
+          linkTitle="Aprende cómo funciona la aplicación"
           onLinkClick={onHelp}
         />
 

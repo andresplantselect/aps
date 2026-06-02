@@ -4,7 +4,7 @@ import DeleteIcon from '@mui/icons-material/Delete';
 import EditIcon from '@mui/icons-material/Edit';
 import VisibilityOffOutlinedIcon from '@mui/icons-material/VisibilityOffOutlined';
 import VisibilityOutlinedIcon from '@mui/icons-material/VisibilityOutlined';
-import { Typography, Box, Stack, Divider } from '@mui/material';
+import { Typography, Box, Stack } from '@mui/material';
 import React from 'react';
 
 import AddItemsCard from '@/src/components/common/AddItemsCard';
@@ -14,8 +14,8 @@ import { useAuth } from '@/src/context/AuthContext';
 import { useCart } from '@/src/context/CartContext';
 import {
   PanelCard,
-  CardEditButton,
-  CardDeleteButton,
+  PrimaryButton,
+  SecondaryButton,
 } from '@/src/styledComponents';
 import { ProductCardProps } from '@/src/types/propsTypes';
 
@@ -81,13 +81,12 @@ export default function ProductCard({
           <Stack direction="row" spacing={2} alignItems="flex-start">
             <Box
               sx={{
-                width: 96,
-                height: 96,
-                border: '1px solid',
-                borderRadius: 1,
-                borderColor: (theme) => theme.palette.grey[200],
+                width: 128,
+                height: 128,
+                borderRadius: '10px',
                 bgcolor: (theme) => theme.palette.grey[200],
                 overflow: 'hidden',
+                flexShrink: 0,
               }}
             >
               <ProductImages
@@ -113,34 +112,34 @@ export default function ProductCard({
 
         <Stack>
           {isAdmin && (
-            <Stack
-              direction="row"
-              alignItems="center"
-              justifyContent="center"
-              spacing={1}
-              sx={{ mt: 2 }}
-            >
-              <CardEditButton
+            <Stack direction="row" spacing={1} sx={{ mt: 2 }}>
+              <SecondaryButton
                 onClick={() => onEdit(product)}
-                startIcon={<EditIcon sx={{ fontSize: 18 }} />}
+                startIcon={<EditIcon sx={{ fontSize: 16 }} />}
+                sx={{
+                  color: 'primary.main',
+                  borderColor: 'primary.main',
+                  width: '100%',
+                }}
               >
                 Editar
-              </CardEditButton>
+              </SecondaryButton>
 
-              <Divider
-                sx={(theme) => ({
-                  borderColor: theme.palette.divider,
-                })}
-                orientation="vertical"
-                flexItem
-              />
-
-              <CardDeleteButton
+              <PrimaryButton
                 onClick={() => onDelete(product)}
-                startIcon={<DeleteIcon sx={{ fontSize: 18 }} />}
+                startIcon={<DeleteIcon sx={{ fontSize: 16 }} />}
+                sx={{
+                  backgroundColor: 'error.main',
+                  borderColor: 'error.main',
+                  width: '100%',
+                  '&:hover': {
+                    backgroundColor: 'error.dark',
+                    borderColor: 'error.dark',
+                  },
+                }}
               >
                 Eliminar
-              </CardDeleteButton>
+              </PrimaryButton>
             </Stack>
           )}
           {isUser && (

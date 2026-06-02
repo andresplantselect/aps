@@ -102,7 +102,7 @@ export function DateRangePicker({
               label="Desde"
               value={draftFrom}
               onChange={handleDraftFrom}
-              slotProps={{ textField: { size: 'small', variant: 'filled' } }}
+              slotProps={{ textField: { size: 'small', variant: 'outlined' } }}
               sx={datePickerStyles}
             />
 

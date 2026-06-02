@@ -45,7 +45,7 @@ export default function ProductInfo({ product }: { product: ProductType }) {
             <YardOutlinedIcon fontSize="small" />
             <Stack>
               <Typography variant="body2">
-                Disponible por Uds: {product.can_buy_units ? 'Si' : 'No'}
+                Uds sueltas: {product.can_buy_units ? 'Sí' : 'No'}
               </Typography>{' '}
             </Stack>
           </Stack>

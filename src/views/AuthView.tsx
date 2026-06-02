@@ -6,7 +6,7 @@ import { Stack } from '@mui/material';
 import { equals } from 'ramda';
 import React, { useMemo, useState } from 'react';
 
-import { AppDrawer } from '@/src/components/common/AppDrawer';
+import { AppDialog } from '@/src/components/common/AppDialog';
 import RedirectionLink from '@/src/components/common/RedirectionLink';
 import CommonForm from '@/src/components/form/CommonForm';
 import {
@@ -80,7 +80,7 @@ export default function AuthView({ open, onClose }: AuthFormProps) {
   const iconTitle = isSignIn ? <LoginIcon /> : <LockOpenIcon />;
 
   return (
-    <AppDrawer
+    <AppDialog
       open={open}
       onClose={onClose}
       title={title}
@@ -139,6 +139,6 @@ export default function AuthView({ open, onClose }: AuthFormProps) {
           </Stack>
         )}
       </Stack>
-    </AppDrawer>
+    </AppDialog>
   );
 }

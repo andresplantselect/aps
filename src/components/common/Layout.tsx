@@ -1,6 +1,6 @@
 'use client';
 
-import { Divider, Stack } from '@mui/material';
+import { Stack } from '@mui/material';
 import React, { ReactNode } from 'react';
 
 import CustomAlert from '@/src/components/common/CustomAlert';
@@ -29,24 +29,20 @@ export default function Layout({ actions, children }: LayoutProps) {
         justifyContent="space-between"
         alignItems="center"
         spacing={2}
-        sx={{
+        sx={(theme) => ({
           width: '100%',
           flexShrink: 0,
-        }}
-        px={{ xs: 2, md: 5 }}
-        py={2}
+          backgroundColor: theme.palette.primary.main,
+        })}
+        pl={0}
+        pr={{ xs: 2, md: 5 }}
+        pt={0.5}
+        pb={1}
       >
-        <Logo />
+        <Logo white />
 
         {!loading && actions}
       </Stack>
-
-      <Divider
-        sx={(theme) => ({
-          borderColor: theme.palette.divider,
-        })}
-        flexItem
-      />
 
       <Stack
         sx={{

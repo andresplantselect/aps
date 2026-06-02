@@ -6,7 +6,7 @@ import { useState } from 'react';
 
 import { CartItemsList } from '@/src/components/cart/CartItemsList';
 import { CartItemSummary } from '@/src/components/cart/CartItemSummary';
-import { AppDrawer } from '@/src/components/common/AppDrawer';
+import { AppDialog } from '@/src/components/common/AppDialog';
 import { TITLES } from '@/src/constants';
 import { useAlert } from '@/src/context/AlertContext';
 import { useCart } from '@/src/context/CartContext';
@@ -52,7 +52,7 @@ export default function CartPanelView({ open, onClose }: CartPanelProps) {
   };
 
   return (
-    <AppDrawer
+    <AppDialog
       open={open}
       onClose={onClose}
       title={TITLES.titles.cart}
@@ -79,6 +79,6 @@ export default function CartPanelView({ open, onClose }: CartPanelProps) {
           />
         )}
       </Stack>
-    </AppDrawer>
+    </AppDialog>
   );
 }

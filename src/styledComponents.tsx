@@ -74,8 +74,8 @@ export const PanelCard = styled(Card)(({ theme }) => ({
 }));
 
 export const RoundIconButton = styled(IconButton)(({ theme }) => ({
-  width: 28,
-  height: 28,
+  width: 44,
+  height: 44,
   borderRadius: '50%',
   backgroundColor: theme.palette.primary.main,
   color: theme.palette.primary.contrastText,
@@ -83,7 +83,7 @@ export const RoundIconButton = styled(IconButton)(({ theme }) => ({
 
   svg: {
     fontWeight: 400,
-    fontSize: '18px',
+    fontSize: '20px',
   },
 
   '&:hover': {
@@ -97,8 +97,8 @@ export const RoundIconButton = styled(IconButton)(({ theme }) => ({
 }));
 
 export const SecondaryRoundIconButton = styled(IconButton)(({ theme }) => ({
-  width: 28,
-  height: 28,
+  width: 44,
+  height: 44,
   borderRadius: '50%',
   backgroundColor: 'transparent',
   color: theme.palette.text.secondary,
@@ -107,7 +107,7 @@ export const SecondaryRoundIconButton = styled(IconButton)(({ theme }) => ({
 
   svg: {
     fontWeight: 400,
-    fontSize: '18px',
+    fontSize: '20px',
   },
 
   '&:hover': {
@@ -123,7 +123,7 @@ export const SecondaryRoundIconButton = styled(IconButton)(({ theme }) => ({
 
 export const CardEditButton = styled(Button)(({ theme }) => ({
   textTransform: 'none',
-  fontSize: 14,
+  fontSize: 13,
   fontWeight: 500,
   color: theme.palette.primary.main,
   padding: theme.spacing(0.5, 2),
@@ -142,7 +142,7 @@ export const CardEditButton = styled(Button)(({ theme }) => ({
 
 export const CardDeleteButton = styled(Button)(({ theme }) => ({
   textTransform: 'none',
-  fontSize: 14,
+  fontSize: 13,
   fontWeight: 500,
   color: theme.palette.error.main,
   padding: theme.spacing(0.5, 2),
@@ -190,8 +190,8 @@ export const FilterPillBox = styled(Box)(({ theme }) => ({
   alignItems: 'center',
   padding: theme.spacing(0.2, 1.5),
   borderRadius: 999,
-  border: '1px dashed',
-  borderColor: theme.palette.text.secondary,
+  border: '1px solid',
+  borderColor: theme.palette.divider,
   transition: 'border-color 0.2s ease, background-color 0.2s ease',
   overflow: 'hidden',
   maxWidth: '100%',
@@ -233,14 +233,19 @@ export const TogglePillButton = styled(ToggleButton)(({ theme }) => ({
 }));
 
 export const TableHeaderCell = styled(TableCell)(({ theme }) => ({
-  fontSize: 14,
+  fontSize: 11,
   fontWeight: 600,
-  letterSpacing: '0.04em',
+  letterSpacing: '0.06em',
+  textTransform: 'uppercase',
   color: theme.palette.text.secondary,
+  backgroundColor: theme.palette.background.default,
+  padding: '8px 14px',
 
   '& .MuiTableSortLabel-root': {
     fontWeight: 600,
-    fontSize: 14,
+    fontSize: 11,
+    textTransform: 'uppercase',
+    letterSpacing: '0.06em',
   },
 
   '& .MuiTableSortLabel-icon': {
@@ -253,7 +258,7 @@ export const CartCard = styled(Box)(({ theme }) => ({
   fontSize: theme.typography.caption.fontSize,
   color: theme.palette.text.secondary,
   padding: theme.spacing(1, 1.5),
-  borderRadius: 10,
+  borderRadius: 14,
   border: `1px solid ${theme.palette.divider}`,
 }));
 

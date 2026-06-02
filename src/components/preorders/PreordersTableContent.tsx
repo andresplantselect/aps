@@ -83,7 +83,7 @@ export function PreordersTableContent({ order }: PreordersTableContentProps) {
 
                     <TableCell align="center">
                       <>
-                        <Typography>{boxes} Caja(s)</Typography>
+                        <Typography>{boxes} Cajas</Typography>
                         {!!units && <Typography>+ {units} Uds</Typography>}
                       </>
                     </TableCell>

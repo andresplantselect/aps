@@ -20,17 +20,17 @@ export function PreordersDeliveryStatusDialog() {
 
   const label = delivered ? 'Pedido entregado' : 'Entrega cancelada';
 
-  const { deliveryDialogOpen, closeDeliveryDialog, selectedOrder } =
+  const { deliveryDialogOpen, closeDeliveryDialog, selectedDeliveryOrder } =
     usePreordersContext();
   const { showAlert } = useAlert();
   const { updateDeliveryStatus } = useUpdateDeliveryStatus();
   const { refreshOrders } = useOrders();
 
   const confirmDelivery = async () => {
-    if (!selectedOrder) return;
+    if (!selectedDeliveryOrder) return;
 
     const { success, error } = await updateDeliveryStatus(
-      selectedOrder.id,
+      selectedDeliveryOrder.id,
       delivered ? 'delivered' : 'failed',
     );
 

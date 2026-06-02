@@ -18,7 +18,7 @@ import WhereToVoteOutlinedIcon from '@mui/icons-material/WhereToVoteOutlined';
 import { Stack, Typography } from '@mui/material';
 import React from 'react';
 
-import { AppDrawer } from '@/src/components/common/AppDrawer';
+import { AppDialog } from '@/src/components/common/AppDialog';
 import { orderStatusesDict, statusColorsDict } from '@/src/constants';
 import { StyledChip } from '@/src/styledComponents';
 
@@ -30,7 +30,7 @@ export default function HelpView({
   onClose: () => void;
 }) {
   return (
-    <AppDrawer open={open} onClose={onClose} title="Cómo usar la aplicación">
+    <AppDialog open={open} onClose={onClose} title="Cómo usar la aplicación">
       <Stack sx={{ width: '100%' }} alignItems="center" spacing={3}>
         <Typography variant="body1" color="text.secondary">
           Esta aplicación te permite consultar el catálogo de plantas, reservar
@@ -82,36 +82,36 @@ export default function HelpView({
 
           <Stack pl={2} spacing={0.5}>
             <Stack direction="row" spacing={1}>
-              <EuroIcon fontSize="small" sx={{ width: 15 }} />
+              <EuroIcon fontSize="small" sx={{ fontSize: 18 }} />
               <Typography variant="body2">precio por unidad</Typography>
             </Stack>
 
             <Stack direction="row" spacing={1}>
-              <Inventory2Icon fontSize="small" sx={{ width: 15 }} />
+              <Inventory2Icon fontSize="small" sx={{ fontSize: 18 }} />
               <Typography variant="body2">
                 cantidad de unidades disponible
               </Typography>
             </Stack>
 
             <Stack direction="row" spacing={1}>
-              <BlockIcon fontSize="small" sx={{ width: 15 }} />
+              <BlockIcon fontSize="small" sx={{ fontSize: 18 }} />
               <Typography variant="body2">diámetro de la maceta</Typography>
             </Stack>
 
             <Stack direction="row" spacing={1}>
-              <HeightIcon fontSize="small" sx={{ width: 15 }} />
+              <HeightIcon fontSize="small" sx={{ fontSize: 18 }} />
               <Typography variant="body2">altura aproximada</Typography>
             </Stack>
 
             <Stack direction="row" spacing={1}>
-              <GrassIcon fontSize="small" sx={{ width: 15 }} />
+              <GrassIcon fontSize="small" sx={{ fontSize: 18 }} />
               <Typography variant="body2">
                 número de unidades por caja
               </Typography>
             </Stack>
 
             <Stack direction="row" spacing={1}>
-              <ImageIcon fontSize="small" sx={{ width: 15 }} />
+              <ImageIcon fontSize="small" sx={{ fontSize: 18 }} />
               <Typography variant="body2">
                 fotografías del producto (al hacer clic en la imagen puedes
                 verla en tamaño grande)
@@ -302,6 +302,6 @@ export default function HelpView({
           </Typography>
         </Stack>
       </Stack>
-    </AppDrawer>
+    </AppDialog>
   );
 }
