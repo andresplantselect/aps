@@ -233,7 +233,9 @@ export const useUpdateDeliveryStatus = () => {
             delivery_status: nextDeliveryStatus,
           })
           .eq('id', orderId),
-      ALERT_MESSAGES_DICT.success.deliveryStatusUpdated,
+      nextDeliveryStatus === 'delivered'
+        ? ALERT_MESSAGES_DICT.success.deliveryDelivered
+        : ALERT_MESSAGES_DICT.success.deliveryFailed,
     );
   };
 
@@ -319,14 +321,14 @@ export const useGetImages = () => {
 export const useUploadImages = () => {
   const { request } = useRequest();
 
-  const uploadImages = async (files: FileList) => {
+  const uploadImages = async (files: FileList, folder: string = 'gallery') => {
     return request(async () => {
       const uploaded: string[] = [];
 
       for (let i = 0; i < files.length; i++) {
         const file = files[i];
 
-        const filePath = `gallery/${Date.now()}_${file.name}`;
+        const filePath = `${folder}/${Date.now()}_${file.name}`;
 
         const { error } = await supabase.storage
           .from('product-images')

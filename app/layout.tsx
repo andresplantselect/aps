@@ -13,6 +13,7 @@ const manrope = Manrope({
 
 export const metadata = {
   title: 'APS',
+  description: 'Andres Plant Select — plataforma de preordenes',
 };
 
 export default function RootLayout({ children }: { children: ReactNode }) {

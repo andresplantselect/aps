@@ -1,6 +1,6 @@
 'use client';
 
-import { Snackbar, Alert, AlertTitle } from '@mui/material';
+import { Snackbar, Alert } from '@mui/material';
 
 import { CustomAlertProps } from '@/src/types/propsTypes';
 
@@ -12,26 +12,21 @@ export default function CustomAlert({ alertState, onClose }: CustomAlertProps) {
       open
       autoHideDuration={alertState.duration || 3000}
       onClose={onClose}
-      sx={{
-        alignItems: 'flex-start',
-        justifyContent: 'center',
-        position: 'absolute',
-        top: 97,
-      }}
+      anchorOrigin={{ vertical: 'top', horizontal: 'center' }}
     >
       <Alert
         onClose={onClose}
         severity={alertState.severity}
         sx={(theme) => ({
           backgroundColor: theme.palette.background.paper,
-          border: `2px solid ${theme.palette[alertState.severity].main}`,
+          border: `1.5px solid ${theme.palette[alertState.severity].main}`,
           color: theme.palette[alertState.severity].main,
-          alignItems: 'flex-start',
+          alignItems: 'center',
+          minWidth: 280,
+          maxWidth: 480,
+          boxShadow: '0 4px 16px rgba(0,0,0,0.08)',
         })}
       >
-        <AlertTitle sx={{ textTransform: 'capitalize' }}>
-          {alertState.severity}
-        </AlertTitle>
         {alertState.message}
       </Alert>
     </Snackbar>

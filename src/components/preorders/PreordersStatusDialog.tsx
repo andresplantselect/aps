@@ -6,6 +6,7 @@ import {
   TextField,
   Typography,
   Stack,
+  Box,
 } from '@mui/material';
 
 import { useAlert } from '@/src/context/AlertContext';
@@ -48,6 +49,13 @@ export function PreordersStatusDialog() {
 
   return (
     <Dialog open={dialogOpen} onClose={closeDialog} fullWidth>
+      <Box sx={{ backgroundColor: 'primary.main', px: 3, py: 1.5 }}>
+        <Typography
+          sx={{ color: 'primary.contrastText', fontWeight: 600, fontSize: 16 }}
+        >
+          {nextStatus === 'approved' ? 'Aprobar pedido' : 'Rechazar pedido'}
+        </Typography>
+      </Box>
       <DialogContent>
         <Typography sx={{ mb: 1 }}>Comentario del administrador:</Typography>
 

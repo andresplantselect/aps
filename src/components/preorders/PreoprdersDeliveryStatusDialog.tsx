@@ -6,6 +6,7 @@ import {
   Stack,
   Switch,
   Typography,
+  Box,
 } from '@mui/material';
 import { useState } from 'react';
 
@@ -44,7 +45,20 @@ export function PreordersDeliveryStatusDialog() {
   };
 
   return (
-    <Dialog open={deliveryDialogOpen} onClose={() => { setDelivered(true); closeDeliveryDialog(); }}>
+    <Dialog
+      open={deliveryDialogOpen}
+      onClose={() => {
+        setDelivered(true);
+        closeDeliveryDialog();
+      }}
+    >
+      <Box sx={{ backgroundColor: 'primary.main', px: 3, py: 1.5 }}>
+        <Typography
+          sx={{ color: 'primary.contrastText', fontWeight: 600, fontSize: 16 }}
+        >
+          Estado de entrega
+        </Typography>
+      </Box>
       <DialogContent>
         <Stack alignItems="center" justifyContent="center">
           <Typography>{label}</Typography>
@@ -55,7 +69,12 @@ export function PreordersDeliveryStatusDialog() {
         </Stack>
 
         <Stack direction="row" justifyContent="center" spacing={1} mt={2}>
-          <SecondaryButton onClick={() => { setDelivered(true); closeDeliveryDialog(); }}>
+          <SecondaryButton
+            onClick={() => {
+              setDelivered(true);
+              closeDeliveryDialog();
+            }}
+          >
             Cerrar
           </SecondaryButton>
           <PrimaryButton onClick={confirmDelivery}>Confirmar</PrimaryButton>

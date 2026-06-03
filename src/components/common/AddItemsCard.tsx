@@ -178,7 +178,9 @@ export default function AddItemsCard({
             </Stack>
 
             <Stack direction="row" alignItems="center">
-              <Typography variant="body2">{Number(totalPrice).toFixed(2)} €</Typography>
+              <Typography variant="body2">
+                {Number(totalPrice).toFixed(2)} €
+              </Typography>
 
               <Typography
                 variant="caption"

@@ -131,19 +131,15 @@ export default function ProductImages({ images, title }: ProductImagesProps) {
             sx={{
               width: '90%',
               height: '90%',
-              display: 'flex',
-              alignItems: 'center',
-              justifyContent: 'center',
+              position: 'relative',
             }}
           >
-            <img
+            <Image
               src={images[index]}
               alt={`${title}-${index}`}
-              style={{
-                maxWidth: '100%',
-                maxHeight: '100%',
-                objectFit: 'contain',
-              }}
+              fill
+              style={{ objectFit: 'contain' }}
+              unoptimized
             />
           </Box>
 
