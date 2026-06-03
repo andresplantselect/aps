@@ -25,7 +25,7 @@ export default function UserView() {
         color="primary"
         sx={{
           position: 'fixed',
-          bottom: 16,
+          bottom: { xs: 72, md: 16 },
           right: 16,
           zIndex: 1000,
         }}

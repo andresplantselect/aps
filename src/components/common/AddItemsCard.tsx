@@ -178,7 +178,7 @@ export default function AddItemsCard({
             </Stack>
 
             <Stack direction="row" alignItems="center">
-              <Typography variant="body2">{totalPrice} €</Typography>
+              <Typography variant="body2">{Number(totalPrice).toFixed(2)} €</Typography>
 
               <Typography
                 variant="caption"
@@ -202,8 +202,8 @@ export default function AddItemsCard({
           )}
           {showPriceDetails && (
             <CustomAccordionText sx={{ mt: 1 }}>
-              {totalUnits} Uds × {productItem.price} € ={' '}
-              {totalUnits * productItem.price} €
+              {totalUnits} Uds × {Number(productItem.price).toFixed(2)} € ={' '}
+              {(totalUnits * productItem.price).toFixed(2)} €
             </CustomAccordionText>
           )}
         </Stack>

@@ -1,4 +1,5 @@
 import CloudUploadIcon from '@mui/icons-material/CloudUpload';
+import { useRef } from 'react';
 
 import { PrimaryButton, VisuallyHiddenInput } from '@/src/styledComponents';
 
@@ -7,16 +8,22 @@ export default function ImageInput({
 }: {
   onChange: (fileList: FileList | null) => void;
 }) {
+  const inputRef = useRef<HTMLInputElement>(null);
+
   return (
-    <label style={{ display: 'contents' }}>
-      <PrimaryButton endIcon={<CloudUploadIcon />} tabIndex={-1}>
+    <>
+      <PrimaryButton
+        endIcon={<CloudUploadIcon />}
+        onClick={() => inputRef.current?.click()}
+      >
         Añadir imágenes
       </PrimaryButton>
       <VisuallyHiddenInput
+        ref={inputRef}
         type="file"
         multiple
         onChange={(e) => onChange(e.target.files)}
       />
-    </label>
+    </>
   );
 }

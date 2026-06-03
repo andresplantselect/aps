@@ -46,12 +46,13 @@ serve(async (req: Request) => {
           price: number;
           units_per_box: number;
         }) => {
-          const subtotal = (i.price * i.quantity).toFixed(2);
+          const price = Number(i.price);
+          const subtotal = (price * i.quantity).toFixed(2);
           return `
           <tr>
             <td style="padding: 10px 14px; border-bottom: 1px solid #E5E7EB; color: #1F2933; font-size: 13px;">${i.title}</td>
             <td style="padding: 10px 14px; border-bottom: 1px solid #E5E7EB; color: #6B7280; font-size: 13px; text-align: center;">${i.quantity} uds</td>
-            <td style="padding: 10px 14px; border-bottom: 1px solid #E5E7EB; color: #6B7280; font-size: 13px; text-align: right;">€ ${i.price.toFixed(2)}</td>
+            <td style="padding: 10px 14px; border-bottom: 1px solid #E5E7EB; color: #6B7280; font-size: 13px; text-align: right;">€ ${price.toFixed(2)}</td>
             <td style="padding: 10px 14px; border-bottom: 1px solid #E5E7EB; color: #1F2933; font-size: 13px; font-weight: 600; text-align: right;">€ ${subtotal}</td>
           </tr>`;
         },

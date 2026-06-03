@@ -129,19 +129,20 @@ export default function ProductImages({ images, title }: ProductImagesProps) {
         >
           <Box
             sx={{
-              position: 'relative',
               width: '90%',
               height: '90%',
-              transition: 'opacity 0.2s ease',
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'center',
             }}
           >
-            <Image
+            <img
               src={images[index]}
               alt={`${title}-${index}`}
-              fill
               style={{
+                maxWidth: '100%',
+                maxHeight: '100%',
                 objectFit: 'contain',
-                transition: 'transform 0.3s ease',
               }}
             />
           </Box>

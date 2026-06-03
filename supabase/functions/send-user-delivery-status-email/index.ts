@@ -8,8 +8,6 @@ serve(async (req: Request) => {
       return new Response('No order', { status: 400 });
     }
 
-    const isApproved = order.status === 'approved';
-
     // @ts-expect-error
     const supabaseUrl = Deno.env.get('SUPABASE_URL')!;
     // @ts-expect-error
@@ -27,7 +25,7 @@ serve(async (req: Request) => {
 
     const userData = await userRes.json();
 
-    if (!userRes.ok) {
+    if (!userRes.ok || !userData.email) {
       console.error('Failed to fetch user:', userData);
       return new Response('Failed to fetch user', { status: 500 });
     }
@@ -39,19 +37,16 @@ serve(async (req: Request) => {
       year: 'numeric',
     });
 
-    if (!email) {
-      console.error('User email not found', userData);
-      return new Response('User email not found', { status: 400 });
-    }
+    const isReady = order.delivery_status === 'delivered';
 
-    const statusBlock = isApproved
+    const statusBlock = isReady
       ? `<div style="background:#e4f0eb; border-radius:8px; padding:16px; text-align:center; margin-bottom:24px;">
-          <p style="margin:0; font-size:18px; font-weight:700; color:#365c46;">Tu pedido ha sido aprobado</p>
-          <p style="margin:6px 0 0; font-size:13px; color:#4a7c5f;">Tu pedido está listo para recoger</p>
+          <p style="margin:0; font-size:18px; font-weight:700; color:#365c46;">Tu pedido está listo</p>
+          <p style="margin:6px 0 0; font-size:13px; color:#4a7c5f;">Puedes pasar a recogerlo</p>
          </div>`
       : `<div style="background:#F8ECEC; border-radius:8px; padding:16px; text-align:center; margin-bottom:24px;">
-          <p style="margin:0; font-size:18px; font-weight:700; color:#8A1B1B;">Tu pedido ha sido cancelado</p>
-          <p style="margin:6px 0 0; font-size:13px; color:#C94A4A;">Lo sentimos, no pudimos procesar tu pedido</p>
+          <p style="margin:0; font-size:18px; font-weight:700; color:#8A1B1B;">No pudimos preparar tu pedido</p>
+          <p style="margin:6px 0 0; font-size:13px; color:#C94A4A;">Ponte en contacto con nosotros para más información</p>
          </div>`;
 
     const html = `
@@ -76,9 +71,10 @@ serve(async (req: Request) => {
 
           <tr>
             <td style="background-color:#FFFFFF; padding:28px 40px; border:1px solid #E5E7EB; border-top:none;">
+
               ${statusBlock}
 
-              <table width="100%" cellpadding="0" cellspacing="0" style="margin-bottom:20px; border-collapse:collapse;">
+              <table width="100%" cellpadding="0" cellspacing="0" style="border-collapse:collapse;">
                 <tr>
                   <td style="padding:5px 0; font-size:13px; color:#6B7280; width:120px;">Pedido</td>
                   <td style="padding:5px 0; font-size:13px; color:#1F2933; font-weight:600;">#${order.id}</td>
@@ -89,14 +85,10 @@ serve(async (req: Request) => {
                 </tr>
                 <tr>
                   <td style="padding:5px 0; font-size:13px; color:#6B7280;">Total</td>
-                  <td style="padding:5px 0; font-size:13px; color:${isApproved ? '#4a7c5f' : '#1F2933'}; font-weight:700;">€ ${Number(order.total).toFixed(2)}</td>
+                  <td style="padding:5px 0; font-size:13px; color:${isReady ? '#4a7c5f' : '#1F2933'}; font-weight:700;">€ ${Number(order.total).toFixed(2)}</td>
                 </tr>
               </table>
 
-              ${order.admin_comment ? `
-              <div style="background:#F7F8F7; border-radius:8px; padding:14px 16px; font-size:13px; color:#6B7280; font-style:italic;">
-                "${order.admin_comment}"
-              </div>` : ''}
             </td>
           </tr>
 
@@ -113,16 +105,20 @@ serve(async (req: Request) => {
 </body>
 </html>`;
 
+    // @ts-expect-error
     const res = await fetch('https://api.resend.com/emails', {
       method: 'POST',
       headers: {
+        // @ts-expect-error
         Authorization: `Bearer ${Deno.env.get('RESEND_API_KEY')}`,
         'Content-Type': 'application/json',
       },
       body: JSON.stringify({
         from: 'Andres Plant Select <pedidos@andresplantselect.es>',
         to: [email],
-        subject: `Estado del pedido #${order.id} de ${orderDate}`,
+        subject: isReady
+          ? `Tu pedido #${order.id} está listo para recoger`
+          : `Actualización de tu pedido #${order.id}`,
         html,
       }),
     });
@@ -133,7 +129,7 @@ serve(async (req: Request) => {
       headers: { 'Content-Type': 'application/json' },
     });
   } catch (e) {
-    console.error('Resend error:', e);
+    console.error('Error:', e);
     return new Response(JSON.stringify({ error: (e as Error).message }), {
       status: 500,
     });

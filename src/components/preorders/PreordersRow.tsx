@@ -60,7 +60,9 @@ export function PreordersRow({ order }: { order: OrderType }) {
           />
         </TableCell>
         <TableCell align="center">
-          {deliveryStatusesDict[order.delivery_status]}
+          {order.status === 'cancelled'
+            ? <RemoveSharpIcon color="error" sx={{ fontSize: 20 }} />
+            : deliveryStatusesDict[order.delivery_status]}
         </TableCell>
 
         <TableCell width={100}>€ {Number(order.total).toFixed(2)}</TableCell>

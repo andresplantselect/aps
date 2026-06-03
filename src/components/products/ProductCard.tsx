@@ -74,7 +74,7 @@ export default function ProductCard({
               variant="body2"
               color={product.available > 0 ? 'primary' : 'error'}
             >
-              Disponible: {availableStock}
+              Disponible: {availableStock} Uds
             </Typography>
           </Stack>
 

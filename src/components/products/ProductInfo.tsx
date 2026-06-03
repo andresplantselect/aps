@@ -17,7 +17,7 @@ export default function ProductInfo({ product }: { product: ProductType }) {
           sx={{ pl: 0.5, fontWeight: 600, fontSize: 20 }}
           color="primary"
         >
-          {product.price} €
+          {Number(product.price).toFixed(2)} €
         </Typography>
 
         <Stack spacing={1} alignItems="flex-start" sx={{ mt: 0.5 }}>
