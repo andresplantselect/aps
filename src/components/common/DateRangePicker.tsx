@@ -112,7 +112,7 @@ export function DateRangePicker({
               value={draftTo}
               onChange={handleDraftTo}
               slotProps={{
-                textField: { size: 'small', variant: 'filled' },
+                textField: { size: 'small', variant: 'outlined' },
               }}
               sx={datePickerStyles}
             />

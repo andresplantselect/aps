@@ -38,12 +38,13 @@ export function PreordersDeliveryStatusDialog() {
 
     if (success) showAlert(success);
 
+    setDelivered(true);
     closeDeliveryDialog();
     void refreshOrders();
   };
 
   return (
-    <Dialog open={deliveryDialogOpen} onClose={closeDeliveryDialog}>
+    <Dialog open={deliveryDialogOpen} onClose={() => { setDelivered(true); closeDeliveryDialog(); }}>
       <DialogContent>
         <Stack alignItems="center" justifyContent="center">
           <Typography>{label}</Typography>
@@ -54,7 +55,7 @@ export function PreordersDeliveryStatusDialog() {
         </Stack>
 
         <Stack direction="row" justifyContent="center" spacing={1} mt={2}>
-          <SecondaryButton onClick={closeDeliveryDialog}>
+          <SecondaryButton onClick={() => { setDelivered(true); closeDeliveryDialog(); }}>
             Cerrar
           </SecondaryButton>
           <PrimaryButton onClick={confirmDelivery}>Confirmar</PrimaryButton>

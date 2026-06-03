@@ -16,9 +16,8 @@ export default function ProductsGrid({
         <Box
           sx={{
             display: 'grid',
-            gridTemplateColumns: 'repeat(auto-fill, minmax(300px, 350px))',
+            gridTemplateColumns: 'repeat(auto-fill, minmax(280px, 1fr))',
             gap: 2,
-            justifyContent: 'flex-start',
           }}
         >
           {visibleProducts.map((product) => (
