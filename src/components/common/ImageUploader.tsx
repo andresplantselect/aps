@@ -5,11 +5,7 @@ import { Stack, Typography, IconButton } from '@mui/material';
 import { useEffect, useMemo, useState } from 'react';
 
 import ImageInput from '@/src/components/form/ImageInput';
-import {
-  useDeleteImages,
-  useGetImages,
-  useUploadImages,
-} from '@/src/hooks/api';
+import { useDeleteImages, useUploadImages } from '@/src/hooks/api';
 
 interface ImageUploaderProps {
   initialImages?: string[];
@@ -20,7 +16,6 @@ export default function ImageUploader({
   onChange,
   initialImages = [],
 }: ImageUploaderProps) {
-  const { getImages } = useGetImages();
   const { uploadImages } = useUploadImages();
   const { deleteImages } = useDeleteImages();
 
@@ -35,18 +30,6 @@ export default function ImageUploader({
     [images],
   );
 
-  const fetchImages = async () => {
-    const { data } = await getImages();
-
-    if (data) {
-      setImages(data);
-    }
-  };
-
-  useEffect(() => {
-    void fetchImages();
-  }, []);
-
   useEffect(() => {
     onChange(images);
   }, [images]);
@@ -54,10 +37,10 @@ export default function ImageUploader({
   const handleFilesChange = async (fileList: FileList | null) => {
     if (!fileList) return;
 
-    const { error } = await uploadImages(fileList);
+    const { data, error } = await uploadImages(fileList, 'products');
 
-    if (!error) {
-      await fetchImages();
+    if (!error && data) {
+      setImages((prev) => [...prev, ...data]);
     }
   };
 
@@ -65,7 +48,7 @@ export default function ImageUploader({
     const { error } = await deleteImages([url]);
 
     if (!error) {
-      await fetchImages();
+      setImages((prev) => prev.filter((img) => img !== url));
     }
   };
 

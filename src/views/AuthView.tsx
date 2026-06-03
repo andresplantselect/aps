@@ -104,6 +104,7 @@ export default function AuthView({ open, onClose }: AuthFormProps) {
                 setIsFormValid(isValid);
               }}
               formConfig={signInFormConfig as FormField<SignInFormType>[]}
+              onSubmit={handleSubmit}
             />
 
             <RedirectionLink
@@ -126,6 +127,7 @@ export default function AuthView({ open, onClose }: AuthFormProps) {
                 setIsFormValid(isValid);
               }}
               formConfig={resetFormConfig as FormField<PasswordFormType>[]}
+              onSubmit={handleSubmit}
             />
             <RedirectionLink
               linkText=""

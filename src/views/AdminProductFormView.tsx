@@ -99,6 +99,7 @@ export default function AdminProductFormView({
           setIsFormValid(isValid);
         }}
         formConfig={formConfig as FormField<ProductForm>[]}
+        onSubmit={isEdit ? handleUpdate : handleCreate}
       />
     </AppDialog>
   );

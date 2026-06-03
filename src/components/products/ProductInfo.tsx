@@ -34,7 +34,7 @@ export default function ProductInfo({ product }: { product: ProductType }) {
             </Typography>
           </Stack>
           <Stack direction="row" spacing={0.5}>
-            <GrassIcon fontSize="small" />
+            <YardOutlinedIcon fontSize="small" />
             <Stack>
               <Typography variant="body2">
                 Uds × Caja: {product.units_per_box}
@@ -42,7 +42,7 @@ export default function ProductInfo({ product }: { product: ProductType }) {
             </Stack>
           </Stack>
           <Stack direction="row" spacing={0.5}>
-            <YardOutlinedIcon fontSize="small" />
+            <GrassIcon fontSize="small" />
             <Stack>
               <Typography variant="body2">
                 Uds sueltas: {product.can_buy_units ? 'Sí' : 'No'}

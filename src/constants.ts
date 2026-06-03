@@ -69,7 +69,8 @@ export const ALERT_MESSAGES_DICT = {
     productDeleted: (title: string) => `Artículo ${title} eliminado.`,
     orderApproved: 'Pedido aprobado.',
     orderCancelled: 'Pedido rechazado.',
-    deliveryStatusUpdated: 'Pedido entregado.',
+    deliveryDelivered: 'Estado de entrega actualizado: entregado.',
+    deliveryFailed: 'Estado de entrega actualizado: no entregado.',
   },
 
   error: {

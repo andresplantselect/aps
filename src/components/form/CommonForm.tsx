@@ -18,9 +18,11 @@ const prepareInitialState = <T extends Record<string, unknown>>(
 export default function CommonForm<T extends Record<string, unknown>>({
   formConfig,
   fillForm,
+  onSubmit,
 }: {
   fillForm: (form: T, isValid: boolean) => void;
   formConfig: FormField<T>[];
+  onSubmit?: () => void;
 }) {
   const [form, setForm] = useState<T>(
     () => prepareInitialState(formConfig) as T,
@@ -59,7 +61,16 @@ export default function CommonForm<T extends Record<string, unknown>>({
   const hasErrors = visibleErrors.length > 0;
 
   return (
-    <Stack alignItems="flex-start" spacing={2} sx={{ width: '100%' }}>
+    <Stack
+      component="form"
+      onSubmit={(e) => {
+        e.preventDefault();
+        onSubmit?.();
+      }}
+      alignItems="flex-start"
+      spacing={2}
+      sx={{ width: '100%' }}
+    >
       <Stack
         sx={{
           borderRadius: 2,
