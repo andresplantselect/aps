@@ -1,9 +1,9 @@
 'use client';
 
+import dynamic from 'next/dynamic';
 import React, { useEffect, useState } from 'react';
 
 import { supabase } from '@/lib/supabase';
-import InviteDialog from '@/src/components/auth/InviteDialog';
 import Layout from '@/src/components/common/Layout';
 import Loader from '@/src/components/common/Loader';
 import HeaderActions from '@/src/components/main/HeaderActions';
@@ -11,11 +11,15 @@ import MobileNavDrawer from '@/src/components/main/MobileNavDrawer';
 import WelcomeSection from '@/src/components/main/WelcomeSection';
 import { useAuth } from '@/src/context/AuthContext';
 import { getMenuActions } from '@/src/helpers/helpers';
-import AuthView from '@/src/views/AuthView';
-import HelpView from '@/src/views/HelpView';
-import UpdateUserView from '@/src/views/UpdateUserView';
 import UsersTabs from '@/src/views/UsersTabs';
 import UserView from '@/src/views/UserView';
+
+const AuthView = dynamic(() => import('@/src/views/AuthView'));
+const HelpView = dynamic(() => import('@/src/views/HelpView'));
+const UpdateUserView = dynamic(() => import('@/src/views/UpdateUserView'));
+const InviteDialog = dynamic(
+  () => import('@/src/components/auth/InviteDialog'),
+);
 
 export default function Page() {
   const [dialogs, setDialogs] = useState({

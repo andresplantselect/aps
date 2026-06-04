@@ -1,8 +1,6 @@
 // @ts-expect-error
 import { serve } from 'https://deno.land/std@0.224.0/http/server.ts';
 
-import { LOGO_BASE64 } from '../_shared/logo.ts';
-
 const EMPTY_VALUE = '—';
 
 serve(async (req: Request) => {
@@ -78,7 +76,7 @@ serve(async (req: Request) => {
           <!-- Header -->
           <tr>
             <td style="background-color: #4a7c5f; border-radius: 18px 18px 0 0; padding: 28px 40px; text-align: center;">
-              <img src="${LOGO_BASE64}" alt="Andres Plant Select" style="height: 72px; width: auto; display: block; margin: 0 auto;" />
+              <img src="https://andresplantselect.es/logo_APS.png" alt="Andres Plant Select" style="height: 72px; width: auto; display: block; margin: 0 auto;" />
             </td>
           </tr>
 

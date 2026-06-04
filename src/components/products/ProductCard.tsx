@@ -5,7 +5,7 @@ import EditIcon from '@mui/icons-material/Edit';
 import VisibilityOffOutlinedIcon from '@mui/icons-material/VisibilityOffOutlined';
 import VisibilityOutlinedIcon from '@mui/icons-material/VisibilityOutlined';
 import { Typography, Box, Stack } from '@mui/material';
-import React from 'react';
+import React, { memo } from 'react';
 
 import AddItemsCard from '@/src/components/common/AddItemsCard';
 import ProductImages from '@/src/components/products/ProductImages';
@@ -19,7 +19,7 @@ import {
 } from '@/src/styledComponents';
 import { ProductCardProps } from '@/src/types/propsTypes';
 
-export default function ProductCard({
+const ProductCard = memo(function ProductCard({
   product,
   onDelete,
   onEdit,
@@ -154,4 +154,6 @@ export default function ProductCard({
       </Stack>
     </PanelCard>
   );
-}
+});
+
+export default ProductCard;
