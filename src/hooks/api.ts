@@ -191,28 +191,45 @@ export const useUpdateOrderStatus = () => {
     nextStatus: OrderStatusType,
     adminComment?: string,
   ) => {
-    if (nextStatus === 'approved') {
-      return request(
-        async () =>
-          supabase.rpc('approve_order', {
-            p_order_id: orderId,
-            p_admin_comment: adminComment || null,
-          }),
-        ALERT_MESSAGES_DICT.success.orderApproved,
-      );
+    const result =
+      nextStatus === 'approved'
+        ? await request(
+            async () =>
+              supabase.rpc('approve_order', {
+                p_order_id: orderId,
+                p_admin_comment: adminComment || null,
+              }),
+            ALERT_MESSAGES_DICT.success.orderApproved,
+          )
+        : await request(
+            async () =>
+              supabase
+                .from('orders')
+                .update({
+                  status: 'cancelled',
+                  admin_comment: adminComment || null,
+                })
+                .eq('id', orderId)
+                .select()
+                .single(),
+            ALERT_MESSAGES_DICT.success.orderCancelled,
+          );
+
+    if (!result.error) {
+      const { data: order } = await supabase
+        .from('orders')
+        .select('*')
+        .eq('id', orderId)
+        .single();
+
+      if (order) {
+        void supabase.functions.invoke('send-user-order-status-email', {
+          body: { order },
+        });
+      }
     }
 
-    return request(
-      async () =>
-        supabase
-          .from('orders')
-          .update({
-            status: 'cancelled',
-            admin_comment: adminComment || null,
-          })
-          .eq('id', orderId),
-      ALERT_MESSAGES_DICT.success.orderCancelled,
-    );
+    return result;
   };
 
   return { updateOrderStatus };
@@ -225,18 +242,32 @@ export const useUpdateDeliveryStatus = () => {
     orderId: number,
     nextDeliveryStatus: DeliveryStatusType,
   ) => {
-    return request(
+    const result = await request(
       async () =>
         supabase
           .from('orders')
-          .update({
-            delivery_status: nextDeliveryStatus,
-          })
+          .update({ delivery_status: nextDeliveryStatus })
           .eq('id', orderId),
       nextDeliveryStatus === 'delivered'
         ? ALERT_MESSAGES_DICT.success.deliveryDelivered
         : ALERT_MESSAGES_DICT.success.deliveryFailed,
     );
+
+    if (!result.error) {
+      const { data: order } = await supabase
+        .from('orders')
+        .select('*')
+        .eq('id', orderId)
+        .single();
+
+      if (order) {
+        void supabase.functions.invoke('send-user-delivery-status-email', {
+          body: { order },
+        });
+      }
+    }
+
+    return result;
   };
 
   return { updateDeliveryStatus };
@@ -263,19 +294,31 @@ export const useCreateOrder = () => {
       };
     }
 
-    return request(
+    const result = await request(
       async () =>
-        supabase.from('orders').insert([
-          {
-            user_id: userId,
-            items,
-            total: Number(total.toFixed(2)),
-            comment: comment || null,
-            status: 'pending',
-          },
-        ]),
+        supabase
+          .from('orders')
+          .insert([
+            {
+              user_id: userId,
+              items,
+              total: Number(total.toFixed(2)),
+              comment: comment || null,
+              status: 'pending',
+            },
+          ])
+          .select()
+          .single(),
       ALERT_MESSAGES_DICT.success.cart,
     );
+
+    if (!result.error && result.data) {
+      void supabase.functions.invoke('send-user-new-order-email', {
+        body: { order: result.data },
+      });
+    }
+
+    return result;
   };
 
   return { createOrder };
