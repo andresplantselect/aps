@@ -3,6 +3,22 @@ import { Session, User } from '@supabase/auth-js';
 
 import { supabase } from '@/lib/supabase';
 import { ALERT_MESSAGES_DICT, RESET_PASSWORD_URL } from '@/src/constants';
+
+const invokeEmailFunction = async (name: string, body: unknown) => {
+  const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL;
+  const {
+    data: { session },
+  } = await supabase.auth.getSession();
+
+  void fetch(`${supabaseUrl}/functions/v1/${name}`, {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+      Authorization: `Bearer ${session?.access_token ?? ''}`,
+    },
+    body: JSON.stringify(body),
+  });
+};
 import { useRequest } from '@/src/hooks/useRequest';
 import { ProductForm } from '@/src/types/propsTypes';
 import {
@@ -223,9 +239,7 @@ export const useUpdateOrderStatus = () => {
         .single();
 
       if (order) {
-        void supabase.functions.invoke('send-user-order-status-email', {
-          body: { order },
-        });
+        void invokeEmailFunction('send-user-order-status-email', { orderId });
       }
     }
 
@@ -261,9 +275,7 @@ export const useUpdateDeliveryStatus = () => {
         .single();
 
       if (order) {
-        void supabase.functions.invoke('send-user-delivery-status-email', {
-          body: { order },
-        });
+        void invokeEmailFunction('send-user-delivery-status-email', { order });
       }
     }
 
@@ -313,8 +325,8 @@ export const useCreateOrder = () => {
     );
 
     if (!result.error && result.data) {
-      void supabase.functions.invoke('send-user-new-order-email', {
-        body: { order: result.data },
+      void invokeEmailFunction('send-user-new-order-email', {
+        orderId: (result.data as { id: number }).id,
       });
     }
 
