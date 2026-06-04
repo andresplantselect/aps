@@ -4,16 +4,32 @@ import { LOGO_BASE64 } from '../_shared/logo.ts';
 
 serve(async (req: Request) => {
   try {
-    const { order } = await req.json();
+    const { orderId } = await req.json();
 
-    if (!order) {
-      return new Response('No order', { status: 400 });
+    if (!orderId) {
+      return new Response('No orderId', { status: 400 });
     }
 
     // @ts-expect-error
     const supabaseUrl = Deno.env.get('SUPABASE_URL')!;
     // @ts-expect-error
     const serviceKey = Deno.env.get('SUPABASE_SERVICE_ROLE_KEY')!;
+
+    const orderRes = await fetch(
+      `${supabaseUrl}/rest/v1/orders?id=eq.${orderId}&select=*`,
+      {
+        headers: {
+          Authorization: `Bearer ${serviceKey}`,
+          apikey: serviceKey,
+        },
+      },
+    );
+    const orders = await orderRes.json();
+    const order = orders?.[0];
+
+    if (!order) {
+      return new Response('Order not found', { status: 404 });
+    }
 
     const userRes = await fetch(
       `${supabaseUrl}/auth/v1/admin/users/${order.user_id}`,
