@@ -14,6 +14,7 @@ import {
   Typography,
 } from '@mui/material';
 import { includes } from 'ramda';
+import { memo } from 'react';
 
 import { PreordersTableContent } from '@/src/components/preorders/PreordersTableContent';
 import {
@@ -27,7 +28,11 @@ import { deliveryStatusesDict } from '@/src/helpers/helpers';
 import { StyledChip, RoundIconButton } from '@/src/styledComponents';
 import { OrderType } from '@/src/types/types';
 
-export function PreordersRow({ order }: { order: OrderType }) {
+export const PreordersRow = memo(function PreordersRow({
+  order,
+}: {
+  order: OrderType;
+}) {
   const { isAdmin } = useAuth();
   const { toggleExpand, expandedOrderId, openDialog, openDeliveryDialog } =
     usePreordersContext();
@@ -142,4 +147,4 @@ export function PreordersRow({ order }: { order: OrderType }) {
       )}
     </>
   );
-}
+});

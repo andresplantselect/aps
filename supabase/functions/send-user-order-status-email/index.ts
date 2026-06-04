@@ -1,13 +1,21 @@
 import { serve } from 'https://deno.land/std@0.224.0/http/server.ts';
 
-import { LOGO_BASE64 } from '../_shared/logo.ts';
+const corsHeaders = {
+  'Access-Control-Allow-Origin': '*',
+  'Access-Control-Allow-Headers':
+    'authorization, x-client-info, apikey, content-type',
+};
 
 serve(async (req: Request) => {
+  if (req.method === 'OPTIONS') {
+    return new Response('ok', { headers: corsHeaders });
+  }
+
   try {
     const { orderId } = await req.json();
 
     if (!orderId) {
-      return new Response('No orderId', { status: 400 });
+      return new Response('No orderId', { status: 400, headers: corsHeaders });
     }
 
     // @ts-expect-error
@@ -28,7 +36,10 @@ serve(async (req: Request) => {
     const order = orders?.[0];
 
     if (!order) {
-      return new Response('Order not found', { status: 404 });
+      return new Response('Order not found', {
+        status: 404,
+        headers: corsHeaders,
+      });
     }
 
     const isApproved = order.status === 'approved';
@@ -47,7 +58,10 @@ serve(async (req: Request) => {
 
     if (!userRes.ok) {
       console.error('Failed to fetch user:', userData);
-      return new Response('Failed to fetch user', { status: 500 });
+      return new Response('Failed to fetch user', {
+        status: 500,
+        headers: corsHeaders,
+      });
     }
 
     const email = userData.email;
@@ -59,7 +73,10 @@ serve(async (req: Request) => {
 
     if (!email) {
       console.error('User email not found', userData);
-      return new Response('User email not found', { status: 400 });
+      return new Response('User email not found', {
+        status: 400,
+        headers: corsHeaders,
+      });
     }
 
     const statusBlock = isApproved
@@ -88,7 +105,7 @@ serve(async (req: Request) => {
 
           <tr>
             <td style="background-color:#4a7c5f; border-radius:18px 18px 0 0; padding:20px 40px; text-align:center;">
-              <img src="${LOGO_BASE64}" alt="Andres Plant Select" style="height:52px; width:auto; display:block; margin:0 auto;"/>
+              <img src="https://andresplantselect.es/logo_APS.png" alt="Andres Plant Select" style="height:52px; width:auto; display:block; margin:0 auto;"/>
             </td>
           </tr>
 
@@ -152,11 +169,12 @@ serve(async (req: Request) => {
     const data = await res.json();
 
     return new Response(JSON.stringify({ ok: true, data }), {
-      headers: { 'Content-Type': 'application/json' },
+      headers: { 'Content-Type': 'application/json', ...corsHeaders },
     });
   } catch (e) {
     console.error('Resend error:', e);
     return new Response(JSON.stringify({ error: (e as Error).message }), {
+      headers: corsHeaders,
       status: 500,
     });
   }

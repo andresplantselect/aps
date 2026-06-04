@@ -62,29 +62,23 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     setIsUnknownUser(isNone);
   };
 
-  async function loadAuth() {
-    const {
-      data: { user: supabaseUser },
-    } = await supabase.auth.getUser();
+  async function loadUserProfile(supabaseUser: {
+    id: string;
+    email?: string;
+    user_metadata?: Record<string, unknown>;
+    created_at?: string;
+  }) {
+    setIsAuthLoading(true);
 
-    if (supabaseUser) {
-      const formattedUser: UserType = {
-        id: supabaseUser.id,
-        email: supabaseUser.email,
-        name: supabaseUser.user_metadata?.name ?? null,
-        role: supabaseUser.user_metadata?.role ?? 'none',
-        created_at: supabaseUser.created_at,
-      };
+    setUser({
+      id: supabaseUser.id,
+      email: supabaseUser.email,
+      name: (supabaseUser.user_metadata?.name as string) ?? null,
+      role: supabaseUser.user_metadata?.role as 'user' | 'admin' | undefined,
+      created_at: supabaseUser.created_at,
+    });
 
-      setUser(formattedUser);
-
-      await loadProfile(supabaseUser.id);
-    } else {
-      setUser(null);
-      applyRole('none');
-      setName(null);
-    }
-
+    await loadProfile(supabaseUser.id);
     setIsAuthLoading(false);
   }
 
@@ -94,9 +88,20 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   };
 
   useEffect(() => {
-    void loadAuth();
+    // Первичная загрузка
+    supabase.auth.getUser().then(({ data: { user: supabaseUser } }) => {
+      if (supabaseUser) {
+        void loadUserProfile(supabaseUser);
+      } else {
+        applyRole('none');
+        setIsAuthLoading(false);
+      }
+    });
 
-    supabase.auth.onAuthStateChange((event, session) => {
+    // Изменения auth (логин / логаут)
+    const {
+      data: { subscription },
+    } = supabase.auth.onAuthStateChange((event, session) => {
       if (equals(event, 'SIGNED_OUT') || !session) {
         setUser(null);
         applyRole('none');
@@ -105,8 +110,12 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
         return;
       }
 
-      void loadAuth();
+      if (session.user) {
+        void loadUserProfile(session.user);
+      }
     });
+
+    return () => subscription.unsubscribe();
   }, []);
 
   return (

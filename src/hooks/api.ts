@@ -4,12 +4,14 @@ import { Session, User } from '@supabase/auth-js';
 import { supabase } from '@/lib/supabase';
 import { ALERT_MESSAGES_DICT, RESET_PASSWORD_URL } from '@/src/constants';
 
-const invokeEmailFunction = async (name: string, body: unknown) => {
+const invokeEmailFunction = async (
+  name: string,
+  body: Record<string, unknown>,
+) => {
   const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL;
   const {
     data: { session },
   } = await supabase.auth.getSession();
-
   void fetch(`${supabaseUrl}/functions/v1/${name}`, {
     method: 'POST',
     headers: {
