@@ -5,7 +5,7 @@ import { Stack, Typography, IconButton } from '@mui/material';
 import { useEffect, useMemo, useState } from 'react';
 
 import ImageInput from '@/src/components/form/ImageInput';
-import { useDeleteImages, useUploadImages } from '@/src/hooks/api';
+import { useUploadImages } from '@/src/hooks/api';
 
 interface ImageUploaderProps {
   initialImages?: string[];
@@ -17,7 +17,6 @@ export default function ImageUploader({
   initialImages = [],
 }: ImageUploaderProps) {
   const { uploadImages } = useUploadImages();
-  const { deleteImages } = useDeleteImages();
 
   const [images, setImages] = useState<string[]>(initialImages);
 
@@ -44,12 +43,8 @@ export default function ImageUploader({
     }
   };
 
-  const handleRemove = async (url: string) => {
-    const { error } = await deleteImages([url]);
-
-    if (!error) {
-      setImages((prev) => prev.filter((img) => img !== url));
-    }
+  const handleRemove = (url: string) => {
+    setImages((prev) => prev.filter((img) => img !== url));
   };
 
   return (
