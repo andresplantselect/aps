@@ -42,3 +42,9 @@ next-env.d.ts
 
 #dev
 readme.test.md
+
+# IDE
+.idea/
+
+# Supabase CLI temp files
+supabase/.temp/

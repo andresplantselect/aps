@@ -165,11 +165,6 @@ export default function HelpView({
                   active: true,
                 },
                 {
-                  icon: <ImageIcon sx={{ fontSize: 22 }} />,
-                  label: 'Imágenes',
-                  active: false,
-                },
-                {
                   icon: <ReceiptLongOutlinedIcon sx={{ fontSize: 22 }} />,
                   label: 'Preordenes',
                   active: false,
@@ -220,22 +215,6 @@ export default function HelpView({
           >
             <MenuIcon sx={{ fontSize: 20, color: '#fff' }} />
           </Box>
-        </Stack>
-
-        <Divider />
-
-        {/* GALERÍA */}
-        <Stack spacing={1}>
-          <Stack direction="row" spacing={1} alignItems="center">
-            <ImageIcon sx={{ fontSize: 18 }} />
-            <Typography variant="h6">Galería de imágenes</Typography>
-          </Stack>
-
-          <Typography variant="body2" color="text.secondary">
-            En la pestaña <strong>Imágenes</strong> puedes ver las fotografías
-            actuales de los artículos disponibles. El administrador la actualiza
-            con cada nueva llegada.
-          </Typography>
         </Stack>
 
         <Divider />

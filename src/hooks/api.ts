@@ -281,43 +281,6 @@ export const useCreateOrder = () => {
   return { createOrder };
 };
 
-export const useGetImages = () => {
-  const { request } = useRequest();
-
-  const getImages = async () =>
-    request<string[]>(async () => {
-      const { data, error } = await supabase.storage
-        .from('product-images')
-        .list('gallery', {
-          limit: 100,
-          sortBy: { column: 'created_at', order: 'desc' },
-        });
-
-      if (error) {
-        return {
-          data: [],
-          error,
-        };
-      }
-
-      const urls =
-        data?.map((file) => {
-          const { data } = supabase.storage
-            .from('product-images')
-            .getPublicUrl(`gallery/${file.name}`);
-
-          return data.publicUrl;
-        }) || [];
-
-      return {
-        data: urls,
-        error: null,
-      };
-    });
-
-  return { getImages };
-};
-
 export const useUploadImages = () => {
   const { request } = useRequest();
 

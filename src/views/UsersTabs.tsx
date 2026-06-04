@@ -1,6 +1,5 @@
 'use client';
 
-import ImageOutlinedIcon from '@mui/icons-material/ImageOutlined';
 import ReceiptLongOutlinedIcon from '@mui/icons-material/ReceiptLongOutlined';
 import StorefrontOutlinedIcon from '@mui/icons-material/StorefrontOutlined';
 import {
@@ -17,7 +16,6 @@ import * as R from 'ramda';
 import React, { JSX, useState, ReactNode } from 'react';
 
 import { useAuth } from '@/src/context/AuthContext';
-import ImagesTab from '@/src/views/ImagesTab';
 import PreordersTab from '@/src/views/PreordersTab';
 import ProductsTab from '@/src/views/ProductsTab';
 
@@ -36,7 +34,6 @@ export function useTabItems() {
       content: <ProductsTab />,
       icon: <StorefrontOutlinedIcon />,
     },
-    { label: 'Imágenes', content: <ImagesTab />, icon: <ImageOutlinedIcon /> },
     {
       label: 'Pedidos',
       content: <PreordersTab />,
