@@ -25,12 +25,10 @@ interface PasswordFieldsProps {
 const PasswordFields = forwardRef<PasswordFieldsRef, PasswordFieldsProps>(
   ({ password, confirm, disabled = false, required = true }, ref) => {
     const [showPassword, setShowPassword] = useState(false);
-    const [showConfirmPassword, setShowConfirmPassword] = useState(false);
 
     useImperativeHandle(ref, () => ({
       resetVisibility() {
         setShowPassword(false);
-        setShowConfirmPassword(false);
       },
     }));
 
@@ -69,7 +67,7 @@ const PasswordFields = forwardRef<PasswordFieldsRef, PasswordFieldsProps>(
         {confirm && (
           <TextField
             label="Confirmar Contraseña"
-            type={showConfirmPassword ? 'text' : 'password'}
+            type={showPassword ? 'text' : 'password'}
             value={confirm.value}
             onChange={(e) => confirm?.onChange(e.target.value)}
             fullWidth
@@ -79,10 +77,10 @@ const PasswordFields = forwardRef<PasswordFieldsRef, PasswordFieldsProps>(
               endAdornment: (
                 <InputAdornment position="end">
                   <IconButton
-                    onClick={() => setShowConfirmPassword((p) => !p)}
+                    onClick={() => setShowPassword((p) => !p)}
                     edge="end"
                   >
-                    {showConfirmPassword ? <VisibilityOff /> : <Visibility />}
+                    {showPassword ? <VisibilityOff /> : <Visibility />}
                   </IconButton>
                 </InputAdornment>
               ),

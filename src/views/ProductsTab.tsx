@@ -29,39 +29,54 @@ export default function ProductsTab() {
 
   const { isAdmin } = useAuth();
   const productsState = useProductsState();
-  const { searchTerm, setSearchTerm } = productsState;
+  const {
+    searchTerm,
+    setSearchTerm,
+    availabilityFilter,
+    visibilityFilter,
+    setAvailabilityFilter,
+    setVisibilityFilter,
+  } = productsState;
+
+  const hasAnyFilter =
+    availabilityFilter.length > 0 || visibilityFilter.length > 0;
+  const clearAllFilters = () => {
+    setAvailabilityFilter([]);
+    setVisibilityFilter([]);
+  };
 
   return (
     <Box>
       <Stack spacing={1}>
         <OutlinedInput
-            size="small"
-            value={searchTerm}
-            placeholder="Buscar articulos"
-            onChange={(e) => setSearchTerm(e.target.value)}
-            sx={{ width: { xs: '100%', md: '350px' }, borderRadius: 12 }}
-            startAdornment={
-              <InputAdornment position="start">
-                <SearchIcon />
+          size="small"
+          value={searchTerm}
+          placeholder="Buscar articulos"
+          onChange={(e) => setSearchTerm(e.target.value)}
+          sx={{ width: { xs: '100%', md: '350px' }, borderRadius: 12 }}
+          startAdornment={
+            <InputAdornment position="start">
+              <SearchIcon />
+            </InputAdornment>
+          }
+          endAdornment={
+            searchTerm ? (
+              <InputAdornment position="end">
+                <IconButton
+                  onClick={() => setSearchTerm('')}
+                  edge="end"
+                  size="small"
+                >
+                  <CloseIcon />
+                </IconButton>
               </InputAdornment>
-            }
-            endAdornment={
-              searchTerm ? (
-                <InputAdornment position="end">
-                  <IconButton
-                    onClick={() => setSearchTerm('')}
-                    edge="end"
-                    size="small"
-                  >
-                    <CloseIcon />
-                  </IconButton>
-                </InputAdornment>
-              ) : null
-            }
-          />
+            ) : null
+          }
+        />
 
-          {isAdmin && (
-            <Stack direction="row" justifyContent="space-between">
+        {isAdmin && (
+          <Stack direction="row" justifyContent="space-between">
+            <Stack direction="row" spacing={1} alignItems="center">
               <SecondaryButton
                 onClick={() => setShowFilters(!showFilters)}
                 startIcon={<TuneIcon fontSize="small" />}
@@ -70,15 +85,21 @@ export default function ProductsTab() {
                   Filtros
                 </Typography>
               </SecondaryButton>
-
-              <PrimaryButton
-                onClick={() => setShowForm(true)}
-                endIcon={<AddIcon />}
-              >
-                Añadir
-              </PrimaryButton>
+              {hasAnyFilter && (
+                <IconButton size="small" onClick={clearAllFilters}>
+                  <CloseIcon fontSize="small" />
+                </IconButton>
+              )}
             </Stack>
-          )}
+
+            <PrimaryButton
+              onClick={() => setShowForm(true)}
+              endIcon={<AddIcon />}
+            >
+              Añadir
+            </PrimaryButton>
+          </Stack>
+        )}
 
         {isAdmin && showFilters && <ProductsFilters {...productsState} />}
         {isAdmin && <ProductsViewToggle {...productsState} />}

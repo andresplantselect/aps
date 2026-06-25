@@ -1,14 +1,15 @@
 'use client';
 
-import { Stack } from '@mui/material';
+import { Box, Divider, Stack } from '@mui/material';
 import React from 'react';
 
-import { FilterSelect } from '@/src/components/common/FilterSelect';
+import { FilterCheckboxGroup } from '@/src/components/common/FilterCheckboxGroup';
 import {
   availabilityStatusesDict,
   visibilityStatusesDict,
 } from '@/src/constants';
 import { UseProductsStateProps } from '@/src/types/propsTypes';
+import { DisponibilityType, VisibilityType } from '@/src/types/types';
 
 export function ProductsFilters({
   availabilityFilter,
@@ -17,19 +18,40 @@ export function ProductsFilters({
   setVisibilityFilter,
 }: UseProductsStateProps) {
   return (
-    <Stack spacing={1} sx={{ width: '100%' }}>
-      <FilterSelect
-        label="Disponibilidad"
-        value={availabilityFilter}
-        options={availabilityStatusesDict}
-        onChange={setAvailabilityFilter}
-      />
-      <FilterSelect
-        label="Visibilidad"
-        value={visibilityFilter}
-        options={visibilityStatusesDict}
-        onChange={setVisibilityFilter}
-      />
-    </Stack>
+    <Box
+      sx={{
+        border: '1px solid',
+        borderColor: 'divider',
+        borderRadius: '12px',
+        bgcolor: 'transparent',
+        px: 2,
+        py: 1.5,
+      }}
+    >
+      <Stack
+        direction={{ xs: 'column', md: 'row' }}
+        spacing={2}
+        divider={
+          <Divider
+            orientation="vertical"
+            flexItem
+            sx={{ display: { xs: 'none', md: 'block' } }}
+          />
+        }
+      >
+        <FilterCheckboxGroup<DisponibilityType>
+          label="Disponibilidad"
+          value={availabilityFilter}
+          options={availabilityStatusesDict}
+          onChange={setAvailabilityFilter}
+        />
+        <FilterCheckboxGroup<VisibilityType>
+          label="Visibilidad"
+          value={visibilityFilter}
+          options={visibilityStatusesDict}
+          onChange={setVisibilityFilter}
+        />
+      </Stack>
+    </Box>
   );
 }

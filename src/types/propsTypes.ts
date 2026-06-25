@@ -82,6 +82,7 @@ export type PanelCardFormLayoutProps = {
   submit: { title: string; handler: () => void };
   alert: AlertType;
   setAlert: (v: AlertType) => void;
+  loading?: boolean;
 };
 
 export type CartItemSummaryProps = {
@@ -162,11 +163,11 @@ export type UseProductsStateProps = {
   visibleProducts: ProductType[];
   isProductListEmpty: boolean;
 
-  availabilityFilter: DisponibilityType | 'all';
-  setAvailabilityFilter: Dispatch<SetStateAction<DisponibilityType | 'all'>>;
+  availabilityFilter: DisponibilityType[];
+  setAvailabilityFilter: (v: DisponibilityType[]) => void;
 
-  visibilityFilter: VisibilityType | 'all';
-  setVisibilityFilter: Dispatch<SetStateAction<VisibilityType | 'all'>>;
+  visibilityFilter: VisibilityType[];
+  setVisibilityFilter: (v: VisibilityType[]) => void;
 
   searchTerm: string;
   setSearchTerm: Dispatch<SetStateAction<string>>;

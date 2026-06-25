@@ -88,7 +88,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   };
 
   useEffect(() => {
-    // Первичная загрузка
+    // Initial load
     const timeout = setTimeout(() => {
       setIsAuthLoading(false);
     }, 5000);
@@ -103,7 +103,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
       }
     });
 
-    // Изменения auth (логин / логаут)
+    // Auth changes (login / logout)
     const {
       data: { subscription },
     } = supabase.auth.onAuthStateChange((event, session) => {

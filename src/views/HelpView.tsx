@@ -12,19 +12,20 @@ import MenuIcon from '@mui/icons-material/Menu';
 import PendingIcon from '@mui/icons-material/Pending';
 import PersonIcon from '@mui/icons-material/Person';
 import ReceiptLongOutlinedIcon from '@mui/icons-material/ReceiptLongOutlined';
-import RemoveCircleOutlineOutlinedIcon from '@mui/icons-material/RemoveCircleOutlineOutlined';
-import ScheduleOutlinedIcon from '@mui/icons-material/ScheduleOutlined';
 import ShoppingCartIcon from '@mui/icons-material/ShoppingCart';
 import StorefrontOutlinedIcon from '@mui/icons-material/StorefrontOutlined';
 import TableRowsIcon from '@mui/icons-material/TableRows';
-import ViewModuleIcon from '@mui/icons-material/ViewModule';
-import WhereToVoteOutlinedIcon from '@mui/icons-material/WhereToVoteOutlined';
 import YardOutlinedIcon from '@mui/icons-material/YardOutlined';
 import { Stack, Typography, Divider, Box, Paper } from '@mui/material';
 import React from 'react';
 
 import { AppDialog } from '@/src/components/common/AppDialog';
-import { orderStatusesDict, statusColorsDict } from '@/src/constants';
+import {
+  orderStatusesDict,
+  statusColorsDict,
+  deliveryStatusesDict,
+  deliveryStatusChipColors,
+} from '@/src/constants';
 import { StyledChip } from '@/src/styledComponents';
 
 export default function HelpView({
@@ -118,14 +119,6 @@ export default function HelpView({
             permite comprar cajas completas y quedan menos unidades que una
             caja, no podrás añadirlo al carrito.
           </Typography>
-
-          <Stack direction="row" spacing={1} alignItems="center">
-            <ViewModuleIcon sx={{ fontSize: 18 }} />
-            <Typography variant="body2" color="text.secondary">
-              En escritorio puedes cambiar entre vista de tarjetas y vista de
-              tabla.
-            </Typography>
-          </Stack>
         </Stack>
 
         <Divider />
@@ -154,7 +147,6 @@ export default function HelpView({
             <Box
               sx={(theme) => ({
                 display: 'flex',
-                borderTop: `1px solid ${theme.palette.divider}`,
                 backgroundColor: theme.palette.background.paper,
               })}
             >
@@ -260,7 +252,7 @@ export default function HelpView({
           <StyledChip
             label={orderStatusesDict.pending}
             color={statusColorsDict.pending}
-            variant="outlined"
+            variant="filled"
             sx={{ width: 'fit-content' }}
           />
 
@@ -274,12 +266,12 @@ export default function HelpView({
             <StyledChip
               label={orderStatusesDict.approved}
               color={statusColorsDict.approved}
-              variant="outlined"
+              variant="filled"
             />
             <StyledChip
               label={orderStatusesDict.cancelled}
               color={statusColorsDict.cancelled}
-              variant="outlined"
+              variant="filled"
             />
           </Stack>
 
@@ -290,21 +282,33 @@ export default function HelpView({
 
           <Stack spacing={1} pl={1}>
             <Stack direction="row" spacing={1} alignItems="center">
-              <ScheduleOutlinedIcon color="warning" sx={{ fontSize: 20 }} />
+              <StyledChip
+                label={deliveryStatusesDict.waiting}
+                color={deliveryStatusChipColors.waiting}
+                variant="outlined"
+                size="small"
+              />
               <Typography variant="body2">
                 Pedido en preparación, pendiente de recogida.
               </Typography>
             </Stack>
             <Stack direction="row" spacing={1} alignItems="center">
-              <WhereToVoteOutlinedIcon color="success" sx={{ fontSize: 20 }} />
+              <StyledChip
+                label={deliveryStatusesDict.delivered}
+                color={deliveryStatusChipColors.delivered}
+                variant="outlined"
+                size="small"
+              />
               <Typography variant="body2">
                 Pedido recogido y pagado en persona.
               </Typography>
             </Stack>
             <Stack direction="row" spacing={1} alignItems="center">
-              <RemoveCircleOutlineOutlinedIcon
-                color="error"
-                sx={{ fontSize: 20 }}
+              <StyledChip
+                label={deliveryStatusesDict.failed}
+                color={deliveryStatusChipColors.failed}
+                variant="outlined"
+                size="small"
               />
               <Typography variant="body2">
                 El pedido no pudo ser entregado o fue cancelado.

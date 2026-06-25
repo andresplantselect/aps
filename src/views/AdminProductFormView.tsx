@@ -47,12 +47,12 @@ export default function AdminProductFormView({
   const { updateProduct } = useUpdateProduct();
   const { deleteImages } = useDeleteImages();
 
-  // Держим ref в синхе с текущими images
+  // Keep ref in sync with current images
   useEffect(() => {
     currentImagesRef.current = productForm.images;
   }, [productForm.images]);
 
-  // При закрытии без сохранения — удаляем только что загруженные фото из Storage
+  // On close without saving — delete recently uploaded photos from Storage
   useEffect(() => {
     return () => {
       if (!savedRef.current) {
@@ -96,7 +96,7 @@ export default function AdminProductFormView({
 
     savedRef.current = true;
 
-    // Удаляем из Storage фото которые убрали из продукта
+    // Remove from Storage photos that were removed from the product
     const toDelete = initialImages.current.filter(
       (url) => !productForm.images.includes(url),
     );

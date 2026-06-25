@@ -21,10 +21,11 @@ import {
   EMPTY_VALUE,
   orderStatusesDict,
   statusColorsDict,
+  deliveryStatusesDict,
+  deliveryStatusChipColors,
 } from '@/src/constants';
 import { useAuth } from '@/src/context/AuthContext';
 import { usePreordersContext } from '@/src/context/PreordersContext';
-import { deliveryStatusesDict } from '@/src/helpers/helpers';
 import { StyledChip, RoundIconButton } from '@/src/styledComponents';
 import { OrderType } from '@/src/types/types';
 
@@ -61,15 +62,21 @@ export const PreordersRow = memo(function PreordersRow({
           <StyledChip
             label={orderStatusesDict[order.status]}
             color={statusColorsDict[order.status]}
-            variant="outlined"
+            variant="filled"
+            size="small"
           />
         </TableCell>
+
         <TableCell align="center">
-          {order.status === 'cancelled' ? (
-            <RemoveSharpIcon color="error" sx={{ fontSize: 20 }} />
-          ) : (
-            deliveryStatusesDict[order.delivery_status]
-          )}
+          <StyledChip
+            label={
+              deliveryStatusesDict[order.delivery_status] ??
+              order.delivery_status
+            }
+            color={deliveryStatusChipColors[order.delivery_status] ?? 'default'}
+            variant="outlined"
+            size="small"
+          />
         </TableCell>
 
         <TableCell width={100}>€ {Number(order.total).toFixed(2)}</TableCell>
@@ -84,7 +91,6 @@ export const PreordersRow = memo(function PreordersRow({
                   <strong>Cliente:</strong> {order.comment}
                 </Typography>
               )}
-
               {order.admin_comment && (
                 <Typography variant="caption">
                   <strong>Admin:</strong> {order.admin_comment}
@@ -112,6 +118,18 @@ export const PreordersRow = memo(function PreordersRow({
             <RoundIconButton
               disabled={order.status !== 'pending'}
               onClick={() => openDialog(order, 'cancelled')}
+              sx={(theme) => ({
+                backgroundColor:
+                  order.status !== 'pending'
+                    ? undefined
+                    : theme.palette.error.main,
+                '&:hover': {
+                  backgroundColor:
+                    order.status !== 'pending'
+                      ? undefined
+                      : theme.palette.error.dark,
+                },
+              })}
             >
               <ClearIcon />
             </RoundIconButton>
