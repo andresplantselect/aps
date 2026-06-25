@@ -89,7 +89,12 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
 
   useEffect(() => {
     // Первичная загрузка
+    const timeout = setTimeout(() => {
+      setIsAuthLoading(false);
+    }, 5000);
+
     supabase.auth.getUser().then(({ data: { user: supabaseUser } }) => {
+      clearTimeout(timeout);
       if (supabaseUser) {
         void loadUserProfile(supabaseUser);
       } else {

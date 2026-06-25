@@ -18,6 +18,7 @@ export default function SignUpForm() {
   const [isFormValid, setIsFormValid] = useState(false);
   const [alert, setAlert] = useState<AlertType>(null);
   const [inviteId, setInviteId] = useState<string | null>(null);
+  const [isLoading, setIsLoading] = useState(false);
 
   const router = useRouter();
   const { checkInviteToken } = useInviteToken();
@@ -62,6 +63,8 @@ export default function SignUpForm() {
   const handleSubmit = async () => {
     if (!inviteId || !isFormValid) return;
 
+    setIsLoading(true);
+
     const { email, password, name } = signUpForm;
 
     const { data: signUpData, error: signUpError } = await signUp({
@@ -72,10 +75,14 @@ export default function SignUpForm() {
 
     if (signUpError) {
       setAlert(signUpError);
+      setIsLoading(false);
       return;
     }
 
-    if (!signUpData?.user) return;
+    if (!signUpData?.user) {
+      setIsLoading(false);
+      return;
+    }
 
     const userId = signUpData.user.id;
 
@@ -86,9 +93,11 @@ export default function SignUpForm() {
 
     if (consumeError) {
       setAlert(consumeError);
+      setIsLoading(false);
       return;
     }
 
+    setIsLoading(false);
     setAlert(success);
     router.push('/');
   };
@@ -99,6 +108,7 @@ export default function SignUpForm() {
         title: 'Registrarse',
         handler: handleSubmit,
       }}
+      loading={isLoading}
       alert={alert}
       setAlert={(v) => setAlert(v)}
     >

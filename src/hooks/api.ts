@@ -277,7 +277,9 @@ export const useUpdateDeliveryStatus = () => {
         .single();
 
       if (order) {
-        void invokeEmailFunction('send-user-delivery-status-email', { order });
+        void invokeEmailFunction('send-user-delivery-status-email', {
+          orderId,
+        });
       }
     }
 
