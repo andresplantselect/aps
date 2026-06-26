@@ -95,7 +95,6 @@ export const usePreordersTable = () => {
 
     sorted.sort((a, b) => {
       if (sortBy === 'date') {
-
         return sortDir === 'asc'
           ? new Date(a.created_at).getTime() - new Date(b.created_at).getTime()
           : new Date(b.created_at).getTime() - new Date(a.created_at).getTime();
