@@ -1,7 +1,7 @@
 import CheckIcon from '@mui/icons-material/Check';
 import CloseIcon from '@mui/icons-material/Close';
 import EditIcon from '@mui/icons-material/Edit';
-import { Stack } from '@mui/material';
+import { Stack, IconButton } from '@mui/material';
 import React, { useRef, useState } from 'react';
 
 import PasswordFields, {
@@ -63,11 +63,7 @@ export default function PasswordUpdateForm() {
   };
 
   return (
-    <Stack
-      direction={editingPassword ? 'column' : 'row'}
-      spacing={1}
-      alignItems={editingPassword ? 'flex-start' : 'center'}
-    >
+    <Stack direction="row" spacing={1} alignItems="center">
       <PasswordFields
         ref={passwordRef}
         password={{ value: password, onChange: (v) => setPassword(v) }}
@@ -80,18 +76,16 @@ export default function PasswordUpdateForm() {
       />
 
       {editingPassword ? (
-        <Stack>
-          <Stack direction="row" spacing={1}>
-            <RoundIconButton onClick={() => handleCancelPassword()}>
-              <CloseIcon />
-            </RoundIconButton>
-            <RoundIconButton
-              onClick={() => handleSavePassword()}
-              disabled={!password || !confirm}
-            >
-              <CheckIcon />
-            </RoundIconButton>
-          </Stack>
+        <Stack direction="row" spacing={1}>
+          <IconButton onClick={() => handleCancelPassword()}>
+            <CloseIcon color="error" />
+          </IconButton>
+          <IconButton
+            onClick={() => handleSavePassword()}
+            disabled={!password || !confirm}
+          >
+            <CheckIcon color="success" />
+          </IconButton>
         </Stack>
       ) : (
         <RoundIconButton onClick={() => setEditingPassword(true)}>

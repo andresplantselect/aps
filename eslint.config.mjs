@@ -12,7 +12,7 @@ export default defineConfig([
 
   globalIgnores([".next/**", "out/**", "build/**", "next-env.d.ts"]),
 
-  // Основной код проекта
+  // Main project code
   {
     files: ["**/*.{js,ts,jsx,tsx}"],
 

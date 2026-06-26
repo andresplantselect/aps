@@ -7,7 +7,6 @@ import {
   TableHead,
   TableRow,
   Box,
-  Typography,
 } from '@mui/material';
 import { useMemo } from 'react';
 
@@ -26,38 +25,49 @@ export function PreordersTableContent({ order }: PreordersTableContentProps) {
 
   return (
     <TableRow>
-      <TableCell colSpan={isAdmin ? 9 : 6} sx={{ p: 0 }}>
-        <Box sx={{ px: 2, py: 2, bgcolor: 'grey.50' }}>
+      <TableCell colSpan={isAdmin ? 9 : 6} sx={{ p: 0, borderBottom: 'none' }}>
+        <Box sx={{ px: 3, py: 1 }}>
           <Table
             size="small"
             sx={{
               width: '100%',
               tableLayout: 'fixed',
-              '& tbody tr:last-child td': {
-                borderBottom: 'none',
+              '& td, & th': {
+                border: 'none',
+                padding: '4px 8px',
+                fontSize: '0.8rem',
+                width: '20%',
               },
             }}
           >
             <TableHead>
               <TableRow>
-                <TableCell sx={{ fontWeight: 600, width: 250 }}>
+                <TableCell sx={{ fontWeight: 600, color: 'text.secondary' }}>
                   Título
                 </TableCell>
-
-                <TableCell align="left" sx={{ width: 90, fontWeight: 600 }}>
+                <TableCell
+                  align="left"
+                  sx={{ fontWeight: 600, color: 'text.secondary' }}
+                >
                   Precio
                 </TableCell>
-
-                <TableCell align="center" sx={{ fontWeight: 600 }}>
+                <TableCell
+                  align="center"
+                  sx={{ fontWeight: 600, color: 'text.secondary' }}
+                >
                   Cantidad
                 </TableCell>
-
-                <TableCell align="center" sx={{ fontWeight: 600 }}>
-                  Total unidades
+                <TableCell
+                  align="center"
+                  sx={{ fontWeight: 600, color: 'text.secondary' }}
+                >
+                  Total uds
                 </TableCell>
-
-                <TableCell align="right" sx={{ fontWeight: 600 }}>
-                  Total precio
+                <TableCell
+                  align="right"
+                  sx={{ fontWeight: 600, color: 'text.secondary' }}
+                >
+                  Total
                 </TableCell>
               </TableRow>
             </TableHead>
@@ -75,21 +85,17 @@ export function PreordersTableContent({ order }: PreordersTableContentProps) {
                 return (
                   <TableRow
                     key={item.product_id ?? `${order.id}-${item.title}`}
-                    sx={{ verticalAlign: 'top' }}
+                    sx={{ verticalAlign: 'middle' }}
                   >
                     <TableCell>{item.title}</TableCell>
-
                     <TableCell align="left">€ {price.toFixed(2)}</TableCell>
-
                     <TableCell align="center">
-                      <>
-                        <Typography>{boxes} Cajas</Typography>
-                        {!!units && <Typography>+ {units} Uds</Typography>}
-                      </>
+                      {boxes} Caj.{!!units && ` + ${units} Uds`}
                     </TableCell>
                     <TableCell align="center">{quantity}</TableCell>
-
-                    <TableCell align="right">€ {total.toFixed(2)}</TableCell>
+                    <TableCell align="right" sx={{ fontWeight: 600 }}>
+                      € {total.toFixed(2)}
+                    </TableCell>
                   </TableRow>
                 );
               })}

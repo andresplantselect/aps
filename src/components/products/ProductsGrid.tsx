@@ -17,7 +17,7 @@ export default function ProductsGrid({
           sx={{
             display: 'grid',
             gridTemplateColumns: 'repeat(auto-fill, minmax(302px, 1fr))',
-            gap: { xs: '5px', sm: 2 },
+            gap: { xs: 1, sm: 2 },
           }}
         >
           {visibleProducts.map((product) => (

@@ -17,7 +17,6 @@ export default function PanelCardFormLayout({
   submit,
 }: PanelCardFormLayoutProps) {
   const { loading } = useRequest();
-
   return (
     <Stack
       sx={{ height: '100vh', position: 'relative' }}

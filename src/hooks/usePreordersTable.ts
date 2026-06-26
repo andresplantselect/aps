@@ -1,5 +1,6 @@
 'use client';
 
+import { useMediaQuery, useTheme } from '@mui/material';
 import { startOfDay, endOfDay } from 'date-fns';
 import { useMemo, useState, useEffect } from 'react';
 
@@ -11,14 +12,15 @@ export const usePreordersTable = () => {
   const { orders, isOrdersLoading } = useOrders();
   const { isAdmin } = useAuth();
 
-  const [statusFilter, setStatusFilter] = useState<OrderStatusType | 'all'>(
-    'all',
-  );
-  const [deliveryStatusFilter, setDeliveryStatusFilter] = useState<
-    DeliveryStatusType | 'all'
-  >('all');
+  const theme = useTheme();
+  const isDesktop = useMediaQuery(theme.breakpoints.up('md'));
 
-  const [userFilter, setUserFilter] = useState('all');
+  const [statusFilter, setStatusFilter] = useState<OrderStatusType[]>([]);
+  const [deliveryStatusFilter, setDeliveryStatusFilter] = useState<
+    DeliveryStatusType[]
+  >([]);
+
+  const [userFilter, setUserFilter] = useState<string[]>([]);
 
   const [sortBy, setSortBy] = useState<
     'date' | 'status' | 'user' | 'delivery_status'
@@ -29,6 +31,9 @@ export const usePreordersTable = () => {
   const [rowsPerPage, setRowsPerPage] = useState(10);
 
   const [expandedOrderId, setExpandedOrderId] = useState<number | null>(null);
+  const [viewMode, setViewMode] = useState<'cards' | 'table'>(
+    isAdmin ? (isDesktop ? 'table' : 'cards') : 'cards',
+  );
 
   const [dateRange, setDateRange] = useState<[Date | null, Date | null]>([
     null,
@@ -47,13 +52,16 @@ export const usePreordersTable = () => {
 
   const filteredOrders = useMemo(() => {
     return orders.filter((order) => {
-      const statusOk = statusFilter === 'all' || order.status === statusFilter;
+      const statusOk =
+        statusFilter.length === 0 || statusFilter.includes(order.status);
       const deliveryStatusOk =
-        deliveryStatusFilter === 'all' ||
-        order.delivery_status === deliveryStatusFilter;
+        deliveryStatusFilter.length === 0 ||
+        deliveryStatusFilter.includes(order.delivery_status);
 
       const userOk =
-        !isAdmin || userFilter === 'all' || order.profile_name === userFilter;
+        !isAdmin ||
+        userFilter.length === 0 ||
+        userFilter.includes(order.profile_name ?? '');
 
       const orderDate = new Date(order.created_at);
 
@@ -85,15 +93,37 @@ export const usePreordersTable = () => {
   const sortedOrders = useMemo(() => {
     const sorted = [...filteredOrders];
 
-    sorted.sort((a, b) => {
-      switch (sortBy) {
-        case 'date':
-          return sortDir === 'asc'
-            ? new Date(a.created_at).getTime() -
-                new Date(b.created_at).getTime()
-            : new Date(b.created_at).getTime() -
-                new Date(a.created_at).getTime();
+    const statusOrder: Record<string, number> = {
+      pending: 0,
+      approved: 1,
+      cancelled: 2,
+    };
 
+    const deliveryStatusOrder: Record<string, number> = {
+      waiting: 0,
+      delivered: 1,
+      failed: 2,
+      not_applicable: 3,
+    };
+
+    sorted.sort((a, b) => {
+      // Default sort by date — multi-level
+      if (sortBy === 'date') {
+        const statusDiff =
+          (statusOrder[a.status] ?? 99) - (statusOrder[b.status] ?? 99);
+        if (statusDiff !== 0) return statusDiff;
+
+        const deliveryDiff =
+          (deliveryStatusOrder[a.delivery_status] ?? 99) -
+          (deliveryStatusOrder[b.delivery_status] ?? 99);
+        if (deliveryDiff !== 0) return deliveryDiff;
+
+        return sortDir === 'asc'
+          ? new Date(a.created_at).getTime() - new Date(b.created_at).getTime()
+          : new Date(b.created_at).getTime() - new Date(a.created_at).getTime();
+      }
+
+      switch (sortBy) {
         case 'status':
           return sortDir === 'asc'
             ? a.status.localeCompare(b.status)
@@ -145,6 +175,8 @@ export const usePreordersTable = () => {
     expandedOrderId,
     toggleExpand,
     isOrdersLoading,
+    viewMode,
+    setViewMode,
     filters: {
       deliveryStatusFilter,
       statusFilter,

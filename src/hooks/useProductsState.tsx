@@ -1,5 +1,6 @@
 'use client';
 
+import { useMediaQuery, useTheme } from '@mui/material';
 import { useMemo, useState } from 'react';
 
 import { useAuth } from '@/src/context/AuthContext';
@@ -16,19 +17,24 @@ export function useProductsState(): UseProductsStateProps {
   const { products, isProductsLoading } = useProducts();
   const { isAdmin } = useAuth();
 
+  const theme = useTheme();
+  const isDesktop = useMediaQuery(theme.breakpoints.up('md'));
+
   const [availabilityFilter, setAvailabilityFilter] = useState<
-    DisponibilityType | 'all'
-  >('all');
-  const [visibilityFilter, setVisibilityFilter] = useState<
-    VisibilityType | 'all'
-  >('all');
+    DisponibilityType[]
+  >([]);
+  const [visibilityFilter, setVisibilityFilter] = useState<VisibilityType[]>(
+    [],
+  );
 
   const [searchTerm, setSearchTerm] = useState('');
 
   const [sortBy, setSortBy] = useState<ProductSortKey>('title');
   const [sortDir, setSortDir] = useState<'asc' | 'desc'>('asc');
 
-  const [viewMode, setViewMode] = useState<ProductsViewType>('cards');
+  const [viewMode, setViewMode] = useState<ProductsViewType>(
+    isAdmin ? (isDesktop ? 'table' : 'cards') : 'cards',
+  );
 
   const toggleSort = (key: ProductSortKey) => {
     if (sortBy === key) {
@@ -42,14 +48,14 @@ export function useProductsState(): UseProductsStateProps {
   const visibleProducts = useMemo(() => {
     const filtered = products.filter((product) => {
       const availabilityOk =
-        availabilityFilter === 'all' ||
-        (availabilityFilter === 'available' && product.available > 0) ||
-        (availabilityFilter === 'outOfStock' && product.available === 0);
+        availabilityFilter.length === 0 ||
+        (availabilityFilter.includes('available') && product.available > 0) ||
+        (availabilityFilter.includes('outOfStock') && product.available === 0);
 
       const visibilityOk =
-        visibilityFilter === 'all' ||
-        (visibilityFilter === 'visible' && product.is_visible) ||
-        (visibilityFilter === 'hidden' && !product.is_visible);
+        visibilityFilter.length === 0 ||
+        (visibilityFilter.includes('visible') && product.is_visible) ||
+        (visibilityFilter.includes('hidden') && !product.is_visible);
 
       const userAccessOk = isAdmin || product.is_visible;
 

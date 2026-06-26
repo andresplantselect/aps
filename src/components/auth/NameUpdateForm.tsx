@@ -1,7 +1,7 @@
 import CheckIcon from '@mui/icons-material/Check';
 import CloseIcon from '@mui/icons-material/Close';
 import EditIcon from '@mui/icons-material/Edit';
-import { Stack, TextField } from '@mui/material';
+import { Stack, TextField, IconButton } from '@mui/material';
 import React, { useEffect, useState } from 'react';
 
 import { useAlert } from '@/src/context/AlertContext';
@@ -37,9 +37,9 @@ export default function NameUpdateForm() {
   return (
     <Stack spacing={1} pt={1}>
       <Stack
-        direction={editingName ? 'column' : 'row'}
+        direction="row"
         spacing={1}
-        alignItems={editingName ? 'flex-start' : 'center'}
+        alignItems="center"
         sx={{ width: '100%' }}
       >
         <TextField
@@ -52,20 +52,20 @@ export default function NameUpdateForm() {
 
         {editingName ? (
           <Stack direction="row" spacing={1}>
-            <RoundIconButton
+            <IconButton
               onClick={() => {
                 setEditingName(false);
                 setName('');
               }}
             >
-              <CloseIcon />
-            </RoundIconButton>
-            <RoundIconButton
+              <CloseIcon color="error" />
+            </IconButton>
+            <IconButton
               onClick={() => handleSaveName()}
               disabled={!name.trim()}
             >
-              <CheckIcon />
-            </RoundIconButton>
+              <CheckIcon color="success" />
+            </IconButton>
           </Stack>
         ) : (
           <RoundIconButton onClick={() => setEditingName(true)}>

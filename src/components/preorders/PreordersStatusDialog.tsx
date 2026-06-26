@@ -30,7 +30,6 @@ export function PreordersStatusDialog() {
   const { refreshOrders } = useOrders();
 
   const applyStatus = async () => {
-    console.log('selectedOrder', selectedOrder);
     if (!selectedOrder || !nextStatus) return;
 
     const { success, error } = await updateOrderStatus(

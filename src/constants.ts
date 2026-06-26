@@ -8,16 +8,24 @@ import {
 
 export const EMPTY_VALUE = '—';
 export const orderStatusesDict: Record<OrderStatusType, string> = {
-  pending: 'pendiente',
-  approved: 'aprobado',
-  cancelled: 'rechazado',
+  pending: 'Pendiente',
+  approved: 'Aprobado',
+  cancelled: 'Rechazado',
 };
 
 export const deliveryStatusesDict = {
-  not_applicable: 'Sin entrega',
-  waiting: 'Pendiente',
+  waiting: 'Pendiente de entrega',
   delivered: 'Entregado',
-  failed: 'Cancelado',
+  failed: 'No entregado',
+};
+
+export const deliveryStatusChipColors: Record<
+  string,
+  'warning' | 'success' | 'error' | 'default'
+> = {
+  waiting: 'warning',
+  delivered: 'success',
+  failed: 'error',
 };
 
 export const availabilityStatusesDict: Record<DisponibilityType, string> = {

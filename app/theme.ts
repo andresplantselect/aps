@@ -28,19 +28,24 @@ export const theme = createTheme({
     },
 
     error: {
-      main: '#C94A4A',
-      dark: '#8A1B1B',
+      main: '#B85450',
+      dark: '#8A3A37',
       light: '#F8ECEC',
       contrastText: '#FFFFFF',
     },
 
     warning: {
-      main: '#F6A351',
+      main: '#C8832E',
+      dark: '#A0661E',
+      light: '#FDF3E7',
+      contrastText: '#FFFFFF',
     },
 
     success: {
       main: '#4a7c5f',
+      dark: '#365c46',
       light: '#e4f0eb',
+      contrastText: '#FFFFFF',
     },
 
     divider: '#E5E7EB',
@@ -111,6 +116,17 @@ export const theme = createTheme({
   },
 
   components: {
+    MuiTab: {
+      styleOverrides: {
+        root: {
+          fontSize: '0.9rem',
+          fontWeight: 600,
+          textTransform: 'none',
+          letterSpacing: 0,
+        },
+      },
+    },
+
     MuiCard: {
       styleOverrides: {
         root: {

@@ -88,8 +88,13 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   };
 
   useEffect(() => {
-    // Первичная загрузка
+    // Initial load
+    const timeout = setTimeout(() => {
+      setIsAuthLoading(false);
+    }, 5000);
+
     supabase.auth.getUser().then(({ data: { user: supabaseUser } }) => {
+      clearTimeout(timeout);
       if (supabaseUser) {
         void loadUserProfile(supabaseUser);
       } else {
@@ -98,7 +103,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
       }
     });
 
-    // Изменения auth (логин / логаут)
+    // Auth changes (login / logout)
     const {
       data: { subscription },
     } = supabase.auth.onAuthStateChange((event, session) => {

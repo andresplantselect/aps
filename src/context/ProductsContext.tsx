@@ -16,12 +16,14 @@ interface ProductsContextType {
   products: ProductType[];
   isProductsLoading: boolean;
   refreshProducts: () => Promise<void>;
+  updateProductInState: (updated: ProductType) => void;
 }
 
 const ProductsContext = createContext<ProductsContextType>({
   products: [],
   isProductsLoading: true,
   refreshProducts: async () => {},
+  updateProductInState: () => {},
 });
 
 export const useProducts = () => useContext(ProductsContext);
@@ -85,12 +87,17 @@ export function ProductsProvider({ children }: { children: ReactNode }) {
     };
   }, [fetchProducts]);
 
+  const updateProductInState = useCallback((updated: ProductType) => {
+    setProducts((prev) => prev.map((p) => (p.id === updated.id ? updated : p)));
+  }, []);
+
   return (
     <ProductsContext.Provider
       value={{
         products,
         isProductsLoading,
         refreshProducts: fetchProducts,
+        updateProductInState,
       }}
     >
       {children}
