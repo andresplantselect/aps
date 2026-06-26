@@ -3,6 +3,7 @@
 import { useRouter } from 'next/navigation';
 import React, { useState, useEffect } from 'react';
 
+import { supabase } from '@/lib/supabase';
 import PanelCardFormLayout from '@/src/components/auth/PanelCardFormLayout';
 import CommonForm from '@/src/components/form/CommonForm';
 import { SignUpFormConfig } from '@/src/components/form/formConfigs';
@@ -44,7 +45,9 @@ export default function SignUpForm() {
         setAlert(error);
         return;
       }
-      const id = data ? JSON.parse(data).inviteId : null;
+
+      const parsed = data ? JSON.parse(data) : null;
+      const id = parsed?.inviteId ?? null;
 
       if (!id) {
         setAlert({
@@ -99,6 +102,7 @@ export default function SignUpForm() {
 
     setIsLoading(false);
     setAlert(success);
+    await supabase.auth.refreshSession();
     router.push('/');
   };
 

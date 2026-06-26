@@ -1,9 +1,7 @@
 'use client';
-
 import dynamic from 'next/dynamic';
 import React, { useEffect, useState } from 'react';
 
-import { supabase } from '@/lib/supabase';
 import Layout from '@/src/components/common/Layout';
 import Loader from '@/src/components/common/Loader';
 import HeaderActions from '@/src/components/main/HeaderActions';
@@ -13,14 +11,12 @@ import { useAuth } from '@/src/context/AuthContext';
 import { getMenuActions } from '@/src/helpers/helpers';
 import UsersTabs from '@/src/views/UsersTabs';
 import UserView from '@/src/views/UserView';
-
 const AuthView = dynamic(() => import('@/src/views/AuthView'));
 const HelpView = dynamic(() => import('@/src/views/HelpView'));
 const UpdateUserView = dynamic(() => import('@/src/views/UpdateUserView'));
 const InviteDialog = dynamic(
   () => import('@/src/components/auth/InviteDialog'),
 );
-
 export default function Page() {
   const [dialogs, setDialogs] = useState({
     user: false,
@@ -28,11 +24,7 @@ export default function Page() {
     help: false,
     invite: false,
   });
-
   const [mobileNavOpen, setMobileNavOpen] = useState(false);
-
-  const [inviteUrl, setInviteUrl] = useState<string | null>(null);
-
   const {
     isAuthLoading,
     name,
@@ -40,12 +32,9 @@ export default function Page() {
     isUser = false,
     isUnknownUser = true,
   } = useAuth();
-
   useEffect(() => {
     if (typeof window === 'undefined') return;
-
     const hash = window.location.hash;
-
     if (
       hash.includes('error=access_denied') ||
       hash.includes('error_code=otp_expired')
@@ -54,34 +43,18 @@ export default function Page() {
       document.title = 'APS';
     }
   }, []);
-
   const openDialog = (key: keyof typeof dialogs) =>
     setDialogs((prev) => ({ ...prev, [key]: true }));
-
   const closeDialog = (key: keyof typeof dialogs) =>
     setDialogs((prev) => ({ ...prev, [key]: false }));
-
   if (isAuthLoading) {
     return <Loader />;
   }
-
-  const fetchUrl = async () => {
-    const { data } = await supabase.functions.invoke('create-invite');
-
-    if (data) {
-      setInviteUrl(data.inviteUrl);
-    }
-  };
-
   const actions = getMenuActions({
     isAdmin,
     openUser: () => openDialog('user'),
-    openInvite: async () => {
-      await fetchUrl();
-      openDialog('invite');
-    },
+    openInvite: () => openDialog('invite'),
   });
-
   return (
     <Layout
       actions={
@@ -102,32 +75,22 @@ export default function Page() {
           name={name as string}
         />
       )}
-
       {isAdmin && <UsersTabs />}
       {isUser && <UserView />}
-
       {isUnknownUser && (
         <WelcomeSection
           onLogin={() => openDialog('auth')}
           onHelp={() => openDialog('help')}
         />
       )}
-
       {/* dialogs */}
       {dialogs.user && (
         <UpdateUserView open onClose={() => closeDialog('user')} />
       )}
-
       {dialogs.auth && <AuthView open onClose={() => closeDialog('auth')} />}
-
       {dialogs.help && <HelpView open onClose={() => closeDialog('help')} />}
-
-      {dialogs.invite && inviteUrl && (
-        <InviteDialog
-          link={inviteUrl}
-          open
-          onClose={() => closeDialog('invite')}
-        />
+      {dialogs.invite && (
+        <InviteDialog open onClose={() => closeDialog('invite')} />
       )}
     </Layout>
   );

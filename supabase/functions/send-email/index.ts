@@ -4,6 +4,32 @@ import { serve } from 'https://deno.land/std@0.224.0/http/server.ts';
 const EMPTY_VALUE = '—';
 
 serve(async (req: Request) => {
+  // @ts-expect-error
+  if (Deno.env.get('APP_ENV') === 'test') {
+    const body = await req.json();
+    // @ts-expect-error
+    const supabaseUrl = Deno.env.get('SUPABASE_URL')!;
+    // @ts-expect-error
+    const serviceKey = Deno.env.get('SUPABASE_SERVICE_ROLE_KEY')!;
+    await fetch(`${supabaseUrl}/rest/v1/notifications_log`, {
+      method: 'POST',
+      headers: {
+        Authorization: `Bearer ${serviceKey}`,
+        apikey: serviceKey,
+        'Content-Type': 'application/json',
+        Prefer: 'return=minimal',
+      },
+      body: JSON.stringify({
+        function_name: 'send-email',
+        order_id: body.order?.id ?? null,
+        payload: body,
+      }),
+    });
+    return new Response(JSON.stringify({ ok: true, skipped: 'test env' }), {
+      headers: { 'Content-Type': 'application/json' },
+    });
+  }
+
   try {
     const { order } = await req.json();
     const userId = order.user_id;
@@ -153,6 +179,7 @@ serve(async (req: Request) => {
 </html>`;
 
     const adminEmails =
+      // @ts-expect-error
       Deno.env
         .get('ADMIN_EMAILS')
         ?.split(',')

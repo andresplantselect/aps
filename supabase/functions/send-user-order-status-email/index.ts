@@ -1,3 +1,4 @@
+// @ts-expect-error
 import { serve } from 'https://deno.land/std@0.224.0/http/server.ts';
 
 const corsHeaders = {
@@ -9,6 +10,32 @@ const corsHeaders = {
 serve(async (req: Request) => {
   if (req.method === 'OPTIONS') {
     return new Response('ok', { headers: corsHeaders });
+  }
+
+  // @ts-expect-error
+  if (Deno.env.get('APP_ENV') === 'test') {
+    const body = await req.json();
+    // @ts-expect-error
+    const supabaseUrl = Deno.env.get('SUPABASE_URL')!;
+    // @ts-expect-error
+    const serviceKey = Deno.env.get('SUPABASE_SERVICE_ROLE_KEY')!;
+    await fetch(`${supabaseUrl}/rest/v1/notifications_log`, {
+      method: 'POST',
+      headers: {
+        Authorization: `Bearer ${serviceKey}`,
+        apikey: serviceKey,
+        'Content-Type': 'application/json',
+        Prefer: 'return=minimal',
+      },
+      body: JSON.stringify({
+        function_name: 'send-user-order-status-email',
+        order_id: body.orderId ?? null,
+        payload: body,
+      }),
+    });
+    return new Response(JSON.stringify({ ok: true, skipped: 'test env' }), {
+      headers: { ...corsHeaders, 'Content-Type': 'application/json' },
+    });
   }
 
   try {
@@ -155,6 +182,7 @@ serve(async (req: Request) => {
     const res = await fetch('https://api.resend.com/emails', {
       method: 'POST',
       headers: {
+        // @ts-expect-error
         Authorization: `Bearer ${Deno.env.get('RESEND_API_KEY')}`,
         'Content-Type': 'application/json',
       },
