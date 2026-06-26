@@ -41,7 +41,6 @@ export default function AddItemsCard({
   const [boxesQuantity, setBoxesQuantity] = useState(boxes);
   const [unitsQuantity, setUnitsQuantity] = useState(units);
   const [showUnitsDetails, setShowUnitsDetails] = useState(false);
-  const [showPriceDetails, setShowPriceDetails] = useState(false);
 
   const totalUnits = boxesQuantity * productItem.units_per_box + unitsQuantity;
   const totalPrice = totalUnits * productItem.price;
