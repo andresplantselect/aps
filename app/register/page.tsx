@@ -2,11 +2,12 @@
 
 import { useRouter } from 'next/navigation';
 import React, { useState, useEffect } from 'react';
+import { flushSync } from 'react-dom';
 
-import { supabase } from '@/lib/supabase';
 import PanelCardFormLayout from '@/src/components/auth/PanelCardFormLayout';
 import CommonForm from '@/src/components/form/CommonForm';
 import { SignUpFormConfig } from '@/src/components/form/formConfigs';
+import { useAuth } from '@/src/context/AuthContext';
 import { useConsumeInvite, useInviteToken, useSignUp } from '@/src/hooks/api';
 import { AlertType, FormField, SignUpFormType } from '@/src/types/types';
 
@@ -22,6 +23,7 @@ export default function SignUpForm() {
   const [isLoading, setIsLoading] = useState(false);
 
   const router = useRouter();
+  const { refreshProfile } = useAuth();
   const { checkInviteToken } = useInviteToken();
   const { signUp } = useSignUp();
   const { consumeInvite } = useConsumeInvite();
@@ -66,7 +68,7 @@ export default function SignUpForm() {
   const handleSubmit = async () => {
     if (!inviteId || !isFormValid) return;
 
-    setIsLoading(true);
+    flushSync(() => setIsLoading(true));
 
     const { email, password, name } = signUpForm;
 
@@ -100,9 +102,9 @@ export default function SignUpForm() {
       return;
     }
 
-    setIsLoading(false);
     setAlert(success);
-    await supabase.auth.refreshSession();
+    await refreshProfile(userId);
+    setIsLoading(false);
     router.push('/');
   };
 

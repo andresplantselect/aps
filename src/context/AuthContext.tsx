@@ -14,7 +14,7 @@ type AuthContextType = {
   isAdmin: boolean;
   isUser: boolean;
   isUnknownUser: boolean;
-  refreshProfile: () => Promise<void>;
+  refreshProfile: (overrideUserId?: string) => Promise<void>;
 };
 
 const AuthContext = createContext<AuthContextType>({
@@ -82,9 +82,10 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     setIsAuthLoading(false);
   }
 
-  const refreshProfile = async () => {
-    if (!user?.id) return;
-    await loadProfile(user.id);
+  const refreshProfile = async (overrideUserId?: string) => {
+    const id = overrideUserId ?? user?.id;
+    if (!id) return;
+    await loadProfile(id);
   };
 
   useEffect(() => {

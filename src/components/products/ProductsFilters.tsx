@@ -26,6 +26,7 @@ export function ProductsFilters({
         bgcolor: 'transparent',
         px: 2,
         py: 1.5,
+        width: 'fit-content',
       }}
     >
       <Stack
