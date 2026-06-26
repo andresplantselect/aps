@@ -28,7 +28,7 @@ export function PreordersGrid() {
         display: 'grid',
         gridTemplateColumns: {
           xs: '1fr',
-          sm: 'repeat(auto-fill, minmax(320px, 1fr))',
+          sm: 'repeat(auto-fill, minmax(330px, 1fr))',
         },
         gap: 1,
       }}

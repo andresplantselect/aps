@@ -1,35 +1,49 @@
+'use client';
+
 import ContentCopyIcon from '@mui/icons-material/ContentCopy';
 import {
   Stack,
   Dialog,
-  DialogTitle,
   DialogContent,
   Typography,
+  Switch,
+  CircularProgress,
+  Box,
 } from '@mui/material';
 import React, { useState } from 'react';
 
+import { supabase } from '@/lib/supabase';
 import { useAlert } from '@/src/context/AlertContext';
 import {
+  PrimaryButton,
   SecondaryButton,
   SecondaryRoundIconButton,
 } from '@/src/styledComponents';
 
 type InviteDialogProps = {
-  link: string;
   open: boolean;
   onClose: () => void;
 };
 
-export default function InviteDialog({
-  link,
-  open,
-  onClose,
-}: InviteDialogProps) {
+export default function InviteDialog({ open, onClose }: InviteDialogProps) {
+  const [isAdmin, setIsAdmin] = useState(false);
+  const [link, setLink] = useState<string | null>(null);
+  const [loading, setLoading] = useState(false);
   const [copied, setCopied] = useState(false);
 
   const { showAlert, clearAlert } = useAlert();
 
+  const handleGenerate = async () => {
+    setLoading(true);
+    const { data } = await supabase.functions.invoke('create-invite', {
+      body: { role: isAdmin ? 'admin' : 'user' },
+    });
+    setLoading(false);
+    if (data?.inviteUrl) setLink(data.inviteUrl);
+  };
+
   const handleCopy = async () => {
+    if (!link) return;
     try {
       if (navigator.clipboard && window.isSecureContext) {
         await navigator.clipboard.writeText(link);
@@ -44,13 +58,8 @@ export default function InviteDialog({
         document.execCommand('copy');
         document.body.removeChild(textArea);
       }
-
       setCopied(true);
-      showAlert({
-        severity: 'success',
-        message: 'Enlace copiado',
-      });
-
+      showAlert({ severity: 'success', message: 'Enlace copiado' });
       setTimeout(() => {
         setCopied(false);
         void clearAlert();
@@ -60,34 +69,83 @@ export default function InviteDialog({
     }
   };
 
+  const handleClose = () => {
+    setLink(null);
+    setIsAdmin(false);
+    onClose();
+  };
+
   return (
-    <>
-      <Dialog open={open} onClose={onClose}>
-        <DialogTitle>
-          <Typography variant="h6">Enlace de invitación</Typography>
-        </DialogTitle>
+    <Dialog open={open} onClose={handleClose}>
+      <Box sx={{ backgroundColor: 'primary.main', px: 3, py: 1.5 }}>
+        <Typography
+          sx={{ color: 'primary.contrastText', fontWeight: 600, fontSize: 16 }}
+        >
+          Nueva invitación
+        </Typography>
+      </Box>
 
-        <DialogContent sx={{ p: 3 }}>
-          <Stack direction="row" alignItems="flex-s" spacing={3}>
-            <Typography
-              color="text.secondary"
-              sx={{
-                wordBreak: 'break-all',
-                textAlign: 'center',
-              }}
-            >
-              {link}
-            </Typography>
+      <DialogContent sx={{ minWidth: 340 }}>
+        <Stack spacing={2}>
+          {/* Role toggle */}
+          {!link && (
+            <Stack direction="row" alignItems="center" justifyContent="center">
+              <Typography>Es administrador</Typography>
+              <Switch
+                checked={isAdmin}
+                onChange={(e) => {
+                  setIsAdmin(e.target.checked);
+                }}
+              />
+            </Stack>
+          )}
 
-            <SecondaryRoundIconButton disabled={copied} onClick={handleCopy}>
-              <ContentCopyIcon fontSize="small" />
-            </SecondaryRoundIconButton>
+          {/* Generated link */}
+          {link && (
+            <Box>
+              <Typography variant="body2" color="text.secondary" mb={1}>
+                {isAdmin
+                  ? 'Enlace de registro de nuevo administrador:'
+                  : 'Enlace de registro de nuevo cliente:'}
+              </Typography>
+              <Stack direction="row" alignItems="flex-start" spacing={1}>
+                <Typography
+                  variant="body2"
+                  sx={{
+                    wordBreak: 'break-all',
+                    flex: 1,
+                    bgcolor: 'action.hover',
+                    borderRadius: 1,
+                    p: 1,
+                  }}
+                >
+                  {link}
+                </Typography>
+                <SecondaryRoundIconButton
+                  disabled={copied}
+                  onClick={handleCopy}
+                >
+                  <ContentCopyIcon fontSize="small" />
+                </SecondaryRoundIconButton>
+              </Stack>
+            </Box>
+          )}
+
+          {/* Actions */}
+          <Stack direction="row" justifyContent="center" spacing={1}>
+            <SecondaryButton onClick={handleClose}>Cerrar</SecondaryButton>
+            {!link && (
+              <PrimaryButton onClick={handleGenerate} disabled={loading}>
+                {loading ? (
+                  <CircularProgress size={18} color="inherit" />
+                ) : (
+                  'Crear'
+                )}
+              </PrimaryButton>
+            )}
           </Stack>
-          <Stack alignItems="center" mt={2}>
-            <SecondaryButton onClick={onClose}>Cerrar</SecondaryButton>
-          </Stack>
-        </DialogContent>
-      </Dialog>
-    </>
+        </Stack>
+      </DialogContent>
+    </Dialog>
   );
 }

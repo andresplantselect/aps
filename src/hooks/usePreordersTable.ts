@@ -93,31 +93,8 @@ export const usePreordersTable = () => {
   const sortedOrders = useMemo(() => {
     const sorted = [...filteredOrders];
 
-    const statusOrder: Record<string, number> = {
-      pending: 0,
-      approved: 1,
-      cancelled: 2,
-    };
-
-    const deliveryStatusOrder: Record<string, number> = {
-      waiting: 0,
-      delivered: 1,
-      failed: 2,
-      not_applicable: 3,
-    };
-
     sorted.sort((a, b) => {
-      // Default sort by date — multi-level
       if (sortBy === 'date') {
-        const statusDiff =
-          (statusOrder[a.status] ?? 99) - (statusOrder[b.status] ?? 99);
-        if (statusDiff !== 0) return statusDiff;
-
-        const deliveryDiff =
-          (deliveryStatusOrder[a.delivery_status] ?? 99) -
-          (deliveryStatusOrder[b.delivery_status] ?? 99);
-        if (deliveryDiff !== 0) return deliveryDiff;
-
         return sortDir === 'asc'
           ? new Date(a.created_at).getTime() - new Date(b.created_at).getTime()
           : new Date(b.created_at).getTime() - new Date(a.created_at).getTime();

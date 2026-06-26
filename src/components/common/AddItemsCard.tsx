@@ -41,7 +41,6 @@ export default function AddItemsCard({
   const [boxesQuantity, setBoxesQuantity] = useState(boxes);
   const [unitsQuantity, setUnitsQuantity] = useState(units);
   const [showUnitsDetails, setShowUnitsDetails] = useState(false);
-  const [showPriceDetails, setShowPriceDetails] = useState(false);
 
   const totalUnits = boxesQuantity * productItem.units_per_box + unitsQuantity;
   const totalPrice = totalUnits * productItem.price;
@@ -162,7 +161,12 @@ export default function AddItemsCard({
             </Typography>
 
             <Stack direction="row" alignItems="center">
-              <Typography variant="body2">{totalUnits} Uds</Typography>
+              <Stack direction="row" alignItems="center" spacing={1}>
+                <Typography variant="body2">{totalUnits} Uds</Typography>
+                <Typography variant="body2">
+                  {Number(totalPrice).toFixed(2)} €
+                </Typography>
+              </Stack>
 
               <Typography
                 variant="caption"
@@ -176,36 +180,20 @@ export default function AddItemsCard({
                 )}
               </Typography>
             </Stack>
-
-            <Stack direction="row" alignItems="center">
-              <Typography variant="body2">
-                {Number(totalPrice).toFixed(2)} €
-              </Typography>
-
-              <Typography
-                variant="caption"
-                sx={{ cursor: 'pointer' }}
-                onClick={() => setShowPriceDetails((p) => !p)}
-              >
-                {showPriceDetails ? (
-                  <ExpandLessOutlinedIcon fontSize="small" />
-                ) : (
-                  <ExpandMoreIcon fontSize="small" />
-                )}
-              </Typography>
-            </Stack>
           </Stack>
           {showUnitsDetails && (
             <CustomAccordionText sx={{ mt: 1 }}>
-              {productItem.can_buy_units
-                ? `${boxesQuantity} Cajas × ${productItem.units_per_box} Uds + ${unitsQuantity} Uds = ${totalUnits} Uds`
-                : `${boxesQuantity} Cajas × ${productItem.units_per_box} Uds = ${totalUnits} Uds`}
-            </CustomAccordionText>
-          )}
-          {showPriceDetails && (
-            <CustomAccordionText sx={{ mt: 1 }}>
-              {totalUnits} Uds × {Number(productItem.price).toFixed(2)} € ={' '}
-              {(totalUnits * productItem.price).toFixed(2)} €
+              <>
+                <Typography>
+                  {productItem.can_buy_units
+                    ? `${boxesQuantity} Cajas × ${productItem.units_per_box} Uds + ${unitsQuantity} Uds = ${totalUnits} Uds`
+                    : `${boxesQuantity} Cajas × ${productItem.units_per_box} Uds = ${totalUnits} Uds`}
+                </Typography>
+                <Typography>
+                  {totalUnits} Uds × {Number(productItem.price).toFixed(2)} € ={' '}
+                  {(totalUnits * productItem.price).toFixed(2)} €
+                </Typography>
+              </>
             </CustomAccordionText>
           )}
         </Stack>

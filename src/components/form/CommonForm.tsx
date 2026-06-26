@@ -1,6 +1,7 @@
 import { Stack } from '@mui/material';
 import React, { useEffect, useMemo, useState } from 'react';
 
+import PasswordFields from '@/src/components/common/PasswordFields';
 import ValidationErrorsList from '@/src/components/common/ValidationErrorsList';
 import { formConfigFieldsDict } from '@/src/components/form/formConfigs';
 import FormFieldRenderer from '@/src/components/form/FormFieldRenderer';
@@ -80,16 +81,43 @@ export default function CommonForm<T extends Record<string, unknown>>({
         spacing={2}
       >
         <Stack spacing={2}>
-          {formConfig
-            .filter(({ visibility }) => visibility)
-            .map((field) => (
-              <FormFieldRenderer
-                key={String(field.key)}
-                field={field as unknown as AnyFormField}
-                value={form[field.key]}
-                onChange={(value) => handleFieldChange(field.key, value)}
-              />
-            ))}
+          {(() => {
+            const visibleFields = formConfig.filter(
+              ({ visibility }) => visibility,
+            );
+            const nodes: React.ReactNode[] = [];
+            for (let i = 0; i < visibleFields.length; i++) {
+              const field = visibleFields[i];
+              const next = visibleFields[i + 1];
+              if (field.type === 'password' && next?.type === 'confirm') {
+                nodes.push(
+                  <PasswordFields
+                    key="password-confirm"
+                    password={{
+                      value: form[field.key] as string,
+                      onChange: (v) => handleFieldChange(field.key, v),
+                    }}
+                    confirm={{
+                      value: form[next.key] as string,
+                      onChange: (v) => handleFieldChange(next.key, v),
+                    }}
+                    required={field.required}
+                  />,
+                );
+                i++;
+              } else {
+                nodes.push(
+                  <FormFieldRenderer
+                    key={String(field.key)}
+                    field={field as unknown as AnyFormField}
+                    value={form[field.key]}
+                    onChange={(value) => handleFieldChange(field.key, value)}
+                  />,
+                );
+              }
+            }
+            return nodes;
+          })()}
         </Stack>
       </Stack>
 
