@@ -11,13 +11,17 @@ import RedirectionLink from '@/src/components/common/RedirectionLink';
 import CommonForm from '@/src/components/form/CommonForm';
 import {
   AuthFormConfig,
-  ResetPasswordFormConfig,
+  RequestResetPasswordFormConfig,
 } from '@/src/components/form/formConfigs';
 import { AuthTitlesDict } from '@/src/constants';
 import { useAlert } from '@/src/context/AlertContext';
 import { useResetPassword, useSignIn } from '@/src/hooks/api';
 import { AuthFormProps, AuthMode } from '@/src/types/propsTypes';
-import { FormField, PasswordFormType, SignInFormType } from '@/src/types/types';
+import {
+  ForgotPasswordFormType,
+  FormField,
+  SignInFormType,
+} from '@/src/types/types';
 
 export default function AuthView({ open, onClose }: AuthFormProps) {
   const [mode, setMode] = useState<AuthMode>('signIn');
@@ -34,7 +38,7 @@ export default function AuthView({ open, onClose }: AuthFormProps) {
   const { showAlert } = useAlert();
 
   const resetFormConfig = useMemo(
-    () => ResetPasswordFormConfig(authForm),
+    () => RequestResetPasswordFormConfig(authForm.email),
     [authForm],
   );
 
@@ -120,13 +124,15 @@ export default function AuthView({ open, onClose }: AuthFormProps) {
 
         {isForgotPassword && (
           <Stack spacing={2}>
-            <CommonForm<PasswordFormType>
+            <CommonForm<ForgotPasswordFormType>
               key={mode}
               fillForm={(form, isValid) => {
                 setAuthForm(form);
                 setIsFormValid(isValid);
               }}
-              formConfig={resetFormConfig as FormField<PasswordFormType>[]}
+              formConfig={
+                resetFormConfig as FormField<ForgotPasswordFormType>[]
+              }
               onSubmit={handleSubmit}
             />
             <RedirectionLink

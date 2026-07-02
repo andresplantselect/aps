@@ -164,6 +164,10 @@ export const ResetPasswordFormConfig = (form: {
   },
 ];
 
+export const RequestResetPasswordFormConfig = (email: string) => [
+  { ...formConfigFieldsDict.email, initialValue: email ?? '' },
+];
+
 export const AdminProductFormConfig = (
   product: ProductType | null,
 ): FormField<ProductForm>[] => [
