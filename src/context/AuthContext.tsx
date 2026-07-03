@@ -1,7 +1,7 @@
 'use client';
 
 import { equals, anyPass } from 'ramda';
-import { createContext, useContext, useEffect, useState } from 'react';
+import { createContext, useContext, useEffect, useRef, useState } from 'react';
 
 import { supabase } from '@/lib/supabase';
 import { UserType } from '@/src/types/types';
@@ -40,6 +40,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
 
   const [isAuthLoading, setIsAuthLoading] = useState(true);
   const [isRecovering, setIsRecovering] = useState(false);
+  const isRecoveringRef = useRef(isRecovering);
 
   async function loadProfile(userId: string) {
     const { data: profile } = await supabase
@@ -98,8 +99,12 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     // detect if we are handling a password recovery flow (hash contains type=recovery)
     if (typeof window !== 'undefined') {
       const hash = window.location.hash || '';
-      if (hash.includes('type=recovery')) {
+      // also check pathname in case the hash was cleaned by the auth client
+      const isOnResetPath =
+        window.location.pathname.includes('/reset-password');
+      if (hash.includes('type=recovery') || isOnResetPath) {
         setIsRecovering(true);
+        isRecoveringRef.current = true;
       }
     }
 
@@ -110,7 +115,20 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     supabase.auth.getUser().then(({ data: { user: supabaseUser } }) => {
       clearTimeout(timeout);
       if (supabaseUser) {
-        void loadUserProfile(supabaseUser);
+        // If we are in password recovery flow, do not treat the recovery session as an authenticated
+        // session for loading private profile data — just keep the recovering flag and stop the loader.
+        const hash =
+          typeof window !== 'undefined' ? window.location.hash || '' : '';
+        const isOnResetPath =
+          typeof window !== 'undefined' &&
+          window.location.pathname.includes('/reset-password');
+        if (hash.includes('type=recovery') || isOnResetPath) {
+          setIsRecovering(true);
+          isRecoveringRef.current = true;
+          setIsAuthLoading(false);
+        } else {
+          void loadUserProfile(supabaseUser);
+        }
       } else {
         applyRole('none');
         setIsAuthLoading(false);
@@ -139,10 +157,12 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
         }
         // mark that we are in recovery flow so UI does not show private content
         setIsRecovering(true);
+        isRecoveringRef.current = true;
         return;
       }
 
-      if (session.user) {
+      // Don't treat a recovery session as a signed-in session for loading private data.
+      if (session.user && !isRecoveringRef.current) {
         void loadUserProfile(session.user);
       }
     });
