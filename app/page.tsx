@@ -31,6 +31,7 @@ export default function Page() {
     isAdmin = false,
     isUser = false,
     isUnknownUser = true,
+    isRecovering = false,
   } = useAuth();
   useEffect(() => {
     if (typeof window === 'undefined') return;
@@ -50,6 +51,8 @@ export default function Page() {
   if (isAuthLoading) {
     return <Loader />;
   }
+  const isEffectivelyUnknown = isUnknownUser || isRecovering;
+
   const actions = getMenuActions({
     isAdmin,
     openUser: () => openDialog('user'),
@@ -58,7 +61,7 @@ export default function Page() {
   return (
     <Layout
       actions={
-        !isUnknownUser && (
+        !isEffectivelyUnknown && (
           <HeaderActions
             name={name as string}
             actions={actions}
@@ -67,7 +70,7 @@ export default function Page() {
         )
       }
     >
-      {!isUnknownUser && (
+      {!isEffectivelyUnknown && (
         <MobileNavDrawer
           open={mobileNavOpen}
           onClose={() => setMobileNavOpen(false)}
@@ -75,9 +78,9 @@ export default function Page() {
           name={name as string}
         />
       )}
-      {isAdmin && <UsersTabs />}
-      {isUser && <UserView />}
-      {isUnknownUser && (
+      {isAdmin && !isRecovering && <UsersTabs />}
+      {isUser && !isRecovering && <UserView />}
+      {isEffectivelyUnknown && (
         <WelcomeSection
           onLogin={() => openDialog('auth')}
           onHelp={() => openDialog('help')}

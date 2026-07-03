@@ -16,7 +16,8 @@ export const PrimaryButton = styled(Button)(({ theme }) => ({
   textTransform: 'none',
   fontWeight: 500,
   fontSize: 14,
-  padding: theme.spacing(0.4, 1.6),
+  // increased vertical padding to make buttons taller and match new design
+  padding: theme.spacing(1, 1.6),
   borderRadius: 999,
   border: `1px solid ${theme.palette.primary.main}`,
   transition: 'background-color 0.2s ease',
@@ -40,7 +41,8 @@ export const SecondaryButton = styled(Button)(({ theme }) => ({
   textTransform: 'none',
   fontWeight: 500,
   fontSize: 14,
-  padding: theme.spacing(0.4, 1.6),
+  // keep same vertical padding as PrimaryButton for consistency
+  padding: theme.spacing(1, 1.6),
   borderRadius: 999,
   border: `1px solid ${theme.palette.divider}`,
   transition: 'background-color 0.2s ease, border-color 0.2s ease',
@@ -126,7 +128,8 @@ export const CardEditButton = styled(Button)(({ theme }) => ({
   fontSize: 13,
   fontWeight: 500,
   color: theme.palette.primary.main,
-  padding: theme.spacing(0.5, 2),
+  // increase vertical padding for better tap/click area
+  padding: theme.spacing(1, 2),
   minWidth: 'auto',
   borderRadius: 999,
   backgroundColor: 'transparent',
@@ -145,7 +148,8 @@ export const CardDeleteButton = styled(Button)(({ theme }) => ({
   fontSize: 13,
   fontWeight: 500,
   color: theme.palette.error.main,
-  padding: theme.spacing(0.5, 2),
+  // increase vertical padding for consistency with other buttons
+  padding: theme.spacing(1, 2),
   minWidth: 'auto',
   borderRadius: 999,
   backgroundColor: 'transparent',
@@ -205,7 +209,8 @@ export const StyledChip = styled(Chip)(() => ({
 export const TogglePillButton = styled(ToggleButton)(({ theme }) => ({
   borderRadius: 999,
   borderColor: theme.palette.divider,
-  padding: theme.spacing(0.5, 1),
+  // slightly larger vertical padding for better touch targets
+  padding: theme.spacing(1, 1),
   minWidth: 36,
   height: 32,
 

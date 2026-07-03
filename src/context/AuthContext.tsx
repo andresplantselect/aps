@@ -14,6 +14,7 @@ type AuthContextType = {
   isAdmin: boolean;
   isUser: boolean;
   isUnknownUser: boolean;
+  isRecovering: boolean;
   refreshProfile: (overrideUserId?: string) => Promise<void>;
 };
 
@@ -25,6 +26,7 @@ const AuthContext = createContext<AuthContextType>({
   isAdmin: false,
   isUser: false,
   isUnknownUser: true,
+  isRecovering: false,
   refreshProfile: async () => {},
 });
 
@@ -37,6 +39,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   const [isUnknownUser, setIsUnknownUser] = useState(true);
 
   const [isAuthLoading, setIsAuthLoading] = useState(true);
+  const [isRecovering, setIsRecovering] = useState(false);
 
   async function loadProfile(userId: string) {
     const { data: profile } = await supabase
@@ -79,6 +82,8 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     });
 
     await loadProfile(supabaseUser.id);
+    // clear recovery flag when a real profile is loaded
+    setIsRecovering(false);
     setIsAuthLoading(false);
   }
 
@@ -90,6 +95,14 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
 
   useEffect(() => {
     // Initial load
+    // detect if we are handling a password recovery flow (hash contains type=recovery)
+    if (typeof window !== 'undefined') {
+      const hash = window.location.hash || '';
+      if (hash.includes('type=recovery')) {
+        setIsRecovering(true);
+      }
+    }
+
     const timeout = setTimeout(() => {
       setIsAuthLoading(false);
     }, 5000);
@@ -113,6 +126,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
         applyRole('none');
         setName(null);
         setIsAuthLoading(false);
+        setIsRecovering(false);
         return;
       }
 
@@ -123,6 +137,8 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
         ) {
           window.location.replace('/reset-password');
         }
+        // mark that we are in recovery flow so UI does not show private content
+        setIsRecovering(true);
         return;
       }
 
@@ -143,6 +159,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
         isAuthLoading,
         isAdmin,
         isUser,
+        isRecovering,
         isUnknownUser,
         refreshProfile,
       }}
