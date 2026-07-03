@@ -40,6 +40,8 @@ export type PasswordFormType = {
   confirm: string;
 };
 
+export type OtpFormType = { otp: string };
+
 export type SignUpFormType = {
   name: string;
   email: string;

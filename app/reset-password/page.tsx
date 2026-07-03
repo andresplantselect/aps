@@ -1,46 +1,63 @@
 'use client';
 
-import { useRouter } from 'next/navigation';
-import React, { useState, useEffect } from 'react';
+import { useRouter, useSearchParams } from 'next/navigation';
+import React, { Suspense, useState } from 'react';
 
 import { supabase } from '@/lib/supabase';
 import PanelCardFormLayout from '@/src/components/auth/PanelCardFormLayout';
 import CommonForm from '@/src/components/form/CommonForm';
-import { ResetPasswordFormConfig } from '@/src/components/form/formConfigs';
+import {
+  OtpFormConfig,
+  ResetPasswordFormConfig,
+} from '@/src/components/form/formConfigs';
 import { useAlert } from '@/src/context/AlertContext';
 import { useUpdatePassword } from '@/src/hooks/api';
-import { AlertType, FormField, PasswordFormType } from '@/src/types/types';
+import {
+  AlertType,
+  FormField,
+  OtpFormType,
+  PasswordFormType,
+} from '@/src/types/types';
 
-export default function Page() {
+function ResetPasswordForm() {
+  const searchParams = useSearchParams();
+  const email = searchParams.get('email') ?? '';
+
+  const [step, setStep] = useState<'otp' | 'password'>('otp');
+  const [otpForm, setOtpForm] = useState<OtpFormType>({ otp: '' });
+  const [isOtpValid, setIsOtpValid] = useState(false);
   const [passwordForm, setPasswordForm] = useState<PasswordFormType>({
     password: '',
     confirm: '',
   });
-  const [isFormValid, setIsFormValid] = useState(false);
+  const [isPasswordValid, setIsPasswordValid] = useState(false);
   const [alert, setAlert] = useState<AlertType>(null);
 
   const router = useRouter();
   const { updatePassword } = useUpdatePassword();
   const { showAlert } = useAlert();
 
-  const resetPasswordFormConfig = ResetPasswordFormConfig(passwordForm);
+  const passwordFormConfig = ResetPasswordFormConfig(passwordForm);
 
-  useEffect(() => {
-    const hash = window.location.hash;
-    const params = new URLSearchParams(hash.replace('#', '?'));
-    const access_token = params.get('access_token');
-    const type = params.get('type');
+  const handleVerifyOtp = async () => {
+    if (!isOtpValid) return;
 
-    if (access_token && type === 'recovery') {
-      supabase.auth.setSession({
-        access_token,
-        refresh_token: access_token,
-      });
+    const { error } = await supabase.auth.verifyOtp({
+      email,
+      token: otpForm.otp,
+      type: 'email',
+    });
+
+    if (error) {
+      setAlert({ message: error.message, severity: 'error' });
+      return;
     }
-  }, []);
 
-  const handleSubmit = async () => {
-    if (!isFormValid) return;
+    setStep('password');
+  };
+
+  const handleUpdatePassword = async () => {
+    if (!isPasswordValid) return;
 
     const { success, error } = await updatePassword(passwordForm.password);
 
@@ -58,17 +75,37 @@ export default function Page() {
       alert={alert}
       setAlert={(v) => setAlert(v)}
       submit={{
-        title: 'Actualizar',
-        handler: handleSubmit,
+        title: step === 'otp' ? 'Verificar' : 'Guardar contraseña',
+        handler: step === 'otp' ? handleVerifyOtp : handleUpdatePassword,
       }}
     >
-      <CommonForm<PasswordFormType>
-        fillForm={(form, isValid) => {
-          setPasswordForm(form);
-          setIsFormValid(isValid);
-        }}
-        formConfig={resetPasswordFormConfig as FormField<PasswordFormType>[]}
-      />
+      {step === 'otp' && (
+        <CommonForm<OtpFormType>
+          fillForm={(form, isValid) => {
+            setOtpForm(form as OtpFormType);
+            setIsOtpValid(isValid);
+          }}
+          formConfig={OtpFormConfig as FormField<OtpFormType>[]}
+        />
+      )}
+
+      {step === 'password' && (
+        <CommonForm<PasswordFormType>
+          fillForm={(form, isValid) => {
+            setPasswordForm(form as PasswordFormType);
+            setIsPasswordValid(isValid);
+          }}
+          formConfig={passwordFormConfig as FormField<PasswordFormType>[]}
+        />
+      )}
     </PanelCardFormLayout>
+  );
+}
+
+export default function Page() {
+  return (
+    <Suspense>
+      <ResetPasswordForm />
+    </Suspense>
   );
 }

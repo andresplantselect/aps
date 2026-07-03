@@ -76,6 +76,11 @@ export const validationRules = {
     return parseNumberInput(value) === null ? 'Valor numérico inválido' : null;
   },
 
+  otp: (value: unknown) => {
+    if (typeof value !== 'string') return 'Código inválido';
+    return /^\d{6}$/.test(value) ? null : 'El código debe tener 6 dígitos';
+  },
+
   confirm: (value: unknown, form: unknown) => {
     if (
       typeof form === 'object' &&

@@ -15,7 +15,7 @@ import {
 } from '@/src/components/form/formConfigs';
 import { AuthTitlesDict } from '@/src/constants';
 import { useAlert } from '@/src/context/AlertContext';
-import { useResetPassword, useSignIn } from '@/src/hooks/api';
+import { useSendOtp, useSignIn } from '@/src/hooks/api';
 import { AuthFormProps, AuthMode } from '@/src/types/propsTypes';
 import {
   ForgotPasswordFormType,
@@ -34,19 +34,17 @@ export default function AuthView({ open, onClose }: AuthFormProps) {
   const title = AuthTitlesDict[mode].title || '';
 
   const { signIn } = useSignIn();
-  const { resetPassword } = useResetPassword();
+  const { sendOtp } = useSendOtp();
   const { showAlert } = useAlert();
 
+  const signInFormConfig = useMemo(() => AuthFormConfig(authForm), [authForm]);
   const resetFormConfig = useMemo(
     () => RequestResetPasswordFormConfig(authForm.email),
     [authForm],
   );
 
-  const signInFormConfig = useMemo(() => AuthFormConfig(authForm), [authForm]);
-
   const startCooldown = (seconds = 60) => {
     setCooldown(seconds);
-
     const interval = setInterval(() => {
       setCooldown((prev) => {
         if (prev <= 1) {
@@ -61,34 +59,39 @@ export default function AuthView({ open, onClose }: AuthFormProps) {
   const handleSubmit = async () => {
     if (!isFormValid || cooldown > 0) return;
 
-    const action = isSignIn
-      ? () => signIn(authForm as SignInFormType)
-      : () => resetPassword(authForm.email);
-
-    const { success, error } = await action();
-
-    if (error) {
-      showAlert(error);
+    if (isSignIn) {
+      const { success, error } = await signIn(authForm as SignInFormType);
+      if (error) {
+        showAlert(error);
+        return;
+      }
+      if (success) showAlert(success);
+      onClose();
       return;
     }
 
-    if (success) showAlert(success);
-
     if (isForgotPassword) {
+      const { error } = await sendOtp(authForm.email);
+      if (error) {
+        showAlert(error);
+        return;
+      }
       startCooldown();
+      showAlert({
+        message:
+          'Revisa tu correo. Te hemos enviado un código para restablecer tu contraseña.',
+        severity: 'success',
+      });
+      onClose();
     }
-
-    onClose();
   };
-
-  const iconTitle = isSignIn ? <LoginIcon /> : <LockOpenIcon />;
 
   return (
     <AppDialog
       open={open}
       onClose={onClose}
       title={title}
-      icon={iconTitle}
+      icon={isSignIn ? <LoginIcon /> : <LockOpenIcon />}
       primaryButton={{
         disabled: !isFormValid || cooldown > 0,
         handleSubmit,
@@ -110,7 +113,6 @@ export default function AuthView({ open, onClose }: AuthFormProps) {
               formConfig={signInFormConfig as FormField<SignInFormType>[]}
               onSubmit={handleSubmit}
             />
-
             <RedirectionLink
               linkText="Olvidaste tu contraseña?"
               linkTitle="Recuperar"
@@ -137,7 +139,7 @@ export default function AuthView({ open, onClose }: AuthFormProps) {
             />
             <RedirectionLink
               linkText=""
-              linkTitle="Volver atras"
+              linkTitle="Volver atrás"
               onLinkClick={() => {
                 setAuthForm({});
                 setIsFormValid(false);
