@@ -116,6 +116,16 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
         return;
       }
 
+      if (equals(event, 'PASSWORD_RECOVERY')) {
+        if (
+          typeof window !== 'undefined' &&
+          !window.location.pathname.includes('/reset-password')
+        ) {
+          window.location.replace('/reset-password');
+        }
+        return;
+      }
+
       if (session.user) {
         void loadUserProfile(session.user);
       }
