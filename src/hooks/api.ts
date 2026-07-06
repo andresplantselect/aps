@@ -2,7 +2,7 @@ import { AlertColor } from '@mui/material';
 import { Session, User } from '@supabase/auth-js';
 
 import { supabase } from '@/lib/supabase';
-import { ALERT_MESSAGES_DICT, RESET_PASSWORD_URL } from '@/src/constants';
+import { ALERT_MESSAGES_DICT } from '@/src/constants';
 import { useRequest } from '@/src/hooks/useRequest';
 import { ProductForm } from '@/src/types/propsTypes';
 import {
@@ -55,19 +55,31 @@ export const useSignUp = () => {
   return { signUp };
 };
 
-export const useResetPassword = () => {
+export const useSendOtp = () => {
   const { request } = useRequest();
 
-  const resetPassword = (email: string) =>
+  const sendOtp = (email: string) =>
     request(
       async () =>
-        supabase.auth.resetPasswordForEmail(email, {
-          redirectTo: RESET_PASSWORD_URL,
+        supabase.auth.signInWithOtp({
+          email,
+          options: { shouldCreateUser: false },
         }),
-      ALERT_MESSAGES_DICT.success.resetPasswordEmail,
+      ALERT_MESSAGES_DICT.success.otpSent,
     );
 
-  return { resetPassword };
+  return { sendOtp };
+};
+
+export const useVerifyOtp = () => {
+  const { request } = useRequest();
+
+  const verifyOtp = (email: string, token: string) =>
+    request<{ user: User | null; session: Session | null }>(async () =>
+      supabase.auth.verifyOtp({ email, token, type: 'email' }),
+    );
+
+  return { verifyOtp };
 };
 
 export const useUpdatePassword = () => {

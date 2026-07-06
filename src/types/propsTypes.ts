@@ -79,7 +79,7 @@ export interface CartItemListProps {
 
 export type PanelCardFormLayoutProps = {
   children: ReactNode;
-  submit: { title: string; handler: () => void };
+  submit: { title: string; handler: () => void; disabled?: boolean };
   alert: AlertType;
   setAlert: (v: AlertType) => void;
   loading?: boolean;

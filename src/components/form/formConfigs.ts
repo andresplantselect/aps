@@ -110,6 +110,15 @@ export const formConfigFieldsDict = {
     visibility: true,
     rules: [validationRules.number],
   },
+  otp: {
+    key: 'otp' as const,
+    label: 'Código de verificación',
+    initialValue: '',
+    required: true,
+    type: 'text' as InputFieldType,
+    visibility: true,
+    rules: [validationRules.required, validationRules.otp],
+  },
   comment: {
     key: 'comment' as const,
     label: 'Comentario',
@@ -163,6 +172,12 @@ export const ResetPasswordFormConfig = (form: {
     initialValue: form.confirm ?? '',
   },
 ];
+
+export const RequestResetPasswordFormConfig = (email: string) => [
+  { ...formConfigFieldsDict.email, initialValue: email ?? '' },
+];
+
+export const OtpFormConfig = [formConfigFieldsDict.otp];
 
 export const AdminProductFormConfig = (
   product: ProductType | null,

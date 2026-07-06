@@ -15,6 +15,7 @@ type AuthContextType = {
   isUser: boolean;
   isUnknownUser: boolean;
   refreshProfile: (overrideUserId?: string) => Promise<void>;
+  refreshAuth: () => Promise<void>;
 };
 
 const AuthContext = createContext<AuthContextType>({
@@ -26,6 +27,7 @@ const AuthContext = createContext<AuthContextType>({
   isUser: false,
   isUnknownUser: true,
   refreshProfile: async () => {},
+  refreshAuth: async () => {},
 });
 
 export function AuthProvider({ children }: { children: React.ReactNode }) {
@@ -88,8 +90,18 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     await loadProfile(id);
   };
 
+  const refreshAuth = async () => {
+    const { data: { user: supabaseUser } } = await supabase.auth.getUser();
+    if (supabaseUser) {
+      await loadUserProfile(supabaseUser);
+    } else {
+      setUser(null);
+      applyRole('none');
+      setIsAuthLoading(false);
+    }
+  };
+
   useEffect(() => {
-    // Initial load
     const timeout = setTimeout(() => {
       setIsAuthLoading(false);
     }, 5000);
@@ -104,7 +116,6 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
       }
     });
 
-    // Auth changes (login / logout)
     const {
       data: { subscription },
     } = supabase.auth.onAuthStateChange((event, session) => {
@@ -135,6 +146,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
         isUser,
         isUnknownUser,
         refreshProfile,
+        refreshAuth,
       }}
     >
       {children}

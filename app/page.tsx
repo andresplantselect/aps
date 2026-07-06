@@ -50,6 +50,8 @@ export default function Page() {
   if (isAuthLoading) {
     return <Loader />;
   }
+  const isEffectivelyUnknown = isUnknownUser;
+
   const actions = getMenuActions({
     isAdmin,
     openUser: () => openDialog('user'),
@@ -58,7 +60,7 @@ export default function Page() {
   return (
     <Layout
       actions={
-        !isUnknownUser && (
+        !isEffectivelyUnknown && (
           <HeaderActions
             name={name as string}
             actions={actions}
@@ -67,7 +69,7 @@ export default function Page() {
         )
       }
     >
-      {!isUnknownUser && (
+      {!isEffectivelyUnknown && (
         <MobileNavDrawer
           open={mobileNavOpen}
           onClose={() => setMobileNavOpen(false)}
@@ -77,7 +79,7 @@ export default function Page() {
       )}
       {isAdmin && <UsersTabs />}
       {isUser && <UserView />}
-      {isUnknownUser && (
+      {isEffectivelyUnknown && (
         <WelcomeSection
           onLogin={() => openDialog('auth')}
           onHelp={() => openDialog('help')}

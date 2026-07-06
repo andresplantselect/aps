@@ -76,32 +76,58 @@ export default function InviteDialog({ open, onClose }: InviteDialogProps) {
   };
 
   return (
-    <Dialog open={open} onClose={handleClose}>
-      <Box sx={{ backgroundColor: 'primary.main', px: 3, py: 1.5 }}>
-        <Typography
-          sx={{ color: 'primary.contrastText', fontWeight: 600, fontSize: 16 }}
-        >
-          Nueva invitación
-        </Typography>
-      </Box>
-
-      <DialogContent sx={{ minWidth: 340 }}>
-        <Stack spacing={2}>
-          {/* Role toggle */}
-          {!link && (
+    <>
+      {/* Dialog 1: toggle + create */}
+      <Dialog open={open && !link} onClose={handleClose}>
+        <Box sx={{ backgroundColor: 'primary.main', px: 3, py: 1.5 }}>
+          <Typography
+            sx={{
+              color: 'primary.contrastText',
+              fontWeight: 600,
+              fontSize: 16,
+            }}
+          >
+            Nueva invitación
+          </Typography>
+        </Box>
+        <DialogContent sx={{ minWidth: 340 }}>
+          <Stack spacing={2}>
             <Stack direction="row" alignItems="center" justifyContent="center">
               <Typography>Es administrador</Typography>
               <Switch
                 checked={isAdmin}
-                onChange={(e) => {
-                  setIsAdmin(e.target.checked);
-                }}
+                onChange={(e) => setIsAdmin(e.target.checked)}
               />
             </Stack>
-          )}
+            <Stack direction="row" justifyContent="center" spacing={1}>
+              <SecondaryButton onClick={handleClose}>Cerrar</SecondaryButton>
+              <PrimaryButton onClick={handleGenerate} disabled={loading}>
+                {loading ? (
+                  <CircularProgress size={18} color="inherit" />
+                ) : (
+                  'Crear'
+                )}
+              </PrimaryButton>
+            </Stack>
+          </Stack>
+        </DialogContent>
+      </Dialog>
 
-          {/* Generated link */}
-          {link && (
+      {/* Dialog 2: generated link */}
+      <Dialog open={!!link} onClose={handleClose}>
+        <Box sx={{ backgroundColor: 'primary.main', px: 3, py: 1.5 }}>
+          <Typography
+            sx={{
+              color: 'primary.contrastText',
+              fontWeight: 600,
+              fontSize: 16,
+            }}
+          >
+            Enlace generado
+          </Typography>
+        </Box>
+        <DialogContent sx={{ minWidth: 340 }}>
+          <Stack spacing={2}>
             <Box>
               <Typography variant="body2" color="text.secondary" mb={1}>
                 {isAdmin
@@ -129,23 +155,12 @@ export default function InviteDialog({ open, onClose }: InviteDialogProps) {
                 </SecondaryRoundIconButton>
               </Stack>
             </Box>
-          )}
-
-          {/* Actions */}
-          <Stack direction="row" justifyContent="center" spacing={1}>
-            <SecondaryButton onClick={handleClose}>Cerrar</SecondaryButton>
-            {!link && (
-              <PrimaryButton onClick={handleGenerate} disabled={loading}>
-                {loading ? (
-                  <CircularProgress size={18} color="inherit" />
-                ) : (
-                  'Crear'
-                )}
-              </PrimaryButton>
-            )}
+            <Stack direction="row" justifyContent="center">
+              <SecondaryButton onClick={handleClose}>Cerrar</SecondaryButton>
+            </Stack>
           </Stack>
-        </Stack>
-      </DialogContent>
-    </Dialog>
+        </DialogContent>
+      </Dialog>
+    </>
   );
 }

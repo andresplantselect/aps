@@ -47,18 +47,21 @@ export const AuthTitlesDict = {
   signIn: {
     title: 'Iniciar sesión',
     submitButton: 'Iniciar sesión',
-    linkText: 'Aún no estás registrado?',
-    linkTitle: 'Registrarse',
   },
   forgotPassword: {
     title: 'Recuperar contraseña',
-    submitButton: 'Enviar enlace',
-    linkText: 'Recordaste los datos?',
-    linkTitle: 'Ir al registro',
+    submitButton: 'Enviar código',
+  },
+  otpVerify: {
+    title: 'Introduce el código',
+    submitButton: 'Verificar',
+  },
+  newPassword: {
+    title: 'Nueva contraseña',
+    submitButton: 'Guardar',
   },
 };
 
-export const RESET_PASSWORD_URL = 'https://andresplantselect.es/reset-password';
 
 export const ALERT_MESSAGES_DICT = {
   success: {
@@ -70,8 +73,7 @@ export const ALERT_MESSAGES_DICT = {
     passwordUpdated: 'Contraseña actualizada.',
     nameUpdated: 'Nombre actualizado.',
     accountCreated: 'Tu cuenta ha sido creada correctamente.',
-    resetPasswordEmail:
-      'Si el correo está registrado, recibirás un email con instrucciones para restablecer tu contraseña.',
+    otpSent: 'Código enviado. Revisa tu correo.',
     productCreated: (title: string) => `Artículo ${title} agregado.`,
     productUpdated: (title: string) => `Artículo ${title} actualizado.`,
     productDeleted: (title: string) => `Artículo ${title} eliminado.`,

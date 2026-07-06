@@ -104,7 +104,6 @@ export default function SignUpForm() {
 
     setAlert(success);
     await refreshProfile(userId);
-    setIsLoading(false);
     router.push('/');
   };
 

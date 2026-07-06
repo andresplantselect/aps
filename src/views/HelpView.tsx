@@ -391,7 +391,13 @@ export default function HelpView({
           <Typography variant="body2" color="text.secondary">
             En la pantalla de inicio de sesión encontrarás el enlace
             <strong> &ldquo;Recuperar&rdquo;</strong>. Introduce tu correo y
-            recibirás un enlace para crear una nueva contraseña.
+            recibirás un correo con un código de verificación de 6 dígitos y un
+            enlace directo al formulario de recuperación.
+          </Typography>
+
+          <Typography variant="body2" color="text.secondary">
+            Haz clic en el enlace del correo, introduce el código y elige tu
+            nueva contraseña. El código es válido durante 10 minutos.
           </Typography>
         </Stack>
       </Stack>
