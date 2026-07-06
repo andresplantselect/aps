@@ -112,7 +112,7 @@ export const formConfigFieldsDict = {
   },
   otp: {
     key: 'otp' as const,
-    label: 'Código de verificación (6 dígitos)',
+    label: 'Código de verificación',
     initialValue: '',
     required: true,
     type: 'text' as InputFieldType,

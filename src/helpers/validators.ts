@@ -78,7 +78,9 @@ export const validationRules = {
 
   otp: (value: unknown) => {
     if (typeof value !== 'string') return 'Código inválido';
-    return /^\d{6}$/.test(value) ? null : 'El código debe tener 6 dígitos';
+    return /^\d{6,8}$/.test(value)
+      ? null
+      : 'El código debe tener entre 6 y 8 dígitos';
   },
 
   confirm: (value: unknown, form: unknown) => {

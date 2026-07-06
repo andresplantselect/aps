@@ -35,7 +35,11 @@ export default function PanelCardFormLayout({
         >
           <Stack alignItems="center" spacing={4}>
             {children}
-            <PrimaryButton type="submit" onClick={submit.handler}>
+            <PrimaryButton
+              type="submit"
+              onClick={submit.handler}
+              disabled={submit.disabled}
+            >
               {submit.title}
             </PrimaryButton>
           </Stack>

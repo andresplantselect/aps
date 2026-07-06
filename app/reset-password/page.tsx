@@ -77,6 +77,7 @@ function ResetPasswordForm() {
       submit={{
         title: step === 'otp' ? 'Verificar' : 'Guardar contraseña',
         handler: step === 'otp' ? handleVerifyOtp : handleUpdatePassword,
+        disabled: step === 'otp' ? !isOtpValid : !isPasswordValid,
       }}
     >
       {step === 'otp' && (
