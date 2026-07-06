@@ -23,14 +23,13 @@ const OrdersContext = createContext<OrdersContextType>({
 export const useOrders = () => useContext(OrdersContext);
 
 export const OrdersProvider = ({ children }: { children: ReactNode }) => {
-  const { userId, isAdmin, isRecovering } = useAuth();
+  const { userId, isAdmin } = useAuth();
 
   const [orders, setOrders] = useState<OrderType[]>([]);
   const [isOrdersLoading, setIsOrdersLoading] = useState(true);
 
   const loadOrders = useCallback(async () => {
-    if (!userId || isRecovering) {
-      // during password recovery we should not load user-specific orders
+    if (!userId) {
       setOrders([]);
       setIsOrdersLoading(false);
       return;

@@ -3,7 +3,6 @@
 import LockOpenIcon from '@mui/icons-material/LockOpen';
 import LoginIcon from '@mui/icons-material/Login';
 import { Stack } from '@mui/material';
-import { useRouter } from 'next/navigation';
 import { equals } from 'ramda';
 import React, { useMemo, useState } from 'react';
 
@@ -16,6 +15,7 @@ import {
 } from '@/src/components/form/formConfigs';
 import { AuthTitlesDict } from '@/src/constants';
 import { useAlert } from '@/src/context/AlertContext';
+import { useAuth } from '@/src/context/AuthContext';
 import { useSendOtp, useSignIn } from '@/src/hooks/api';
 import { AuthFormProps, AuthMode } from '@/src/types/propsTypes';
 import {
@@ -34,7 +34,7 @@ export default function AuthView({ open, onClose }: AuthFormProps) {
   const isForgotPassword = equals(mode, 'forgotPassword');
   const title = AuthTitlesDict[mode].title || '';
 
-  const router = useRouter();
+  const { refreshAuth } = useAuth();
   const { signIn } = useSignIn();
   const { sendOtp } = useSendOtp();
   const { showAlert } = useAlert();
@@ -69,7 +69,7 @@ export default function AuthView({ open, onClose }: AuthFormProps) {
       }
       if (success) showAlert(success);
       onClose();
-      router.refresh();
+      await refreshAuth();
       return;
     }
 

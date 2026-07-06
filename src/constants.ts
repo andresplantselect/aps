@@ -62,7 +62,6 @@ export const AuthTitlesDict = {
   },
 };
 
-export const RESET_PASSWORD_URL = 'https://andresplantselect.es/reset-password';
 
 export const ALERT_MESSAGES_DICT = {
   success: {
@@ -75,8 +74,6 @@ export const ALERT_MESSAGES_DICT = {
     nameUpdated: 'Nombre actualizado.',
     accountCreated: 'Tu cuenta ha sido creada correctamente.',
     otpSent: 'Código enviado. Revisa tu correo.',
-    resetPasswordEmail:
-      'Si el correo está registrado, recibirás un email con instrucciones para restablecer tu contraseña.',
     productCreated: (title: string) => `Artículo ${title} agregado.`,
     productUpdated: (title: string) => `Artículo ${title} actualizado.`,
     productDeleted: (title: string) => `Artículo ${title} eliminado.`,

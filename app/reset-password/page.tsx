@@ -11,6 +11,7 @@ import {
   ResetPasswordFormConfig,
 } from '@/src/components/form/formConfigs';
 import { useAlert } from '@/src/context/AlertContext';
+import { useAuth } from '@/src/context/AuthContext';
 import { useUpdatePassword } from '@/src/hooks/api';
 import {
   AlertType,
@@ -36,6 +37,7 @@ function ResetPasswordForm() {
   const router = useRouter();
   const { updatePassword } = useUpdatePassword();
   const { showAlert } = useAlert();
+  const { refreshAuth } = useAuth();
 
   const passwordFormConfig = ResetPasswordFormConfig(passwordForm);
 
@@ -75,6 +77,8 @@ function ResetPasswordForm() {
       setAlert({ message: signInError.message, severity: 'error' });
       return;
     }
+
+    await refreshAuth();
 
     showAlert({
       message:

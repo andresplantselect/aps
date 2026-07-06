@@ -23,7 +23,6 @@ export interface UserType {
   role?: 'user' | 'admin';
   created_at?: string;
   email?: string;
-  isRecovering?: boolean;
 }
 
 export type SignInFormType = {

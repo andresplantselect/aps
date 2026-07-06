@@ -31,7 +31,6 @@ export default function Page() {
     isAdmin = false,
     isUser = false,
     isUnknownUser = true,
-    isRecovering = false,
   } = useAuth();
   useEffect(() => {
     if (typeof window === 'undefined') return;
@@ -51,7 +50,7 @@ export default function Page() {
   if (isAuthLoading) {
     return <Loader />;
   }
-  const isEffectivelyUnknown = isUnknownUser || isRecovering;
+  const isEffectivelyUnknown = isUnknownUser;
 
   const actions = getMenuActions({
     isAdmin,
@@ -78,8 +77,8 @@ export default function Page() {
           name={name as string}
         />
       )}
-      {isAdmin && !isRecovering && <UsersTabs />}
-      {isUser && !isRecovering && <UserView />}
+      {isAdmin && <UsersTabs />}
+      {isUser && <UserView />}
       {isEffectivelyUnknown && (
         <WelcomeSection
           onLogin={() => openDialog('auth')}
