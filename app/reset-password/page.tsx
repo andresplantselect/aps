@@ -59,14 +59,30 @@ function ResetPasswordForm() {
   const handleUpdatePassword = async () => {
     if (!isPasswordValid) return;
 
-    const { success, error } = await updatePassword(passwordForm.password);
+    const { error } = await updatePassword(passwordForm.password);
 
     if (error) {
       setAlert(error);
       return;
     }
 
-    if (success) showAlert(success);
+    const { error: signInError } = await supabase.auth.signInWithPassword({
+      email,
+      password: passwordForm.password,
+    });
+
+    if (signInError) {
+      setAlert({ message: signInError.message, severity: 'error' });
+      return;
+    }
+
+    showAlert({
+      message:
+        'Contraseña actualizada. Has iniciado sesión con tu nueva contraseña.',
+      severity: 'success',
+      duration: 6000,
+    });
+
     router.push('/');
   };
 
