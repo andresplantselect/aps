@@ -44,7 +44,17 @@ export default function SignUpForm() {
       const { data, error } = await checkInviteToken(token);
 
       if (error) {
-        setAlert(error);
+        // The check-invite function responds with a non-2xx status for an
+        // invalid/expired/already-used token, which supabase-js surfaces as
+        // a generic FunctionsHttpError ("Edge Function returned a non-2xx
+        // status code") rather than the function's own response body. Since
+        // `token` is guaranteed non-empty here, this is always the
+        // invalid/used-invite case, so show the user-facing Spanish message
+        // instead of the internal error text.
+        setAlert({
+          message: 'Token inválido o ya usado',
+          severity: 'error',
+        });
         return;
       }
 

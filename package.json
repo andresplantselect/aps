@@ -8,7 +8,9 @@
     "start": "next start",
     "lint": "eslint",
     "lint:fix": "eslint --fix .",
-    "typecheck": "tsc --noEmit"
+    "typecheck": "tsc --noEmit",
+    "e2e:open": "cypress open",
+    "e2e:run": "cypress run"
   },
   "dependencies": {
     "@emotion/react": "^11.14.0",
@@ -27,11 +29,13 @@
     "xlsx-js-style": "^1.2.0"
   },
   "devDependencies": {
+    "@faker-js/faker": "^10.5.0",
     "@tailwindcss/postcss": "^4",
     "@types/node": "^20",
     "@types/ramda": "^0.31.1",
     "@types/react": "^19",
     "@types/react-dom": "^19",
+    "cypress": "^15.18.0",
     "eslint": "^9.39.1",
     "eslint-config-next": "16.0.3",
     "eslint-config-prettier": "^10.1.8",

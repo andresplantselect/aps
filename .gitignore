@@ -48,3 +48,9 @@ readme.test.md
 
 # Supabase CLI temp files
 supabase/.temp/
+
+# Cypress
+cypress.env.json
+cypress/videos/
+cypress/screenshots/
+cypress/downloads/
