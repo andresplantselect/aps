@@ -19,7 +19,6 @@ function switchToTableView() {
 }
 
 function waitForProductCard(title: string) {
-  cy.reload();
   switchToCardsView();
   searchFor(title);
   cy.contains(SELECTORS.card, title, { timeout: 10000 }).should('be.visible');
@@ -98,6 +97,12 @@ describe('Admin product management', () => {
     cy.contains('button', 'Guardar cambios').click();
     cy.contains(`Artículo ${titleAEdited} actualizado.`).should('be.visible');
 
+    cy.contains('tr', titleAEdited).as('editedRow');
+    cy.get('@editedRow').find('td').eq(2).should('contain.text', '10.00');
+    cy.get('@editedRow').find('td').eq(4).should('contain.text', '3');
+    cy.get('@editedRow').find('td').eq(5).should('contain.text', '20 cms');
+    cy.get('@editedRow').find('td').eq(6).should('contain.text', '15 cms');
+
     waitForProductCard(titleAEdited);
     cy.contains(SELECTORS.card, titleAEdited).within(() => {
       cy.contains('10.00 €').should('be.visible');
@@ -160,7 +165,6 @@ describe('Admin product management', () => {
       .contains(`¿Eliminar ${titleAEdited}?`)
       .should('be.visible');
     cy.get('@deleteDialog').contains('button', 'Eliminar').click();
-    cy.reload();
     cy.contains(titleAEdited).should('not.exist');
 
     switchToCardsView();
@@ -173,7 +177,6 @@ describe('Admin product management', () => {
       .contains(`¿Eliminar ${titleB}?`)
       .should('be.visible');
     cy.get('@deleteDialogB').contains('button', 'Eliminar').click();
-    cy.reload();
     cy.contains(titleB).should('not.exist');
   });
 });

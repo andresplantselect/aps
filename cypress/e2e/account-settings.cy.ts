@@ -6,13 +6,7 @@ describe('Account settings: change password and name from "Editar perfil"', () =
   const newPassword = 'CypressNewPass456';
   const newName = 'Cypress Account Renamed';
 
-  let originalName: string;
-
-  before(() => {
-    cy.task('getUserName', fixtureEmail).then((name) => {
-      originalName = name as string;
-    });
-  });
+  const originalName = 'User Test';
 
   after(() => {
     cy.task('restoreTestUser', {

@@ -9,4 +9,7 @@ export const SELECTORS = {
   cardsViewIcon: '[data-testid="DragIndicatorIcon"]',
   tableViewIcon: '[data-testid="TableViewIcon"]',
   searchInput: 'input[placeholder="Buscar articulos"]',
+  plusIcon: '[data-testid="AddIcon"]',
+  minusIcon: '[data-testid="RemoveIcon"]',
+  clearCartIcon: '[data-testid="RemoveShoppingCartOutlinedIcon"]',
 };
