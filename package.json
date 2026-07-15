@@ -10,7 +10,8 @@
     "lint:fix": "eslint --fix .",
     "typecheck": "tsc --noEmit",
     "e2e:open": "cypress open",
-    "e2e:run": "cypress run"
+    "e2e:run": "cypress run",
+    "e2e:cleanup": "cypress run --spec \"cypress/e2e/z-cleanup.cy.ts\""
   },
   "dependencies": {
     "@emotion/react": "^11.14.0",

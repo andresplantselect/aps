@@ -14,10 +14,6 @@ describe('Password recovery flow', () => {
     });
   });
 
-  after(() => {
-    cy.task('deleteTestUser', testEmail);
-  });
-
   it('sends a recovery code and lets the user set a new password with it', () => {
     cy.visit('/');
     cy.contains('button', 'Inicia sesión').click();

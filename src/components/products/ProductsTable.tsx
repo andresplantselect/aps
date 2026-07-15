@@ -50,7 +50,9 @@ export default function ProductsTable({
 
             <TableHeaderCell align="center">Altura</TableHeaderCell>
             {isAdmin && (
-              <TableHeaderCell align="center">Visible en catálogo</TableHeaderCell>
+              <TableHeaderCell align="center">
+                Visible en catálogo
+              </TableHeaderCell>
             )}
 
             {isAdmin && (

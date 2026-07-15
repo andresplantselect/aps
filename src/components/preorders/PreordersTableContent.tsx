@@ -52,7 +52,7 @@ export function PreordersTableContent({ order }: PreordersTableContentProps) {
                   Precio
                 </TableCell>
                 <TableCell
-                  align="center"
+                  align="left"
                   sx={{ fontWeight: 600, color: 'text.secondary' }}
                 >
                   Cantidad
@@ -64,7 +64,7 @@ export function PreordersTableContent({ order }: PreordersTableContentProps) {
                   Total uds
                 </TableCell>
                 <TableCell
-                  align="right"
+                  align="left"
                   sx={{ fontWeight: 600, color: 'text.secondary' }}
                 >
                   Total
@@ -89,11 +89,13 @@ export function PreordersTableContent({ order }: PreordersTableContentProps) {
                   >
                     <TableCell>{item.title}</TableCell>
                     <TableCell align="left">€ {price.toFixed(2)}</TableCell>
-                    <TableCell align="center">
-                      {boxes} Caj.{!!units && ` + ${units} Uds`}
+                    <TableCell align="left">
+                      {boxes === 0 && !!units
+                        ? `${units} Uds`
+                        : `${boxes} Caj.${!!units ? ` + ${units} Uds` : ''}`}
                     </TableCell>
                     <TableCell align="center">{quantity}</TableCell>
-                    <TableCell align="right" sx={{ fontWeight: 600 }}>
+                    <TableCell align="left" sx={{ fontWeight: 600 }}>
                       € {total.toFixed(2)}
                     </TableCell>
                   </TableRow>

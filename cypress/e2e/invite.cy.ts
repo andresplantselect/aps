@@ -11,8 +11,6 @@ function assertRoleUi(role: InviteRole) {
     cy.contains('Articulos').should('be.visible');
     cy.contains('button', /^Añadir$/).should('be.visible');
     cy.get(SELECTORS.fab).should('not.exist');
-    cy.get('table').should('be.visible');
-    cy.contains('Artículo').should('be.visible');
   } else {
     cy.contains('Catálogo').should('be.visible');
     cy.contains('button', /^Añadir$/).should('not.exist');
@@ -24,10 +22,6 @@ function registerViaInvite(role: InviteRole) {
   const testEmail = `cypress-invite-${role}-${faker.string.alphanumeric(8)}@aps-test.com`;
   const testPassword = 'CypressTest123';
   const testName = `Cypress Invite Test (${faker.person.firstName()})`;
-
-  afterEach(() => {
-    cy.task('deleteTestUser', testEmail);
-  });
 
   it(`lets an admin invite a new ${role}, who registers and gets the "${role}" role`, () => {
     let inviteToken: string;

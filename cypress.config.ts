@@ -76,6 +76,56 @@ async function deleteTestUserByEmail(
   return user.id;
 }
 
+async function listAllAuthUsers(env: Record<string, string>) {
+  const baseUrl = env.SUPABASE_URL;
+  const serviceKey = requireServiceKey(env);
+  const authHeaders = {
+    apikey: serviceKey,
+    Authorization: `Bearer ${serviceKey}`,
+  };
+
+  const perPage = 200;
+  let page = 1;
+  const all: { id: string; email?: string }[] = [];
+
+  while (true) {
+    const res = await fetch(
+      `${baseUrl}/auth/v1/admin/users?page=${page}&per_page=${perPage}`,
+      { headers: authHeaders },
+    );
+    if (!res.ok) {
+      throw new Error(
+        `Failed to list auth users (${res.status}): ${await res.text()}`,
+      );
+    }
+    const data = await res.json();
+    const users = data.users ?? [];
+    all.push(...users);
+    if (users.length < perPage) break;
+    page++;
+  }
+
+  return all;
+}
+
+async function deleteTestUsersByDomain(
+  domain: string,
+  env: Record<string, string>,
+) {
+  const users = await listAllAuthUsers(env);
+  const matching = users.filter((u) =>
+    u.email?.toLowerCase().endsWith(`@${domain.toLowerCase()}`),
+  );
+
+  const deletedEmails: string[] = [];
+  for (const user of matching) {
+    await deleteTestUserByEmail(user.email as string, env);
+    deletedEmails.push(user.email as string);
+  }
+
+  return deletedEmails;
+}
+
 async function getUserRole(email: string, env: Record<string, string>) {
   const baseUrl = env.SUPABASE_URL;
   const serviceKey = requireServiceKey(env);
@@ -281,6 +331,197 @@ async function deleteTestProducts(
   return products.map((p) => p.id);
 }
 
+async function getOrderByComment(comment: string, env: Record<string, string>) {
+  const baseUrl = env.SUPABASE_URL;
+  const serviceKey = requireServiceKey(env);
+  const authHeaders = {
+    apikey: serviceKey,
+    Authorization: `Bearer ${serviceKey}`,
+  };
+
+  const res = await fetch(
+    `${baseUrl}/rest/v1/orders?comment=eq.${encodeURIComponent(comment)}&select=id,total,items,user_id,status,comment&order=created_at.desc&limit=1`,
+    { headers: authHeaders },
+  );
+  if (!res.ok) {
+    throw new Error(
+      `Failed to look up order by comment (${res.status}): ${await res.text()}`,
+    );
+  }
+  const rows = await res.json();
+  return rows?.[0] ?? null;
+}
+
+async function createTestOrder(
+  {
+    userEmail,
+    comment,
+    items,
+  }: {
+    userEmail: string;
+    comment: string;
+    items: { title: string; quantity: number }[];
+  },
+  env: Record<string, string>,
+) {
+  const baseUrl = env.SUPABASE_URL;
+  const serviceKey = requireServiceKey(env);
+  const authHeaders = {
+    apikey: serviceKey,
+    Authorization: `Bearer ${serviceKey}`,
+    'Content-Type': 'application/json',
+  };
+
+  const user = await findAuthUserByEmail(userEmail, env);
+  if (!user) {
+    throw new Error(`Cannot create test order: user ${userEmail} not found.`);
+  }
+
+  const orderItems = [];
+  for (const { title, quantity } of items) {
+    const res = await fetch(
+      `${baseUrl}/rest/v1/products?title=eq.${encodeURIComponent(title)}&select=id,price,units_per_box,can_buy_units`,
+      { headers: authHeaders },
+    );
+    if (!res.ok) {
+      throw new Error(
+        `Failed to look up product ${title} (${res.status}): ${await res.text()}`,
+      );
+    }
+    const rows = await res.json();
+    const product = rows?.[0];
+    if (!product) {
+      throw new Error(`Cannot create test order: product ${title} not found.`);
+    }
+
+    orderItems.push({
+      product_id: product.id,
+      title,
+      price: product.price,
+      quantity,
+      can_buy_units: product.can_buy_units,
+      units_per_box: product.units_per_box,
+    });
+  }
+
+  const total = orderItems.reduce(
+    (sum, item) => sum + Number(item.price) * item.quantity,
+    0,
+  );
+
+  const insertRes = await fetch(`${baseUrl}/rest/v1/orders`, {
+    method: 'POST',
+    headers: { ...authHeaders, Prefer: 'return=representation' },
+    body: JSON.stringify({
+      user_id: user.id,
+      items: orderItems,
+      total: Number(total.toFixed(2)),
+      comment,
+      status: 'pending',
+    }),
+  });
+  if (!insertRes.ok) {
+    throw new Error(
+      `Failed to create test order (${insertRes.status}): ${await insertRes.text()}`,
+    );
+  }
+  const [order] = await insertRes.json();
+  return order;
+}
+
+function sleep(ms: number) {
+  return new Promise((resolve) => setTimeout(resolve, ms));
+}
+
+// cy.task() is not retried by Cypress the way cy.get()/cy.contains() are,
+// so a single fetch here can easily run before the trigger's async
+// net.http_post call has actually landed a row. Poll from the Node side
+// instead until we have at least `minRows` or time out.
+async function getNotificationsForOrder(
+  {
+    orderId,
+    minRows = 1,
+    timeoutMs = 15000,
+  }: { orderId: number; minRows?: number; timeoutMs?: number },
+  env: Record<string, string>,
+) {
+  const baseUrl = env.SUPABASE_URL;
+  const serviceKey = requireServiceKey(env);
+  const authHeaders = {
+    apikey: serviceKey,
+    Authorization: `Bearer ${serviceKey}`,
+  };
+
+  const deadline = Date.now() + timeoutMs;
+  let rows: unknown[] = [];
+
+  while (Date.now() < deadline) {
+    const res = await fetch(
+      `${baseUrl}/rest/v1/notifications_log?order_id=eq.${orderId}&select=function_name,payload,created_at`,
+      { headers: authHeaders },
+    );
+    if (!res.ok) {
+      throw new Error(
+        `Failed to look up notifications_log for order ${orderId} (${res.status}): ${await res.text()}`,
+      );
+    }
+    rows = await res.json();
+    if (rows.length >= minRows) return rows;
+    await sleep(500);
+  }
+
+  return rows;
+}
+
+async function deleteTestOrders(
+  commentPrefix: string,
+  env: Record<string, string>,
+) {
+  const baseUrl = env.SUPABASE_URL;
+  const serviceKey = requireServiceKey(env);
+  const authHeaders = {
+    apikey: serviceKey,
+    Authorization: `Bearer ${serviceKey}`,
+    'Content-Type': 'application/json',
+  };
+
+  const listRes = await fetch(
+    `${baseUrl}/rest/v1/orders?comment=like.${encodeURIComponent(commentPrefix)}*&select=id`,
+    { headers: authHeaders },
+  );
+  if (!listRes.ok) {
+    throw new Error(
+      `Failed to list test orders (${listRes.status}): ${await listRes.text()}`,
+    );
+  }
+  const orders: { id: number }[] = await listRes.json();
+  const orderIds = orders.map((o) => o.id);
+
+  if (orderIds.length > 0) {
+    const notificationsRes = await fetch(
+      `${baseUrl}/rest/v1/notifications_log?order_id=in.(${orderIds.join(',')})`,
+      { method: 'DELETE', headers: authHeaders },
+    );
+    if (!notificationsRes.ok) {
+      throw new Error(
+        `Failed to delete notifications_log rows (${notificationsRes.status}): ${await notificationsRes.text()}`,
+      );
+    }
+  }
+
+  const deleteRes = await fetch(
+    `${baseUrl}/rest/v1/orders?comment=like.${encodeURIComponent(commentPrefix)}*`,
+    { method: 'DELETE', headers: authHeaders },
+  );
+  if (!deleteRes.ok) {
+    throw new Error(
+      `Failed to delete test orders (${deleteRes.status}): ${await deleteRes.text()}`,
+    );
+  }
+
+  return orderIds;
+}
+
 export default defineConfig({
   e2e: {
     baseUrl: 'http://localhost:3000',
@@ -315,6 +556,29 @@ export default defineConfig({
         },
         async deleteTestProducts(titlePrefix: string) {
           return deleteTestProducts(titlePrefix, config.env);
+        },
+        async getOrderByComment(comment: string) {
+          return getOrderByComment(comment, config.env);
+        },
+        async createTestOrder(args: {
+          userEmail: string;
+          comment: string;
+          items: { title: string; quantity: number }[];
+        }) {
+          return createTestOrder(args, config.env);
+        },
+        async getNotificationsForOrder(args: {
+          orderId: number;
+          minRows?: number;
+          timeoutMs?: number;
+        }) {
+          return getNotificationsForOrder(args, config.env);
+        },
+        async deleteTestOrders(commentPrefix: string) {
+          return deleteTestOrders(commentPrefix, config.env);
+        },
+        async deleteTestUsersByDomain(domain: string) {
+          return deleteTestUsersByDomain(domain, config.env);
         },
       });
 

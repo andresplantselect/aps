@@ -19,6 +19,7 @@ export function ProductsFilters({
 }: UseProductsStateProps) {
   return (
     <Box
+      data-testid="products-filters"
       sx={{
         border: '1px solid',
         borderColor: 'divider',

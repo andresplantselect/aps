@@ -12,4 +12,7 @@ export const SELECTORS = {
   plusIcon: '[data-testid="AddIcon"]',
   minusIcon: '[data-testid="RemoveIcon"]',
   clearCartIcon: '[data-testid="RemoveShoppingCartOutlinedIcon"]',
+  clearIcon: '[data-testid="ClearIcon"]',
+  shippingIcon: '[data-testid="LocalShippingOutlinedIcon"]',
+  filtersPanel: '[data-testid="products-filters"]',
 };

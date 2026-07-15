@@ -131,7 +131,12 @@ export default function CommonForm<T extends Record<string, unknown>>({
           form on Enter when it has exactly one text field. Since our
           real submit button lives outside this <form> (in AppDialog),
           this restores Enter-to-submit for forms with multiple fields. */}
-      <button type="submit" style={{ display: 'none' }} aria-hidden="true" tabIndex={-1} />
+      <button
+        type="submit"
+        style={{ display: 'none' }}
+        aria-hidden="true"
+        tabIndex={-1}
+      />
     </Stack>
   );
 }

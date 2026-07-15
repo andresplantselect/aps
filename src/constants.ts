@@ -62,7 +62,6 @@ export const AuthTitlesDict = {
   },
 };
 
-
 export const ALERT_MESSAGES_DICT = {
   success: {
     cart: 'Pedido enviado con éxito.',

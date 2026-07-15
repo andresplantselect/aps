@@ -24,6 +24,17 @@ function waitForProductCard(title: string) {
   cy.contains(SELECTORS.card, title, { timeout: 10000 }).should('be.visible');
 }
 
+function toggleFilter(label: string) {
+  cy.get(SELECTORS.filtersPanel).contains(label).click();
+}
+
+function setAvailableInline(title: string, value: string) {
+  cy.contains('tr', title).find('td').eq(1).as('availableCell').click();
+  cy.get('@availableCell').find('input').clear().type(value);
+  cy.get('@availableCell').find(SELECTORS.checkIcon).click();
+  cy.contains('tr', title).contains(value).should('be.visible');
+}
+
 function fillCreateProductForm(fields: {
   title: string;
   price: string;
@@ -42,13 +53,7 @@ function fillCreateProductForm(fields: {
   });
 }
 
-function cleanupTestProducts() {
-  cy.task('deleteTestProducts', 'Cypress ');
-}
-
 describe('Admin product management', () => {
-  after(cleanupTestProducts);
-
   it('lets an admin create products', () => {
     cy.loginAs('admin');
     switchToTableView();
@@ -77,6 +82,36 @@ describe('Admin product management', () => {
     cy.contains('button', 'Agregar').click();
     cy.contains(`Artículo ${titleB} agregado.`).should('be.visible');
     waitForProductCard(titleB);
+  });
+
+  it('lets an admin filter products by visibility and availability', () => {
+    cy.loginAs('admin');
+    switchToTableView();
+    cy.contains('button', 'Filtros').click();
+
+    toggleFilter('Oculto para clientes');
+    cy.contains('tr', titleA).should('be.visible');
+    cy.contains('tr', titleB).should('not.exist');
+    toggleFilter('Oculto para clientes');
+
+    toggleFilter('Visible en catálogo');
+    cy.contains('tr', titleA).should('not.exist');
+    cy.contains('tr', titleB).should('be.visible');
+    toggleFilter('Visible en catálogo');
+
+    setAvailableInline(titleB, '0');
+
+    toggleFilter('Fuera de stock');
+    cy.contains('tr', titleB).should('be.visible');
+    cy.contains('tr', titleA).should('not.exist');
+    toggleFilter('Fuera de stock');
+
+    toggleFilter('Disponibles');
+    cy.contains('tr', titleA).should('be.visible');
+    cy.contains('tr', titleB).should('not.exist');
+    toggleFilter('Disponibles');
+
+    setAvailableInline(titleB, '4');
   });
 
   it('lets an admin edit a product, including its image, and edit price/available/visibility from the table view', () => {
