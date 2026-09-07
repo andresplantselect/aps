@@ -5,6 +5,7 @@ import { Stack, Typography, IconButton } from '@mui/material';
 import { useEffect, useMemo, useState } from 'react';
 
 import ImageInput from '@/src/components/form/ImageInput';
+import { useAlert } from '@/src/context/AlertContext';
 import { useUploadImages } from '@/src/hooks/api';
 
 interface ImageUploaderProps {
@@ -17,6 +18,7 @@ export default function ImageUploader({
   initialImages = [],
 }: ImageUploaderProps) {
   const { uploadImages } = useUploadImages();
+  const { showAlert } = useAlert();
 
   const [images, setImages] = useState<string[]>(initialImages);
 
@@ -38,7 +40,12 @@ export default function ImageUploader({
 
     const { data, error } = await uploadImages(fileList, 'products');
 
-    if (!error && data) {
+    if (error) {
+      showAlert(error);
+      return;
+    }
+
+    if (data) {
       setImages((prev) => [...prev, ...data]);
     }
   };
