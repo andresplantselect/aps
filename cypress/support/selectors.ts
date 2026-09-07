@@ -13,6 +13,7 @@ export const SELECTORS = {
   minusIcon: '[data-testid="RemoveIcon"]',
   clearCartIcon: '[data-testid="RemoveShoppingCartOutlinedIcon"]',
   clearIcon: '[data-testid="ClearIcon"]',
+  closeIcon: '[data-testid="CloseIcon"]',
   shippingIcon: '[data-testid="LocalShippingOutlinedIcon"]',
   filtersPanel: '[data-testid="products-filters"]',
 };

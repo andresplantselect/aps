@@ -9,12 +9,17 @@ import { AdminProductFormConfig } from '@/src/components/form/formConfigs';
 import { useAlert } from '@/src/context/AlertContext';
 import { parseNumberInput } from '@/src/helpers/helpers';
 import {
+  clearProductFormDraft,
+  readProductFormDraft,
+  writeProductFormDraft,
+} from '@/src/helpers/productFormDraft';
+import {
   useCreateProduct,
   useDeleteImages,
   useUpdateProduct,
 } from '@/src/hooks/api';
 import { AdminProductFormProps, ProductForm } from '@/src/types/propsTypes';
-import { FormField } from '@/src/types/types';
+import { FormField, ProductType } from '@/src/types/types';
 
 export default function AdminProductFormView({
   open,
@@ -26,6 +31,16 @@ export default function AdminProductFormView({
   const initialImages = useRef<string[]>(product?.images ?? []);
   const currentImagesRef = useRef<string[]>(product?.images ?? []);
   const savedRef = useRef(false);
+
+  // Restore a draft left behind by a mobile reload (see productFormDraft.ts)
+  // if it matches what this dialog instance is editing.
+  const matchingDraft = useMemo(() => {
+    const draft = readProductFormDraft();
+    if (!draft) return null;
+    if (draft.mode !== (isEdit ? 'edit' : 'create')) return null;
+    if (isEdit && draft.productId !== product?.id) return null;
+    return draft;
+  }, []);
 
   const [productForm, setProductForm] = useState<ProductForm>({
     title: '',
@@ -42,7 +57,28 @@ export default function AdminProductFormView({
   const [isFormValid, setIsFormValid] = useState(false);
   const { showAlert } = useAlert();
 
-  const formConfig = useMemo(() => AdminProductFormConfig(product), [product]);
+  const formConfig = useMemo(
+    () =>
+      AdminProductFormConfig(
+        matchingDraft
+          ? ({ ...product, ...matchingDraft.form } as unknown as ProductType)
+          : product,
+      ),
+    [product],
+  );
+
+  useEffect(() => {
+    writeProductFormDraft({
+      mode: isEdit ? 'edit' : 'create',
+      productId: product?.id ?? null,
+      form: productForm,
+    });
+  }, [productForm]);
+
+  const handleClose = () => {
+    clearProductFormDraft();
+    onClose();
+  };
   const { createProduct } = useCreateProduct();
   const { updateProduct } = useUpdateProduct();
   const { deleteImages } = useDeleteImages();
@@ -87,6 +123,7 @@ export default function AdminProductFormView({
       return;
     }
 
+    clearProductFormDraft();
     if (success) showAlert(success);
     onClose();
   };
@@ -115,6 +152,7 @@ export default function AdminProductFormView({
       return;
     }
 
+    clearProductFormDraft();
     if (success) showAlert(success);
     onClose();
   };
@@ -122,7 +160,7 @@ export default function AdminProductFormView({
   return (
     <AppDialog
       open={open}
-      onClose={onClose}
+      onClose={handleClose}
       title={isEdit ? 'Editar articulo' : 'Agregar articulo'}
       icon={<GrassIcon />}
       primaryButton={{

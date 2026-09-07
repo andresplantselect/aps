@@ -19,12 +19,17 @@ import { ProductsFilters } from '@/src/components/products/ProductsFilters';
 import ProductsPage from '@/src/components/products/ProductsPage';
 import ProductsViewToggle from '@/src/components/products/ProductsViewToggle';
 import { useAuth } from '@/src/context/AuthContext';
+import { readProductFormDraft } from '@/src/helpers/productFormDraft';
 import { useProductsState } from '@/src/hooks/useProductsState';
 import { PrimaryButton, SecondaryButton } from '@/src/styledComponents';
 import AdminProductFormView from '@/src/views/AdminProductFormView';
 
 export default function ProductsTab() {
-  const [showForm, setShowForm] = useState(false);
+  // Reopen the "add product" dialog if a mobile reload (see
+  // productFormDraft.ts) left a create-mode draft behind.
+  const [showForm, setShowForm] = useState(
+    () => readProductFormDraft()?.mode === 'create',
+  );
   const [showFilters, setShowFilters] = useState(false);
 
   const { isAdmin } = useAuth();

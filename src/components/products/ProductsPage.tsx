@@ -1,9 +1,10 @@
 import { Box } from '@mui/material';
-import React, { useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 
 import DeleteProductDialog from '@/src/components/products/DeleteProductDialog';
 import ProductsGrid from '@/src/components/products/ProductsGrid';
 import ProductsTable from '@/src/components/products/ProductsTable';
+import { readProductFormDraft } from '@/src/helpers/productFormDraft';
 import { UseProductsStateProps } from '@/src/types/propsTypes';
 import { ProductType } from '@/src/types/types';
 import AdminProductFormView from '@/src/views/AdminProductFormView';
@@ -17,7 +18,24 @@ export default function ProductsPage(productsState: UseProductsStateProps) {
     delete: false,
   });
 
-  const { viewMode } = productsState;
+  const { viewMode, visibleProducts } = productsState;
+
+  // Reopen the "edit product" dialog if a mobile reload (see
+  // productFormDraft.ts) left an edit-mode draft behind.
+  const hasRestoredDraft = useRef(false);
+  useEffect(() => {
+    if (hasRestoredDraft.current) return;
+
+    const draft = readProductFormDraft();
+    if (draft?.mode !== 'edit' || !draft.productId) return;
+
+    const match = visibleProducts.find((p) => p.id === draft.productId);
+    if (!match) return;
+
+    hasRestoredDraft.current = true;
+    setSelectedProduct(match);
+    setActionsState((prev) => ({ ...prev, edit: true }));
+  }, [visibleProducts]);
 
   const handleUpdateTrigger = (
     p: ProductType | null,
