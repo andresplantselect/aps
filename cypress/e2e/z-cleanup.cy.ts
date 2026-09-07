@@ -3,5 +3,6 @@ describe('Cleanup: remove all Cypress-generated test data', () => {
     cy.task('deleteTestOrders', 'Cypress Order Test');
     cy.task('deleteTestProducts', 'Cypress ');
     cy.task('deleteTestUsersByDomain', 'aps-test.com');
+    cy.task('deleteNumberedTestUsers');
   });
 });

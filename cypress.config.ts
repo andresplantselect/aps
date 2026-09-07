@@ -126,6 +126,24 @@ async function deleteTestUsersByDomain(
   return deletedEmails;
 }
 
+async function deleteNumberedTestUsers(env: Record<string, string>) {
+  const users = await listAllAuthUsers(env);
+  // Only numbered throwaway accounts (user_test1@aps.com, admin_test2@aps.com, ...)
+  // — the digit requirement keeps this from ever matching the permanent
+  // fixtures user_test@aps.com / admin_test@aps.com.
+  const matching = users.filter((u) =>
+    /^(user|admin)_test\d+@aps\.com$/i.test(u.email ?? ''),
+  );
+
+  const deletedEmails: string[] = [];
+  for (const user of matching) {
+    await deleteTestUserByEmail(user.email as string, env);
+    deletedEmails.push(user.email as string);
+  }
+
+  return deletedEmails;
+}
+
 async function getUserRole(email: string, env: Record<string, string>) {
   const baseUrl = env.SUPABASE_URL;
   const serviceKey = requireServiceKey(env);
@@ -579,6 +597,9 @@ export default defineConfig({
         },
         async deleteTestUsersByDomain(domain: string) {
           return deleteTestUsersByDomain(domain, config.env);
+        },
+        async deleteNumberedTestUsers() {
+          return deleteNumberedTestUsers(config.env);
         },
       });
 

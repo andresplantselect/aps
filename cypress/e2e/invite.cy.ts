@@ -1,6 +1,7 @@
 import { faker } from '@faker-js/faker';
 
 import { SELECTORS } from '../support/selectors';
+import { numberedTestAccount } from '../support/testAccounts';
 
 type InviteRole = 'admin' | 'user';
 
@@ -19,8 +20,10 @@ function assertRoleUi(role: InviteRole) {
 }
 
 function registerViaInvite(role: InviteRole) {
-  const testEmail = `cypress-invite-${role}-${faker.string.alphanumeric(8)}@aps-test.com`;
-  const testPassword = 'CypressTest123';
+  const { email: testEmail, password: testPassword } = numberedTestAccount(
+    role,
+    1,
+  );
   const testName = `Cypress Invite Test (${faker.person.firstName()})`;
 
   it(`lets an admin invite a new ${role}, who registers and gets the "${role}" role`, () => {

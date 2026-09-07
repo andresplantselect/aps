@@ -1,7 +1,9 @@
 import { faker } from '@faker-js/faker';
 
+import { numberedTestAccount } from '../support/testAccounts';
+
 describe('Password recovery flow', () => {
-  const testEmail = `cypress-recovery-${faker.string.alphanumeric(8)}@aps-test.com`;
+  const { email: testEmail } = numberedTestAccount('user', 2);
   const initialPassword = 'CypressOldPass123';
   const newPassword = 'CypressNewPass456';
   const testName = `Cypress Recovery Test (${faker.person.firstName()})`;
