@@ -215,3 +215,71 @@ describe('Admin product management', () => {
     cy.contains(titleB).should('not.exist');
   });
 });
+
+// Android Chrome can kill a backgrounded tab's process while the native
+// photo picker is open, reloading the page from scratch when the user
+// returns (see AdminProductFormView / productFormDraft.ts). These tests
+// simulate that with a plain reload — the resulting state loss is
+// identical from the app's point of view.
+describe('Product form draft survives a page reload', () => {
+  it('restores an in-progress "add product" draft after reload', () => {
+    cy.loginAs('admin');
+    switchToTableView();
+
+    cy.contains('button', /^Añadir$/).click();
+
+    const draftTitle = `Cypress Draft ${faker.string.alphanumeric(6)}`;
+    fillCreateProductForm({
+      title: draftTitle,
+      price: '5.00',
+      unitsPerBox: '2',
+      available: '3',
+    });
+
+    cy.reload();
+
+    cy.get(SELECTORS.dialog).should('be.visible');
+    cy.contains('Agregar articulo').should('be.visible');
+    cy.getByLabel('Título').should('have.value', draftTitle);
+    cy.getByLabel('Precio').should('have.value', '5.00');
+    cy.getByLabel('Unidades por caja').should('have.value', '2');
+    cy.getByLabel('En stock').should('have.value', '3');
+
+    // Close without saving — nothing to clean up server-side.
+    cy.get(SELECTORS.dialog).find(SELECTORS.closeIcon).click();
+  });
+
+  it('restores an in-progress "edit product" draft after reload', () => {
+    cy.loginAs('admin');
+    switchToTableView();
+
+    const title = `Cypress Draft Edit ${faker.string.alphanumeric(6)}`;
+    cy.contains('button', /^Añadir$/).click();
+    fillCreateProductForm({
+      title,
+      price: '1.00',
+      unitsPerBox: '1',
+      available: '1',
+    });
+    cy.contains('button', 'Agregar').click();
+    cy.contains(`Artículo ${title} agregado.`).should('be.visible');
+
+    switchToTableView();
+    searchFor(title);
+    cy.contains('tr', title).find(SELECTORS.editIcon).click();
+
+    const editedComment = `Cypress draft comment ${faker.string.alphanumeric(6)}`;
+    cy.get(SELECTORS.dialog).should('be.visible');
+    cy.getByLabel('Comentario').type(editedComment);
+
+    cy.reload();
+
+    cy.get(SELECTORS.dialog).should('be.visible');
+    cy.contains('Editar articulo').should('be.visible');
+    cy.getByLabel('Comentario').should('have.value', editedComment);
+
+    // Close without saving; the product itself gets swept up by
+    // z-cleanup.cy.ts at the end of the run (title prefix "Cypress ").
+    cy.get(SELECTORS.dialog).find(SELECTORS.closeIcon).click();
+  });
+});
