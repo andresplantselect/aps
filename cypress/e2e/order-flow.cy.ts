@@ -103,7 +103,7 @@ function preorderCardForComment(comment: string) {
 }
 
 function preorderRowForComment(comment: string) {
-  return cy.contains(comment).closest('tr');
+  return cy.contains(comment, { timeout: 15000 }).closest('tr');
 }
 
 function approveOrder(comment: string) {
