@@ -1,0 +1,55 @@
+name: CI
+
+on:
+  pull_request:
+    branches: [main]
+  push:
+    branches: [main]
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    env:
+      NEXT_PUBLIC_SUPABASE_URL: ${{ secrets.APS_TEST_SUPABASE_URL }}
+      NEXT_PUBLIC_SUPABASE_ANON_KEY: ${{ secrets.APS_TEST_SUPABASE_ANON_KEY }}
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: npm
+
+      - run: npm ci
+
+      - run: npm run lint
+
+      - run: npm run typecheck
+
+      - name: Write cypress.env.json
+        run: |
+          cat > cypress.env.json << EOF
+          {
+            "SUPABASE_URL": "${{ secrets.APS_TEST_SUPABASE_URL }}",
+            "SUPABASE_ANON_KEY": "${{ secrets.APS_TEST_SUPABASE_ANON_KEY }}",
+            "SUPABASE_SERVICE_ROLE_KEY": "${{ secrets.APS_TEST_SUPABASE_SERVICE_ROLE_KEY }}",
+            "TEST_ADMIN_EMAIL": "${{ secrets.APS_TEST_ADMIN_EMAIL }}",
+            "TEST_ADMIN_PASSWORD": "${{ secrets.APS_TEST_ADMIN_PASSWORD }}",
+            "TEST_USER_EMAIL": "${{ secrets.APS_TEST_USER_EMAIL }}",
+            "TEST_USER_PASSWORD": "${{ secrets.APS_TEST_USER_PASSWORD }}"
+          }
+          EOF
+
+      - uses: cypress-io/github-action@v6
+        with:
+          build: npm run build
+          start: npm run start
+          wait-on: 'http://localhost:3000'
+          wait-on-timeout: 60
+
+      - uses: actions/upload-artifact@v4
+        if: failure()
+        with:
+          name: cypress-screenshots
+          path: cypress/screenshots
+          if-no-files-found: ignore
