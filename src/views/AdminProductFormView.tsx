@@ -57,6 +57,20 @@ export default function AdminProductFormView({
   const [isFormValid, setIsFormValid] = useState(false);
   const { showAlert } = useAlert();
 
+  // Diagnostic: confirm whether a draft restore was actually caused by a
+  // page reload (Android Chrome killing the backgrounded tab), visible
+  // right on the device instead of needing remote debugging.
+  useEffect(() => {
+    if (!matchingDraft) return;
+    const navEntry = performance.getEntriesByType('navigation')[0] as
+      | PerformanceNavigationTiming
+      | undefined;
+    showAlert({
+      message: `Borrador restaurado — tipo de carga de página: ${navEntry?.type ?? 'desconocido'}`,
+      severity: 'success',
+    });
+  }, []);
+
   const formConfig = useMemo(
     () =>
       AdminProductFormConfig(
