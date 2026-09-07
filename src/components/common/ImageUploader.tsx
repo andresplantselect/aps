@@ -36,7 +36,12 @@ export default function ImageUploader({
   }, [images]);
 
   const handleFilesChange = async (fileList: FileList | null) => {
-    if (!fileList) return;
+    if (!fileList || fileList.length === 0) return;
+
+    showAlert({
+      message: `Subiendo ${fileList.length} imagen(es)...`,
+      severity: 'success',
+    });
 
     const { data, error } = await uploadImages(fileList, 'products');
 
