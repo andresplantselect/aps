@@ -57,16 +57,16 @@ export default function AdminProductFormView({
   const [isFormValid, setIsFormValid] = useState(false);
   const { showAlert } = useAlert();
 
-  // Diagnostic: confirm whether a draft restore was actually caused by a
-  // page reload (Android Chrome killing the backgrounded tab), visible
-  // right on the device instead of needing remote debugging.
+  // Some Android/Chrome builds discard a backgrounded tab while the native
+  // photo picker is open, reloading the page the moment it closes — any
+  // image being selected right then is lost even though the rest of the
+  // form survives (see productFormDraft.ts). Let the user know why, since
+  // a retry right after usually succeeds.
   useEffect(() => {
     if (!matchingDraft) return;
-    const navEntry = performance.getEntriesByType('navigation')[0] as
-      | PerformanceNavigationTiming
-      | undefined;
     showAlert({
-      message: `Borrador restaurado — tipo de carga de página: ${navEntry?.type ?? 'desconocido'}`,
+      message:
+        'Se restauró tu borrador. Si estabas añadiendo una foto, la selección se perdió — inténtalo de nuevo.',
       severity: 'success',
     });
   }, []);
