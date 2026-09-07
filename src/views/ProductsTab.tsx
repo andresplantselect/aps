@@ -117,7 +117,7 @@ export default function ProductsTab() {
             icon={<YardOutlinedIcon />}
           />
         ) : (
-          <ProductsPage {...productsState} />
+          <ProductsPage {...productsState} isCreateDialogOpen={showForm} />
         )}
       </Stack>
 
