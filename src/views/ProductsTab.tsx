@@ -104,16 +104,13 @@ export default function ProductsTab() {
         {isAdmin && showFilters && <ProductsFilters {...productsState} />}
         {isAdmin && <ProductsViewToggle {...productsState} />}
 
-        {!productsState.isProductsLoading &&
-          productsState.isProductListEmpty && (
-            <EmptyStateMessage
-              message="No hay productos disponibles"
-              icon={<YardOutlinedIcon />}
-            />
-          )}
-
         {productsState.isProductsLoading ? (
           <LinearProgress />
+        ) : productsState.isProductListEmpty ? (
+          <EmptyStateMessage
+            message="No hay productos disponibles"
+            icon={<YardOutlinedIcon />}
+          />
         ) : (
           <ProductsPage {...productsState} />
         )}

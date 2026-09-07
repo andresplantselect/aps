@@ -91,7 +91,9 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   };
 
   const refreshAuth = async () => {
-    const { data: { user: supabaseUser } } = await supabase.auth.getUser();
+    const {
+      data: { user: supabaseUser },
+    } = await supabase.auth.getUser();
     if (supabaseUser) {
       await loadUserProfile(supabaseUser);
     } else {

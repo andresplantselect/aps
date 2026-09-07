@@ -1,0 +1,61 @@
+name: CI
+
+on:
+  pull_request:
+    branches: [main]
+  push:
+    branches: [main]
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    env:
+      NEXT_PUBLIC_SUPABASE_URL: ${{ secrets.APS_TEST_SUPABASE_URL }}
+      NEXT_PUBLIC_SUPABASE_ANON_KEY: ${{ secrets.APS_TEST_SUPABASE_ANON_KEY }}
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: npm
+
+      - run: npm ci
+
+      - run: npm run lint
+
+      - run: npm run typecheck
+
+      - name: Write cypress.env.json
+        run: |
+          jq -n \
+            --arg url "${{ secrets.APS_TEST_SUPABASE_URL }}" \
+            --arg anon "${{ secrets.APS_TEST_SUPABASE_ANON_KEY }}" \
+            --arg service "${{ secrets.APS_TEST_SUPABASE_SERVICE_ROLE_KEY }}" \
+            --arg adminEmail "${{ secrets.APS_TEST_ADMIN_EMAIL }}" \
+            --arg adminPassword "${{ secrets.APS_TEST_ADMIN_PASSWORD }}" \
+            --arg userEmail "${{ secrets.APS_TEST_USER_EMAIL }}" \
+            --arg userPassword "${{ secrets.APS_TEST_USER_PASSWORD }}" \
+            '{
+              SUPABASE_URL: ($url | gsub("^\\s+|\\s+$"; "")),
+              SUPABASE_ANON_KEY: ($anon | gsub("^\\s+|\\s+$"; "")),
+              SUPABASE_SERVICE_ROLE_KEY: ($service | gsub("^\\s+|\\s+$"; "")),
+              TEST_ADMIN_EMAIL: ($adminEmail | gsub("^\\s+|\\s+$"; "")),
+              TEST_ADMIN_PASSWORD: ($adminPassword | gsub("^\\s+|\\s+$"; "")),
+              TEST_USER_EMAIL: ($userEmail | gsub("^\\s+|\\s+$"; "")),
+              TEST_USER_PASSWORD: ($userPassword | gsub("^\\s+|\\s+$"; ""))
+            }' > cypress.env.json
+
+      - uses: cypress-io/github-action@v6
+        with:
+          build: npm run build
+          start: npm run start
+          wait-on: 'http://localhost:3000'
+          wait-on-timeout: 60
+
+      - uses: actions/upload-artifact@v4
+        if: failure()
+        with:
+          name: cypress-screenshots
+          path: cypress/screenshots
+          if-no-files-found: ignore

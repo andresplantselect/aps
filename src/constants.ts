@@ -62,14 +62,9 @@ export const AuthTitlesDict = {
   },
 };
 
-
 export const ALERT_MESSAGES_DICT = {
   success: {
-    cart:
-      'Pedido enviado con éxito.\n' +
-      'Tu pedido está en estado pendiente.\n' +
-      'Los artículos han sido reservados hasta que el administrador lo apruebe o lo cancele.\n' +
-      'Puedes consultar el estado y los detalles en la tabla de pedidos.',
+    cart: 'Pedido enviado con éxito.',
     passwordUpdated: 'Contraseña actualizada.',
     nameUpdated: 'Nombre actualizado.',
     accountCreated: 'Tu cuenta ha sido creada correctamente.',

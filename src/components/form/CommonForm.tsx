@@ -126,6 +126,17 @@ export default function CommonForm<T extends Record<string, unknown>>({
           formErrors={visibleErrors as unknown as Record<string, string[]>}
         />
       )}
+
+      {/* Hidden submit button: without it, browsers only auto-submit a
+          form on Enter when it has exactly one text field. Since our
+          real submit button lives outside this <form> (in AppDialog),
+          this restores Enter-to-submit for forms with multiple fields. */}
+      <button
+        type="submit"
+        style={{ display: 'none' }}
+        aria-hidden="true"
+        tabIndex={-1}
+      />
     </Stack>
   );
 }
