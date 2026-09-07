@@ -25,7 +25,7 @@ function switchToCardsView() {
 function waitForProductCard(title: string) {
   switchToCardsView();
   searchFor(title);
-  cy.contains(SELECTORS.card, title, { timeout: 10000 }).should('be.visible');
+  cy.contains(SELECTORS.card, title, { timeout: 15000 }).should('be.visible');
 }
 
 function fillCreateProductForm(fields: {

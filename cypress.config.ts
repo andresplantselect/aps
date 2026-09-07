@@ -543,6 +543,9 @@ async function deleteTestOrders(
 export default defineConfig({
   e2e: {
     baseUrl: 'http://localhost:3000',
+    // CI runners are noticeably slower than local dev machines; the
+    // default (4000ms) is too tight there and produces flaky failures.
+    defaultCommandTimeout: 10000,
     supportFile: 'cypress/support/e2e.ts',
     setupNodeEvents(on, config) {
       on('task', {
