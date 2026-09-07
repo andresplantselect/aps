@@ -27,7 +27,13 @@ export function AppDialog({
   return (
     <Dialog
       open={open}
-      onClose={onClose}
+      onClose={(_event, reason) => {
+        // Mobile browsers can fire a spurious backdrop click when the
+        // native photo/camera picker closes, which would otherwise
+        // silently discard the form without saving.
+        if (reason === 'backdropClick') return;
+        onClose?.();
+      }}
       fullWidth
       maxWidth="sm"
       PaperProps={{
