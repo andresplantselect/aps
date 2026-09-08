@@ -9,9 +9,7 @@ import { UseProductsStateProps } from '@/src/types/propsTypes';
 import { ProductType } from '@/src/types/types';
 import AdminProductFormView from '@/src/views/AdminProductFormView';
 
-export default function ProductsPage(
-  productsState: UseProductsStateProps & { isCreateDialogOpen?: boolean },
-) {
+export default function ProductsPage(productsState: UseProductsStateProps) {
   const [selectedProduct, setSelectedProduct] = useState<ProductType | null>(
     null,
   );
@@ -20,14 +18,7 @@ export default function ProductsPage(
     delete: false,
   });
 
-  const { viewMode, visibleProducts, isCreateDialogOpen } = productsState;
-
-  // Mobile browsers can kill a backgrounded tab while the native photo
-  // picker is open, more likely the more the page has in memory. Unmount
-  // the (image-heavy) grid/table while any product dialog is open to cut
-  // that risk during the moment it actually matters.
-  const isAnyProductDialogOpen =
-    isCreateDialogOpen || (actionsState.edit && !!selectedProduct);
+  const { viewMode, visibleProducts } = productsState;
 
   // Reopen the "edit product" dialog if a mobile reload (see
   // productFormDraft.ts) left an edit-mode draft behind.
@@ -57,7 +48,7 @@ export default function ProductsPage(
 
   return (
     <Box>
-      {!isAnyProductDialogOpen && viewMode === 'cards' && (
+      {viewMode === 'cards' && (
         <ProductsGrid
           productsState={productsState}
           onDelete={(p) => handleUpdateTrigger(p, 'delete', true)}
@@ -65,7 +56,7 @@ export default function ProductsPage(
         />
       )}
 
-      {!isAnyProductDialogOpen && viewMode === 'table' && (
+      {viewMode === 'table' && (
         <ProductsTable
           productsState={productsState}
           onDelete={(p) => handleUpdateTrigger(p, 'delete', true)}
