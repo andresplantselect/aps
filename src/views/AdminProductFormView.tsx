@@ -57,6 +57,20 @@ export default function AdminProductFormView({
   const [isFormValid, setIsFormValid] = useState(false);
   const { showAlert } = useAlert();
 
+  // Some Android/Chrome builds discard a backgrounded tab while the native
+  // photo picker is open, reloading the page the moment it closes — any
+  // image being selected right then is lost even though the rest of the
+  // form survives (see productFormDraft.ts). Let the user know why, since
+  // a retry right after usually succeeds.
+  useEffect(() => {
+    if (!matchingDraft) return;
+    showAlert({
+      message:
+        'Se restauró tu borrador. Si estabas añadiendo una foto, la selección se perdió — inténtalo de nuevo.',
+      severity: 'success',
+    });
+  }, []);
+
   const formConfig = useMemo(
     () =>
       AdminProductFormConfig(

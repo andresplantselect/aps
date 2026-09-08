@@ -3,6 +3,7 @@ import { Session, User } from '@supabase/auth-js';
 
 import { supabase } from '@/lib/supabase';
 import { ALERT_MESSAGES_DICT } from '@/src/constants';
+import { compressImage } from '@/src/helpers/imageCompression';
 import { useRequest } from '@/src/hooks/useRequest';
 import { ProductForm } from '@/src/types/propsTypes';
 import {
@@ -362,7 +363,7 @@ export const useUploadImages = () => {
       const uploaded: string[] = [];
 
       for (let i = 0; i < files.length; i++) {
-        const file = files[i];
+        const file = await compressImage(files[i]);
 
         const filePath = `${folder}/${Date.now()}_${file.name}`;
 
