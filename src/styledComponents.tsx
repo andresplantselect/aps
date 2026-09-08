@@ -240,11 +240,14 @@ export const TogglePillButton = styled(ToggleButton)(({ theme }) => ({
 export const TableHeaderCell = styled(TableCell)(({ theme }) => ({
   fontSize: 11,
   fontWeight: 600,
+  lineHeight: 1.2,
   letterSpacing: '0.06em',
   textTransform: 'uppercase',
   color: theme.palette.text.secondary,
   backgroundColor: theme.palette.background.default,
   padding: '8px 14px',
+  whiteSpace: 'nowrap',
+  verticalAlign: 'top',
 
   '& .MuiTableSortLabel-root': {
     fontWeight: 600,

@@ -200,7 +200,11 @@ export function ProductsRow({ product, onEdit, onDelete }: ProductsRowProps) {
       <Tooltip title="Click to edit" placement="top">
         <span
           onClick={() => startEdit(field, value)}
-          style={{ cursor: 'pointer', borderBottom: '1px dashed currentColor' }}
+          style={{
+            cursor: 'pointer',
+            borderBottom: '1px dashed currentColor',
+            whiteSpace: 'nowrap',
+          }}
         >
           {prefix ? `${prefix} ` : ''}
           {displayValue}
