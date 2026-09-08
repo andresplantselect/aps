@@ -31,13 +31,13 @@ export default function MobileNavDrawer({
     <Drawer anchor="left" open={open} onClose={onClose}>
       <Stack sx={{ width: 260, pt: 3, pb: 2 }}>
         <Typography
-          sx={{
+          sx={(theme) => ({
             px: 2,
             pb: 2,
             fontWeight: 600,
-            fontSize: 15,
+            fontSize: theme.typography.pxToRem(19),
             color: 'primary.main',
-          }}
+          })}
         >
           Hola, {name}!
         </Typography>

@@ -76,7 +76,7 @@ export default function PasswordUpdateForm() {
       />
 
       {editingPassword ? (
-        <Stack direction="row" spacing={1}>
+        <Stack direction="row" spacing={2}>
           <IconButton onClick={() => handleCancelPassword()}>
             <CloseIcon color="error" />
           </IconButton>

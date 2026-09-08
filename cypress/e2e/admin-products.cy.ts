@@ -134,13 +134,18 @@ describe('Admin product management', () => {
 
     cy.contains('tr', titleAEdited).as('editedRow');
     cy.get('@editedRow').find('td').eq(2).should('contain.text', '10.00');
+    cy.get('@editedRow')
+      .find('td')
+      .eq(3)
+      .find(SELECTORS.switchInput)
+      .should('be.checked');
     cy.get('@editedRow').find('td').eq(4).should('contain.text', '3');
     cy.get('@editedRow').find('td').eq(5).should('contain.text', '20 cms');
     cy.get('@editedRow').find('td').eq(6).should('contain.text', '15 cms');
 
     waitForProductCard(titleAEdited);
     cy.contains(SELECTORS.card, titleAEdited).within(() => {
-      cy.contains('10.00 €').should('be.visible');
+      cy.contains('€ 10.00').should('be.visible');
       cy.contains('Maceta: 20 cms').should('be.visible');
       cy.contains('Altura: 15 cms').should('be.visible');
       cy.contains('Uds × Caja: 3').should('be.visible');
@@ -168,7 +173,7 @@ describe('Admin product management', () => {
 
     waitForProductCard(titleAEdited);
     cy.contains(SELECTORS.card, titleAEdited).within(() => {
-      cy.contains('12.50 €').should('be.visible');
+      cy.contains('€ 12.50').should('be.visible');
       cy.contains('Disponible: 9 Uds').should('be.visible');
     });
   });
@@ -197,7 +202,7 @@ describe('Admin product management', () => {
     });
     cy.get(SELECTORS.dialog).should('be.visible').as('deleteDialog');
     cy.get('@deleteDialog')
-      .contains(`¿Eliminar ${titleAEdited}?`)
+      .contains(`Eliminar ${titleAEdited}?`)
       .should('be.visible');
     cy.get('@deleteDialog').contains('button', 'Eliminar').click();
     cy.contains(titleAEdited).should('not.exist');
@@ -209,7 +214,7 @@ describe('Admin product management', () => {
     });
     cy.get(SELECTORS.dialog).should('be.visible').as('deleteDialogB');
     cy.get('@deleteDialogB')
-      .contains(`¿Eliminar ${titleB}?`)
+      .contains(`Eliminar ${titleB}?`)
       .should('be.visible');
     cy.get('@deleteDialogB').contains('button', 'Eliminar').click();
     cy.contains(titleB).should('not.exist');

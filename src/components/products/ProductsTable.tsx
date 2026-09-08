@@ -39,7 +39,7 @@ export default function ProductsTable({
               </TableSortLabel>
             </TableHeaderCell>
 
-            <TableHeaderCell align="center">Disponible</TableHeaderCell>
+            <TableHeaderCell>Disponible</TableHeaderCell>
 
             <TableHeaderCell>Precio</TableHeaderCell>
             <TableHeaderCell align="center">Disponible por Uds</TableHeaderCell>
@@ -60,7 +60,9 @@ export default function ProductsTable({
             )}
 
             {isAdmin && (
-              <TableHeaderCell align="center">Eliminar</TableHeaderCell>
+              <TableHeaderCell align="center" sx={{ width: 64 }}>
+                Eliminar
+              </TableHeaderCell>
             )}
           </TableRow>
         </TableHead>

@@ -4,6 +4,7 @@ import TextSnippetOutlinedIcon from '@mui/icons-material/TextSnippetOutlined';
 import {
   Table,
   TableBody,
+  TableCell,
   TableHead,
   TableRow,
   TableContainer,
@@ -43,8 +44,8 @@ export function PreordersTable() {
       <Table>
         <TableHead>
           <TableRow>
-            <TableHeaderCell />
-            <TableHeaderCell>ID</TableHeaderCell>
+            <TableHeaderCell sx={{ width: 48 }} />
+            <TableHeaderCell align="center">ID</TableHeaderCell>
 
             {isAdmin && <TableHeaderCell>Usuario</TableHeaderCell>}
 
@@ -66,25 +67,31 @@ export function PreordersTable() {
             <TableHeaderCell>Comentarios</TableHeaderCell>
 
             {isAdmin && (
-              <TableHeaderCell align="center">Aprobar</TableHeaderCell>
+              <TableHeaderCell align="center" sx={{ width: 140 }}>
+                Aprobar
+              </TableHeaderCell>
             )}
             {isAdmin && (
-              <TableHeaderCell align="center">Rechazar</TableHeaderCell>
+              <TableHeaderCell align="center" sx={{ width: 140 }}>
+                Rechazar
+              </TableHeaderCell>
             )}
             {isAdmin && (
-              <TableHeaderCell align="center">Entregado</TableHeaderCell>
+              <TableHeaderCell align="center" sx={{ width: 140 }}>
+                Entregado
+              </TableHeaderCell>
             )}
           </TableRow>
         </TableHead>
         <TableBody>
           {!isOrdersLoading && isEmpty(orders) ? (
             <TableRow>
-              <TableHeaderCell colSpan={isAdmin ? 11 : 8} align="center">
+              <TableCell colSpan={isAdmin ? 11 : 8} align="center">
                 <EmptyStateMessage
                   message="No hay pedidos todavía"
                   icon={<TextSnippetOutlinedIcon />}
                 />
-              </TableHeaderCell>
+              </TableCell>
             </TableRow>
           ) : (
             orders.map((order) => <PreordersRow key={order.id} order={order} />)

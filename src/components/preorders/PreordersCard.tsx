@@ -14,7 +14,7 @@ import {
   Typography,
 } from '@mui/material';
 import { includes } from 'ramda';
-import { memo } from 'react';
+import React, { memo } from 'react';
 
 import {
   orderStatusesDict,
@@ -56,12 +56,12 @@ export const PreordersCard = memo(function PreordersCard({
         expandIcon={<ExpandMoreIcon />}
         sx={{ px: 2, py: 0.5, minHeight: 56 }}
       >
-        <Stack spacing={0.5} sx={{ width: '100%', pr: 1 }}>
+        <Stack spacing={2} sx={{ width: '100%', pr: 1 }}>
           <Stack
             direction="row"
-            spacing={1}
+            spacing={2}
             alignItems="center"
-            flexWrap="wrap"
+            flexWrap="nowrap"
           >
             <StyledChip
               label={orderStatusesDict[order.status]}
@@ -80,9 +80,6 @@ export const PreordersCard = memo(function PreordersCard({
               variant="outlined"
               size="small"
             />
-            <Typography variant="body2" fontWeight={600}>
-              € {Number(order.total).toFixed(2)}
-            </Typography>
           </Stack>
 
           <Stack direction="row" spacing={1} alignItems="center">
@@ -95,6 +92,15 @@ export const PreordersCard = memo(function PreordersCard({
               </Typography>
             )}
           </Stack>
+          <Typography
+            sx={{
+              fontWeight: 600,
+              fontSize: '1rem',
+            }}
+            color="primary"
+          >
+            Total: € {Number(order.total).toFixed(2)}
+          </Typography>
         </Stack>
       </AccordionSummary>
 
@@ -143,7 +149,7 @@ export const PreordersCard = memo(function PreordersCard({
           {isAdmin && (
             <Stack
               direction="row"
-              spacing={1}
+              spacing={2}
               px={2}
               py={1.5}
               justifyContent="flex-end"

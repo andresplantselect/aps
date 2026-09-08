@@ -14,10 +14,10 @@ export const PrimaryButton = styled(Button)(({ theme }) => ({
   backgroundColor: theme.palette.primary.main,
   color: theme.palette.primary.contrastText,
   textTransform: 'none',
-  fontWeight: 500,
-  fontSize: 14,
+  fontWeight: 600,
+  fontSize: '1rem',
   // increased vertical padding to make buttons taller and match new design
-  padding: theme.spacing(1, 1.6),
+  padding: theme.spacing(0.8, 2),
   borderRadius: 999,
   border: `1px solid ${theme.palette.primary.main}`,
   transition: 'background-color 0.2s ease',
@@ -37,12 +37,12 @@ export const PrimaryButton = styled(Button)(({ theme }) => ({
 
 export const SecondaryButton = styled(Button)(({ theme }) => ({
   backgroundColor: 'transparent',
-  color: theme.palette.text.primary,
+  color: theme.palette.primary.main,
   textTransform: 'none',
-  fontWeight: 500,
-  fontSize: 14,
+  fontWeight: 600,
+  fontSize: '1rem',
   // keep same vertical padding as PrimaryButton for consistency
-  padding: theme.spacing(1, 1.6),
+  padding: theme.spacing(0.8, 2),
   borderRadius: 999,
   border: `1px solid ${theme.palette.divider}`,
   transition: 'background-color 0.2s ease, border-color 0.2s ease',
@@ -55,6 +55,26 @@ export const SecondaryButton = styled(Button)(({ theme }) => ({
 
   '&.Mui-disabled': {
     borderColor: theme.palette.grey[200],
+    color: theme.palette.grey[400],
+  },
+}));
+
+export const LinkButton = styled(Button)(({ theme }) => ({
+  backgroundColor: 'transparent',
+  color: theme.palette.primary.main,
+  textTransform: 'none',
+  fontWeight: 600,
+  fontSize: '1rem',
+  padding: 0,
+  transition: 'color 0.2s ease',
+  width: 'fit-content',
+
+  '&:hover': {
+    backgroundColor: 'transparent',
+    color: theme.palette.primary.light,
+  },
+
+  '&.Mui-disabled': {
     color: theme.palette.grey[400],
   },
 }));
@@ -123,46 +143,6 @@ export const SecondaryRoundIconButton = styled(IconButton)(({ theme }) => ({
   },
 }));
 
-export const CardEditButton = styled(Button)(({ theme }) => ({
-  textTransform: 'none',
-  fontSize: 13,
-  fontWeight: 500,
-  color: theme.palette.primary.main,
-  // increase vertical padding for better tap/click area
-  padding: theme.spacing(1, 2),
-  minWidth: 'auto',
-  borderRadius: 999,
-  backgroundColor: 'transparent',
-
-  '& .MuiButton-startIcon': {
-    marginRight: theme.spacing(0.5),
-  },
-
-  '&:hover': {
-    backgroundColor: theme.palette.success.light,
-  },
-}));
-
-export const CardDeleteButton = styled(Button)(({ theme }) => ({
-  textTransform: 'none',
-  fontSize: 13,
-  fontWeight: 500,
-  color: theme.palette.error.main,
-  // increase vertical padding for consistency with other buttons
-  padding: theme.spacing(1, 2),
-  minWidth: 'auto',
-  borderRadius: 999,
-  backgroundColor: 'transparent',
-
-  '& .MuiButton-startIcon': {
-    marginRight: theme.spacing(0.5),
-  },
-
-  '&:hover': {
-    backgroundColor: theme.palette.error.light,
-  },
-}));
-
 export const VisuallyHiddenInput = styled('input')({
   border: 0,
   height: 1,
@@ -209,10 +189,8 @@ export const StyledChip = styled(Chip)(() => ({
 export const TogglePillButton = styled(ToggleButton)(({ theme }) => ({
   borderRadius: 999,
   borderColor: theme.palette.divider,
-  // slightly larger vertical padding for better touch targets
-  padding: theme.spacing(1, 1),
+  padding: theme.spacing(0.8, 2),
   minWidth: 36,
-  height: 32,
 
   color: theme.palette.text.secondary,
   backgroundColor: 'transparent',
@@ -238,19 +216,20 @@ export const TogglePillButton = styled(ToggleButton)(({ theme }) => ({
 }));
 
 export const TableHeaderCell = styled(TableCell)(({ theme }) => ({
-  fontSize: 11,
+  fontSize: '1rem',
   fontWeight: 600,
-  letterSpacing: '0.06em',
-  textTransform: 'uppercase',
+  lineHeight: 1.3,
   color: theme.palette.text.secondary,
   backgroundColor: theme.palette.background.default,
+  minHeight: 65,
   padding: '8px 14px',
+  whiteSpace: 'wrap',
+  verticalAlign: 'middle',
+  boxSizing: 'border-box',
 
   '& .MuiTableSortLabel-root': {
     fontWeight: 600,
-    fontSize: 11,
-    textTransform: 'uppercase',
-    letterSpacing: '0.06em',
+    fontSize: '1rem',
   },
 
   '& .MuiTableSortLabel-icon': {
@@ -273,4 +252,17 @@ export const CustomAccordionText = styled(Card)(({ theme }) => ({
   color: theme.palette.text.secondary,
   padding: theme.spacing(0.5, 1),
   borderRadius: 5,
+}));
+
+export const FiltersBox = styled(Stack)(({ theme }) => ({
+  border: '1px solid',
+  borderColor: theme.palette.divider,
+  borderRadius: '12px',
+  backgroundColor: 'transparent',
+  padding: theme.spacing(1.5, 2),
+  width: '100%',
+
+  [theme.breakpoints.up('md')]: {
+    width: 'auto',
+  },
 }));

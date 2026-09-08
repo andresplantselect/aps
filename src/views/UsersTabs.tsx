@@ -51,7 +51,7 @@ export default function UsersTabs() {
   const currentTab = R.nth(tab, tabs) ?? { label: '', content: null };
 
   return (
-    <Box sx={{ width: '100%', paddingBottom: 2 }}>
+    <Box sx={{ width: '100%', paddingTop: 2 }}>
       {!isMobile && (
         <Tabs value={tab} onChange={(_, v) => setTab(v)}>
           {R.addIndex<TabItem, JSX.Element>(R.map)(
@@ -63,7 +63,7 @@ export default function UsersTabs() {
         </Tabs>
       )}
 
-      <Box sx={{ mt: isMobile ? 2 : 2, pb: isMobile ? 8 : 0 }}>
+      <Box sx={{ mt: isMobile ? 2 : 2, pb: isMobile ? 10 : 0 }}>
         {currentTab.content}
       </Box>
 
@@ -84,7 +84,7 @@ export default function UsersTabs() {
           <BottomNavigation
             value={tab}
             onChange={(_, v) => setTab(v)}
-            sx={{ backgroundColor: 'background.paper' }}
+            sx={{ backgroundColor: 'background.paper', height: 72 }}
           >
             {tabs.map((t, i) => (
               <BottomNavigationAction
@@ -95,6 +95,8 @@ export default function UsersTabs() {
                   color: 'text.secondary',
                   '&.Mui-selected': { color: 'primary.main' },
                   minWidth: 0,
+                  pt: 1.5,
+                  pb: 1,
                 }}
               />
             ))}

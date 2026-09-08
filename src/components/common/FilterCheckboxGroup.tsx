@@ -34,7 +34,7 @@ export function FilterCheckboxGroup<T extends string>({
 
   return (
     <Stack spacing={0.5}>
-      <Stack direction="row" alignItems="center" justifyContent="space-between">
+      <Stack direction="row" alignItems="center" spacing={1}>
         <Typography variant="caption" fontWeight={600} color="text.secondary">
           {label}
         </Typography>

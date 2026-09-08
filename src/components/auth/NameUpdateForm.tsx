@@ -51,7 +51,7 @@ export default function NameUpdateForm() {
         />
 
         {editingName ? (
-          <Stack direction="row" spacing={1}>
+          <Stack direction="row" spacing={2}>
             <IconButton
               onClick={() => {
                 setEditingName(false);

@@ -8,9 +8,9 @@ import {
   MenuAction,
   OrderType,
   ProductSortKey,
-  ProductsViewType,
   ProductType,
   VisibilityType,
+  ViewModeType,
 } from '@/src/types/types';
 
 export interface AdminProductFormProps {
@@ -176,6 +176,6 @@ export type UseProductsStateProps = {
   sortDir: 'asc' | 'desc';
   toggleSort: (key: ProductSortKey) => void;
 
-  viewMode: ProductsViewType;
-  setViewMode: Dispatch<SetStateAction<ProductsViewType>>;
+  viewMode: ViewModeType;
+  setViewMode: Dispatch<SetStateAction<ViewModeType>>;
 };

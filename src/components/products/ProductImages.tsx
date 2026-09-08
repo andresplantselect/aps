@@ -92,7 +92,7 @@ export default function ProductImages({ images, title }: ProductImagesProps) {
         {hasMany && (
           <Typography
             onClick={() => setOpen(true)}
-            sx={{
+            sx={(theme) => ({
               position: 'absolute',
               bottom: 8,
               right: 8,
@@ -101,13 +101,13 @@ export default function ProductImages({ images, title }: ProductImagesProps) {
               px: 1.5,
               py: 0.5,
               borderRadius: 1,
-              fontSize: 12,
+              fontSize: theme.typography.pxToRem(15),
               fontWeight: 500,
               cursor: 'pointer',
               transition: 'background-color 0.2s',
 
               '&:hover': { bgcolor: 'rgba(255,255,255,0.9)' },
-            }}
+            })}
           >
             + {images.length - 1}
           </Typography>

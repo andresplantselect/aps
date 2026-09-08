@@ -1,7 +1,8 @@
 'use client';
 
-import { Dialog, DialogContent, Stack, Typography, Box } from '@mui/material';
+import { Dialog, DialogContent, Stack, Typography } from '@mui/material';
 
+import { DialogHeaderBar } from '@/src/components/common/DialogHeaderBar';
 import { useAlert } from '@/src/context/AlertContext';
 import { useDeleteProduct } from '@/src/hooks/api';
 import { PrimaryButton, SecondaryButton } from '@/src/styledComponents';
@@ -28,17 +29,11 @@ export default function DeleteProductDialog({
 
   return (
     <Dialog open={open} onClose={onClose} fullWidth>
-      <Box sx={{ backgroundColor: 'primary.main', px: 3, py: 1.5 }}>
-        <Typography
-          sx={{ color: 'primary.contrastText', fontWeight: 600, fontSize: 16 }}
-        >
-          Eliminar artículo
-        </Typography>
-      </Box>
+      <DialogHeaderBar>Eliminar artículo</DialogHeaderBar>
       <DialogContent>
-        <Typography sx={{ mb: 1 }}>¿Eliminar {product.title}?</Typography>
+        <Typography sx={{ mb: 1 }}>Eliminar {product.title}?</Typography>
 
-        <Stack direction="row" justifyContent="center" spacing={1} mt={2}>
+        <Stack direction="row" justifyContent="center" spacing={2} mt={2}>
           <SecondaryButton onClick={onClose}>Cancelar</SecondaryButton>
 
           <PrimaryButton

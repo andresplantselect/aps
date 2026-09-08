@@ -117,7 +117,7 @@ export function DateRangePicker({
               sx={datePickerStyles}
             />
 
-            <Stack direction="row" spacing={1} justifyContent="flex-end">
+            <Stack direction="row" spacing={2} justifyContent="flex-end">
               <SecondaryButton
                 onClick={() => {
                   setDraftFrom(null);

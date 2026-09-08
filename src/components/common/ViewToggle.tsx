@@ -1,14 +1,18 @@
 import DragIndicatorIcon from '@mui/icons-material/DragIndicator';
 import TableViewIcon from '@mui/icons-material/TableView';
 import { ToggleButtonGroup } from '@mui/material';
+import { Dispatch, SetStateAction } from 'react';
 
 import { TogglePillButton } from '@/src/styledComponents';
-import { UseProductsStateProps } from '@/src/types/propsTypes';
+import { ViewModeType } from '@/src/types/types';
 
-export default function ProductsViewToggle({
+export function ViewToggle({
   viewMode,
   setViewMode,
-}: UseProductsStateProps) {
+}: {
+  viewMode: ViewModeType;
+  setViewMode: Dispatch<SetStateAction<ViewModeType>>;
+}) {
   return (
     <ToggleButtonGroup
       size="small"

@@ -35,7 +35,9 @@ function registerViaInvite(role: InviteRole) {
     cy.contains('Crear invitación').click();
 
     if (role === 'admin') {
-      cy.get(SELECTORS.switchInput).click({ force: true });
+      cy.get(SELECTORS.dialog)
+        .find(SELECTORS.switchInput)
+        .click({ force: true });
     }
 
     cy.intercept('POST', '**/functions/v1/create-invite').as('createInvite');

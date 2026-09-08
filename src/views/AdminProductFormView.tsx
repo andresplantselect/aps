@@ -32,8 +32,6 @@ export default function AdminProductFormView({
   const currentImagesRef = useRef<string[]>(product?.images ?? []);
   const savedRef = useRef(false);
 
-  // Restore a draft left behind by a mobile reload (see productFormDraft.ts)
-  // if it matches what this dialog instance is editing.
   const matchingDraft = useMemo(() => {
     const draft = readProductFormDraft();
     if (!draft) return null;
@@ -57,11 +55,6 @@ export default function AdminProductFormView({
   const [isFormValid, setIsFormValid] = useState(false);
   const { showAlert } = useAlert();
 
-  // Some Android/Chrome builds discard a backgrounded tab while the native
-  // photo picker is open, reloading the page the moment it closes — any
-  // image being selected right then is lost even though the rest of the
-  // form survives (see productFormDraft.ts). Let the user know why, since
-  // a retry right after usually succeeds.
   useEffect(() => {
     if (!matchingDraft) return;
     showAlert({

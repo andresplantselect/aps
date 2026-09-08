@@ -23,7 +23,7 @@ export const theme = createTheme({
 
     text: {
       primary: '#1F2933',
-      secondary: '#6B7280',
+      secondary: '#616674',
       disabled: '#9CA3AF',
     },
 
@@ -54,57 +54,57 @@ export const theme = createTheme({
   typography: {
     fontFamily: ['Manrope', 'Arial', 'sans-serif'].join(','),
 
-    fontSize: 14,
+    fontSize: 18,
 
     h4: {
-      fontSize: '2rem',
+      fontSize: '2.5rem',
       fontWeight: 700,
       lineHeight: 1.15,
       letterSpacing: '-0.03em',
     },
 
     h5: {
-      fontSize: '1.5rem',
+      fontSize: '1.875rem',
       fontWeight: 600,
       lineHeight: 1.2,
       letterSpacing: '-0.02em',
     },
 
     h6: {
-      fontSize: '1.125rem',
+      fontSize: '1.4rem',
       fontWeight: 600,
       lineHeight: 1.35,
       letterSpacing: '-0.01em',
     },
 
     subtitle1: {
-      fontSize: '0.95rem',
+      fontSize: '1.2rem',
       fontWeight: 500,
       lineHeight: 1.5,
     },
 
     body1: {
-      fontSize: '0.875rem',
+      fontSize: '1rem',
       fontWeight: 400,
       lineHeight: 1.65,
     },
 
     body2: {
-      fontSize: '0.82rem',
+      fontSize: '1rem',
       fontWeight: 400,
       lineHeight: 1.55,
       color: '#6B7280',
     },
 
     caption: {
-      fontSize: '0.75rem',
+      fontSize: '0.95rem',
       fontWeight: 400,
       lineHeight: 1.4,
       color: '#6B7280',
     },
 
     button: {
-      fontSize: '0.875rem',
+      fontSize: '1rem',
       fontWeight: 500,
       letterSpacing: '0',
       textTransform: 'none',
@@ -119,10 +119,12 @@ export const theme = createTheme({
     MuiTab: {
       styleOverrides: {
         root: {
-          fontSize: '0.9rem',
+          fontSize: '1.1rem',
           fontWeight: 600,
           textTransform: 'none',
-          letterSpacing: 0,
+          letterSpacing: '0.02em',
+          minHeight: 56,
+          padding: '12px 16px',
         },
       },
     },
@@ -141,7 +143,7 @@ export const theme = createTheme({
         root: {
           borderRadius: 10,
           fontWeight: 500,
-          fontSize: '0.75rem',
+          fontSize: '0.95rem',
           height: 30,
         },
       },
@@ -150,7 +152,7 @@ export const theme = createTheme({
     MuiInputBase: {
       styleOverrides: {
         input: {
-          fontSize: '0.875rem',
+          fontSize: '1rem',
           fontWeight: 400,
         },
       },
@@ -185,7 +187,7 @@ export const theme = createTheme({
     MuiTooltip: {
       styleOverrides: {
         tooltip: {
-          fontSize: '0.75rem',
+          fontSize: '0.95rem',
           borderRadius: 8,
           padding: '8px 10px',
         },
@@ -230,7 +232,7 @@ export const theme = createTheme({
     MuiTableCell: {
       styleOverrides: {
         root: {
-          fontSize: '0.84rem',
+          fontSize: '1rem',
           padding: '10px 14px',
           borderBottom: '1px solid #E5E7EB',
         },

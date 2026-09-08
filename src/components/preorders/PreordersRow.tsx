@@ -48,7 +48,7 @@ export const PreordersRow = memo(function PreordersRow({
   return (
     <>
       <TableRow hover>
-        <TableCell>
+        <TableCell sx={{ width: 48 }}>
           <IconButton size="small" onClick={() => toggleExpand(order.id)}>
             {expanded ? <KeyboardArrowUpIcon /> : <KeyboardArrowDownIcon />}
           </IconButton>
@@ -103,7 +103,7 @@ export const PreordersRow = memo(function PreordersRow({
         </TableCell>
 
         {isAdmin && (
-          <TableCell align="center">
+          <TableCell align="center" sx={{ width: 140 }}>
             <RoundIconButton
               disabled={order.status !== 'pending'}
               onClick={() => openDialog(order, 'approved')}
@@ -114,7 +114,7 @@ export const PreordersRow = memo(function PreordersRow({
         )}
 
         {isAdmin && (
-          <TableCell align="center">
+          <TableCell align="center" sx={{ width: 140 }}>
             <RoundIconButton
               disabled={order.status !== 'pending'}
               onClick={() => openDialog(order, 'cancelled')}
@@ -137,7 +137,7 @@ export const PreordersRow = memo(function PreordersRow({
         )}
 
         {isAdmin && (
-          <TableCell align="center">
+          <TableCell align="center" sx={{ width: 140 }}>
             <RoundIconButton
               size="small"
               disabled={
@@ -158,7 +158,8 @@ export const PreordersRow = memo(function PreordersRow({
 
       {expanded && (
         <TableRow>
-          <TableCell colSpan={isAdmin ? 11 : 8}>
+          <TableCell sx={{ width: 48 }} />
+          <TableCell colSpan={isAdmin ? 10 : 6}>
             <PreordersTableContent order={order} />
           </TableCell>
         </TableRow>
