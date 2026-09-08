@@ -18,6 +18,7 @@ export default function ImageInput({
       Añadir imágenes
       <VisuallyHiddenInput
         type="file"
+        accept="image/*"
         multiple
         onChange={(e) => onChange(e.target.files)}
       />
