@@ -14,6 +14,7 @@ import {
   Stack,
   CircularProgress,
   Tooltip,
+  Switch,
 } from '@mui/material';
 import React, { useState, useRef } from 'react';
 
@@ -99,6 +100,18 @@ export function ProductsRow({ product, onEdit, onDelete }: ProductsRowProps) {
   const toggleVisibility = async () => {
     setSaving(true);
     const form = { ...productToForm(product), is_visible: !product.is_visible };
+    const { error, data } = await updateProduct(form, product.id);
+    setSaving(false);
+    if (error) showAlert(error);
+    else if (data) updateProductInState(data as unknown as ProductType);
+  };
+
+  const toggleCanBuyUnits = async () => {
+    setSaving(true);
+    const form = {
+      ...productToForm(product),
+      can_buy_units: !product.can_buy_units,
+    };
     const { error, data } = await updateProduct(form, product.id);
     setSaving(false);
     if (error) showAlert(error);
@@ -213,7 +226,18 @@ export function ProductsRow({ product, onEdit, onDelete }: ProductsRowProps) {
       <TableCell>{renderInlineCell('price', product.price, '€')}</TableCell>
 
       <TableCell align="center">
-        {product.can_buy_units ? 'Si' : 'No'}
+        {isAdmin ? (
+          <Switch
+            checked={product.can_buy_units}
+            onChange={toggleCanBuyUnits}
+            disabled={saving}
+            size="small"
+          />
+        ) : product.can_buy_units ? (
+          'Si'
+        ) : (
+          'No'
+        )}
       </TableCell>
 
       <TableCell align="center">{product.units_per_box}</TableCell>
