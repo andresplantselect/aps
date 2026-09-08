@@ -9,8 +9,8 @@ import { UseProductsStateProps } from '@/src/types/propsTypes';
 import type {
   DisponibilityType,
   ProductSortKey,
-  ProductsViewType,
   VisibilityType,
+  ViewModeType,
 } from '@/src/types/types';
 
 export function useProductsState(): UseProductsStateProps {
@@ -32,7 +32,7 @@ export function useProductsState(): UseProductsStateProps {
   const [sortBy, setSortBy] = useState<ProductSortKey>('title');
   const [sortDir, setSortDir] = useState<'asc' | 'desc'>('asc');
 
-  const [viewMode, setViewMode] = useState<ProductsViewType>(
+  const [viewMode, setViewMode] = useState<ViewModeType>(
     isAdmin ? (isDesktop ? 'table' : 'cards') : 'cards',
   );
 

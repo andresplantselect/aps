@@ -6,10 +6,10 @@ import {
   Stack,
   Switch,
   Typography,
-  Box,
 } from '@mui/material';
 import { useState } from 'react';
 
+import { DialogHeaderBar } from '@/src/components/common/DialogHeaderBar';
 import { useAlert } from '@/src/context/AlertContext';
 import { useOrders } from '@/src/context/OrdersContext';
 import { usePreordersContext } from '@/src/context/PreordersContext';
@@ -52,13 +52,7 @@ export function PreordersDeliveryStatusDialog() {
         closeDeliveryDialog();
       }}
     >
-      <Box sx={{ backgroundColor: 'primary.main', px: 3, py: 1.5 }}>
-        <Typography
-          sx={{ color: 'primary.contrastText', fontWeight: 600, fontSize: 16 }}
-        >
-          Estado de entrega
-        </Typography>
-      </Box>
+      <DialogHeaderBar>Estado de entrega</DialogHeaderBar>
       <DialogContent>
         <Stack alignItems="center" justifyContent="center">
           <Typography>{label}</Typography>
@@ -68,7 +62,7 @@ export function PreordersDeliveryStatusDialog() {
           />
         </Stack>
 
-        <Stack direction="row" justifyContent="center" spacing={1} mt={2}>
+        <Stack direction="row" justifyContent="center" spacing={2} mt={2}>
           <SecondaryButton
             onClick={() => {
               setDelivered(true);

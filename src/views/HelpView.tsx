@@ -180,7 +180,13 @@ export default function HelpView({
                   })}
                 >
                   {tab.icon}
-                  <Typography variant="caption" sx={{ fontSize: 10, mt: 0.3 }}>
+                  <Typography
+                    variant="caption"
+                    sx={(theme) => ({
+                      fontSize: theme.typography.pxToRem(12),
+                      mt: 0.3,
+                    })}
+                  >
                     {tab.label}
                   </Typography>
                 </Box>
@@ -385,7 +391,7 @@ export default function HelpView({
         <Stack spacing={1}>
           <Stack direction="row" spacing={1} alignItems="center">
             <LockResetIcon sx={{ fontSize: 18 }} />
-            <Typography variant="h6">¿Olvidaste tu contraseña?</Typography>
+            <Typography variant="h6">Olvidaste tu contraseña?</Typography>
           </Stack>
 
           <Typography variant="body2" color="text.secondary">

@@ -14,10 +14,14 @@ export default function ProductInfo({ product }: { product: ProductType }) {
     <Box>
       <Stack>
         <Typography
-          sx={{ pl: 0.5, fontWeight: 600, fontSize: 20 }}
+          sx={{
+            pl: 0.5,
+            fontWeight: 600,
+            fontSize: '1.5rem',
+          }}
           color="primary"
         >
-          {Number(product.price).toFixed(2)} €
+          € {Number(product.price).toFixed(2)}
         </Typography>
 
         <Stack spacing={1} alignItems="flex-start" sx={{ mt: 0.5 }}>

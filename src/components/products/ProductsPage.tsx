@@ -1,5 +1,5 @@
 import { Box } from '@mui/material';
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useCallback, useEffect, useRef, useState } from 'react';
 
 import DeleteProductDialog from '@/src/components/products/DeleteProductDialog';
 import ProductsGrid from '@/src/components/products/ProductsGrid';
@@ -37,30 +37,43 @@ export default function ProductsPage(productsState: UseProductsStateProps) {
     setActionsState((prev) => ({ ...prev, edit: true }));
   }, [visibleProducts]);
 
-  const handleUpdateTrigger = (
-    p: ProductType | null,
-    dialog: keyof typeof actionsState,
-    dialogState: boolean,
-  ) => {
-    setSelectedProduct(p);
-    setActionsState((prev) => ({ ...prev, [dialog]: dialogState }));
-  };
+  const handleUpdateTrigger = useCallback(
+    (
+      p: ProductType | null,
+      dialog: keyof typeof actionsState,
+      dialogState: boolean,
+    ) => {
+      setSelectedProduct(p);
+      setActionsState((prev) => ({ ...prev, [dialog]: dialogState }));
+    },
+    [],
+  );
+
+  const handleEdit = useCallback(
+    (p: ProductType) => handleUpdateTrigger(p, 'edit', true),
+    [handleUpdateTrigger],
+  );
+
+  const handleDelete = useCallback(
+    (p: ProductType) => handleUpdateTrigger(p, 'delete', true),
+    [handleUpdateTrigger],
+  );
 
   return (
     <Box>
       {viewMode === 'cards' && (
         <ProductsGrid
           productsState={productsState}
-          onDelete={(p) => handleUpdateTrigger(p, 'delete', true)}
-          onEdit={(p) => handleUpdateTrigger(p, 'edit', true)}
+          onDelete={handleDelete}
+          onEdit={handleEdit}
         />
       )}
 
       {viewMode === 'table' && (
         <ProductsTable
           productsState={productsState}
-          onDelete={(p) => handleUpdateTrigger(p, 'delete', true)}
-          onEdit={(p) => handleUpdateTrigger(p, 'edit', true)}
+          onDelete={handleDelete}
+          onEdit={handleEdit}
         />
       )}
 

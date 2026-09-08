@@ -44,7 +44,7 @@ const ProductCard = memo(function ProductCard({
             <Stack
               direction="row"
               justifyContent="space-between"
-              alignItems="center"
+              alignItems="flex-start"
             >
               <Typography
                 sx={{
@@ -54,7 +54,7 @@ const ProductCard = memo(function ProductCard({
                   WebkitBoxOrient: 'vertical',
                   overflow: 'hidden',
                   fontWeight: 600,
-                  fontSize: 20,
+                  fontSize: '1.5rem',
                 }}
               >
                 {product.title}
@@ -62,9 +62,9 @@ const ProductCard = memo(function ProductCard({
               {isAdmin && (
                 <>
                   {product.is_visible ? (
-                    <VisibilityOutlinedIcon sx={{ fontSize: 20 }} />
+                    <VisibilityOutlinedIcon sx={{ fontSize: '1.5rem' }} />
                   ) : (
-                    <VisibilityOffOutlinedIcon sx={{ fontSize: 20 }} />
+                    <VisibilityOffOutlinedIcon sx={{ fontSize: '1.5rem' }} />
                   )}
                 </>
               )}
@@ -112,7 +112,7 @@ const ProductCard = memo(function ProductCard({
 
         <Stack>
           {isAdmin && (
-            <Stack direction="row" spacing={1} sx={{ mt: 2 }}>
+            <Stack direction="row" spacing={2} sx={{ mt: 2 }}>
               <SecondaryButton
                 onClick={() => onEdit(product)}
                 startIcon={<EditIcon sx={{ fontSize: 16 }} />}

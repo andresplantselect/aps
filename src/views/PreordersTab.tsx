@@ -2,7 +2,7 @@
 
 import React from 'react';
 
-import { PreordersDeliveryStatusDialog } from '@/src/components/preorders/PreoprdersDeliveryStatusDialog';
+import { PreordersDeliveryStatusDialog } from '@/src/components/preorders/PreordersDeliveryStatusDialog';
 import { PreordersGrid } from '@/src/components/preorders/PreordersGrid';
 import { PreordersStatusDialog } from '@/src/components/preorders/PreordersStatusDialog';
 import { PreordersTable } from '@/src/components/preorders/PreordersTable';

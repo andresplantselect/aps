@@ -42,18 +42,28 @@ export default function ProductsTable({
             <TableHeaderCell>Disponible</TableHeaderCell>
 
             <TableHeaderCell>Precio</TableHeaderCell>
-            <TableHeaderCell>Disponible por Uds</TableHeaderCell>
+            <TableHeaderCell align="center">Disponible por Uds</TableHeaderCell>
 
-            <TableHeaderCell>Uds × caja</TableHeaderCell>
+            <TableHeaderCell align="center">Uds × caja</TableHeaderCell>
 
-            <TableHeaderCell>Maceta</TableHeaderCell>
+            <TableHeaderCell align="center">Maceta</TableHeaderCell>
 
-            <TableHeaderCell>Altura</TableHeaderCell>
-            {isAdmin && <TableHeaderCell>Visible en catálogo</TableHeaderCell>}
+            <TableHeaderCell align="center">Altura</TableHeaderCell>
+            {isAdmin && (
+              <TableHeaderCell align="center">
+                Visible en catálogo
+              </TableHeaderCell>
+            )}
 
-            {isAdmin && <TableHeaderCell>Editar</TableHeaderCell>}
+            {isAdmin && (
+              <TableHeaderCell align="center">Editar</TableHeaderCell>
+            )}
 
-            {isAdmin && <TableHeaderCell>Eliminar</TableHeaderCell>}
+            {isAdmin && (
+              <TableHeaderCell align="center" sx={{ width: 64 }}>
+                Eliminar
+              </TableHeaderCell>
+            )}
           </TableRow>
         </TableHead>
 

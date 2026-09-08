@@ -13,6 +13,7 @@ import {
 import React, { useState } from 'react';
 
 import { supabase } from '@/lib/supabase';
+import { DialogHeaderBar } from '@/src/components/common/DialogHeaderBar';
 import { useAlert } from '@/src/context/AlertContext';
 import {
   PrimaryButton,
@@ -79,17 +80,7 @@ export default function InviteDialog({ open, onClose }: InviteDialogProps) {
     <>
       {/* Dialog 1: toggle + create */}
       <Dialog open={open && !link} onClose={handleClose}>
-        <Box sx={{ backgroundColor: 'primary.main', px: 3, py: 1.5 }}>
-          <Typography
-            sx={{
-              color: 'primary.contrastText',
-              fontWeight: 600,
-              fontSize: 16,
-            }}
-          >
-            Nueva invitación
-          </Typography>
-        </Box>
+        <DialogHeaderBar>Nueva invitación</DialogHeaderBar>
         <DialogContent sx={{ minWidth: 340 }}>
           <Stack spacing={2}>
             <Stack direction="row" alignItems="center" justifyContent="center">
@@ -99,7 +90,7 @@ export default function InviteDialog({ open, onClose }: InviteDialogProps) {
                 onChange={(e) => setIsAdmin(e.target.checked)}
               />
             </Stack>
-            <Stack direction="row" justifyContent="center" spacing={1}>
+            <Stack direction="row" justifyContent="center" spacing={2}>
               <SecondaryButton onClick={handleClose}>Cerrar</SecondaryButton>
               <PrimaryButton onClick={handleGenerate} disabled={loading}>
                 {loading ? (
@@ -115,17 +106,7 @@ export default function InviteDialog({ open, onClose }: InviteDialogProps) {
 
       {/* Dialog 2: generated link */}
       <Dialog open={!!link} onClose={handleClose}>
-        <Box sx={{ backgroundColor: 'primary.main', px: 3, py: 1.5 }}>
-          <Typography
-            sx={{
-              color: 'primary.contrastText',
-              fontWeight: 600,
-              fontSize: 16,
-            }}
-          >
-            Enlace generado
-          </Typography>
-        </Box>
+        <DialogHeaderBar>Enlace generado</DialogHeaderBar>
         <DialogContent sx={{ minWidth: 340 }}>
           <Stack spacing={2}>
             <Box>
@@ -134,7 +115,7 @@ export default function InviteDialog({ open, onClose }: InviteDialogProps) {
                   ? 'Enlace de registro de nuevo administrador:'
                   : 'Enlace de registro de nuevo cliente:'}
               </Typography>
-              <Stack direction="row" alignItems="flex-start" spacing={1}>
+              <Stack direction="row" alignItems="flex-start" spacing={2}>
                 <Typography
                   variant="body2"
                   sx={{

@@ -1,6 +1,6 @@
 'use client';
 
-import { Box, Divider, Stack } from '@mui/material';
+import { Divider, Stack } from '@mui/material';
 import React from 'react';
 
 import { FilterCheckboxGroup } from '@/src/components/common/FilterCheckboxGroup';
@@ -8,6 +8,7 @@ import {
   availabilityStatusesDict,
   visibilityStatusesDict,
 } from '@/src/constants';
+import { FiltersBox, LinkButton } from '@/src/styledComponents';
 import { UseProductsStateProps } from '@/src/types/propsTypes';
 import { DisponibilityType, VisibilityType } from '@/src/types/types';
 
@@ -17,27 +18,31 @@ export function ProductsFilters({
   visibilityFilter,
   setVisibilityFilter,
 }: UseProductsStateProps) {
+  const hasAnyFilter =
+    availabilityFilter.length > 0 || visibilityFilter.length > 0;
+  const clearAllFilters = () => {
+    setAvailabilityFilter([]);
+    setVisibilityFilter([]);
+  };
   return (
-    <Box
-      data-testid="products-filters"
-      sx={{
-        border: '1px solid',
-        borderColor: 'divider',
-        borderRadius: '12px',
-        bgcolor: 'transparent',
-        px: 2,
-        py: 1.5,
-        width: 'fit-content',
-      }}
-    >
+    <FiltersBox data-testid="products-filters">
+      <LinkButton
+        onClick={clearAllFilters}
+        disabled={!hasAnyFilter}
+        sx={{ alignSelf: 'flex-end' }}
+      >
+        Limpiar filtros
+      </LinkButton>
       <Stack
         direction={{ xs: 'column', md: 'row' }}
-        spacing={2}
+        spacing={{ xs: 2, md: 5 }}
         divider={
           <Divider
             orientation="vertical"
             flexItem
-            sx={{ display: { xs: 'none', md: 'block' } }}
+            sx={{
+              display: { xs: 'none', md: 'block' },
+            }}
           />
         }
       >
@@ -54,6 +59,6 @@ export function ProductsFilters({
           onChange={setVisibilityFilter}
         />
       </Stack>
-    </Box>
+    </FiltersBox>
   );
 }

@@ -9,6 +9,7 @@ const titleVisibleWithUnits = `Cypress Units ${runTag}`;
 const orderComment = `Cypress Order Test ${runTag}`;
 const orderComment2 = `Cypress Order Test ${runTag} 2`;
 const orderComment3 = `Cypress Order Test ${runTag} 3`;
+const orderComment4 = `Cypress Order Test ${runTag} 4`;
 
 function searchFor(term: string) {
   cy.get(SELECTORS.searchInput).clear().type(term);
@@ -115,6 +116,30 @@ function approveOrder(comment: string) {
 function rejectOrder(comment: string) {
   preorderRowForComment(comment).find(SELECTORS.clearIcon).parent().click();
   cy.get(SELECTORS.dialog).contains('button', 'Rechazar').click();
+  cy.get(SELECTORS.dialog).should('not.exist');
+}
+
+function openDeliveryDialog(comment: string) {
+  preorderRowForComment(comment)
+    .find(SELECTORS.shippingIcon)
+    .parent()
+    .should('not.be.disabled')
+    .click();
+  cy.get(SELECTORS.dialog).should('be.visible');
+}
+
+function markDelivered(comment: string) {
+  openDeliveryDialog(comment);
+  cy.get(SELECTORS.dialog).contains('Pedido entregado').should('be.visible');
+  cy.get(SELECTORS.dialog).contains('button', 'Confirmar').click();
+  cy.get(SELECTORS.dialog).should('not.exist');
+}
+
+function markDeliveryFailed(comment: string) {
+  openDeliveryDialog(comment);
+  cy.get(SELECTORS.dialog).find(SELECTORS.switchInput).click({ force: true });
+  cy.get(SELECTORS.dialog).contains('Entrega cancelada').should('be.visible');
+  cy.get(SELECTORS.dialog).contains('button', 'Confirmar').click();
   cy.get(SELECTORS.dialog).should('not.exist');
 }
 
@@ -405,6 +430,72 @@ describe('Order flow: catalog visibility, buy-units controls, and cart behavior 
           (r) => r.function_name,
         );
         expect(names).to.include('send-user-order-status-email');
+      });
+    });
+  });
+
+  it('admin delivery flow: marks an approved order as delivered and another as delivery failed, notifying the user for both', () => {
+    const userEmail = Cypress.env('TEST_USER_EMAIL') as string;
+
+    cy.task('createTestOrder', {
+      userEmail,
+      comment: orderComment4,
+      items: [{ title: titleVisibleNoUnits, quantity: 2 }],
+    }).then((order) => {
+      // eslint-disable-next-line @typescript-eslint/no-unused-expressions -- chai assertion
+      expect(order, 'order created via API').to.not.be.null;
+    });
+
+    cy.loginAs('admin');
+    cy.contains('Pedidos').click();
+
+    approveOrder(orderComment4);
+
+    markDelivered(orderComment2);
+    preorderRowForComment(orderComment2)
+      .contains('Entregado')
+      .should('be.visible');
+
+    markDeliveryFailed(orderComment4);
+    preorderRowForComment(orderComment4)
+      .contains('No entregado')
+      .should('be.visible');
+
+    cy.task('getOrderByComment', orderComment2).then((order) => {
+      const { id: orderId, delivery_status: deliveryStatus } = order as {
+        id: number;
+        delivery_status: string;
+      };
+      expect(deliveryStatus).to.eq('delivered');
+
+      cy.task(
+        'getNotificationsForOrder',
+        { orderId, minRows: 1, timeoutMs: 15000 },
+        { timeout: 20000 },
+      ).then((rows) => {
+        const names = (rows as { function_name: string }[]).map(
+          (r) => r.function_name,
+        );
+        expect(names).to.include('send-user-delivery-status-email');
+      });
+    });
+
+    cy.task('getOrderByComment', orderComment4).then((order) => {
+      const { id: orderId, delivery_status: deliveryStatus } = order as {
+        id: number;
+        delivery_status: string;
+      };
+      expect(deliveryStatus).to.eq('failed');
+
+      cy.task(
+        'getNotificationsForOrder',
+        { orderId, minRows: 1, timeoutMs: 15000 },
+        { timeout: 20000 },
+      ).then((rows) => {
+        const names = (rows as { function_name: string }[]).map(
+          (r) => r.function_name,
+        );
+        expect(names).to.include('send-user-delivery-status-email');
       });
     });
   });

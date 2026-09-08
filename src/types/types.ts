@@ -142,6 +142,10 @@ export type MenuAction = {
   visibility: boolean;
 };
 
-export type ProductsViewType = 'cards' | 'table';
+export type ViewModeType = 'cards' | 'table';
 
 export type ProductSortKey = 'title' | 'available' | 'price';
+
+export type ProductInlineEditField = 'available' | 'price' | null;
+
+export type ProductToggleField = 'is_visible' | 'can_buy_units';

@@ -1,5 +1,5 @@
 import CloseIcon from '@mui/icons-material/Close';
-import { Box, Divider, IconButton, Stack, Typography } from '@mui/material';
+import { Divider, IconButton, Stack, Typography } from '@mui/material';
 import { AdapterDateFns } from '@mui/x-date-pickers/AdapterDateFns';
 import { DatePicker } from '@mui/x-date-pickers/DatePicker';
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
@@ -9,6 +9,7 @@ import { FilterCheckboxGroup } from '@/src/components/common/FilterCheckboxGroup
 import { deliveryStatusesDict, orderStatusesDict } from '@/src/constants';
 import { useAuth } from '@/src/context/AuthContext';
 import { usePreordersContext } from '@/src/context/PreordersContext';
+import { FiltersBox, LinkButton } from '@/src/styledComponents';
 import { DeliveryStatusType, OrderStatusType } from '@/src/types/types';
 
 export function PreordersFilters() {
@@ -25,22 +26,33 @@ export function PreordersFilters() {
   const [from, to] = dateRange;
   const isAnyDatePicked = any(isNotNil, dateRange);
 
+  const hasAnyFilter =
+    statusFilter.length > 0 ||
+    deliveryStatusFilter.length > 0 ||
+    userFilter.length > 0 ||
+    dateRange.some(Boolean);
+
+  const clearAllFilters = () => {
+    setStatusFilter([]);
+    setDeliveryStatusFilter([]);
+    setUserFilter([]);
+    setDateRange([null, null]);
+  };
+
   return (
     <LocalizationProvider dateAdapter={AdapterDateFns}>
-      <Box
-        sx={{
-          border: '1px solid',
-          borderColor: 'divider',
-          borderRadius: '12px',
-          bgcolor: 'transparent',
-          px: 2,
-          py: 1.5,
-          width: 'fit-content',
-        }}
-      >
+      <FiltersBox data-testid="preorders-filters">
+        <LinkButton
+          onClick={clearAllFilters}
+          disabled={!hasAnyFilter}
+          sx={{ alignSelf: 'flex-end' }}
+        >
+          Limpiar filtros
+        </LinkButton>
+
         <Stack
           direction={{ xs: 'column', md: 'row' }}
-          spacing={2}
+          spacing={{ xs: 2, md: 5 }}
           divider={
             <Divider
               orientation="vertical"
@@ -113,7 +125,7 @@ export function PreordersFilters() {
             </Stack>
           </Stack>
         </Stack>
-      </Box>
+      </FiltersBox>
     </LocalizationProvider>
   );
 }

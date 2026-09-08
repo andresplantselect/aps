@@ -6,7 +6,11 @@ import { useMemo, useState, useEffect } from 'react';
 
 import { useAuth } from '@/src/context/AuthContext';
 import { useOrders } from '@/src/context/OrdersContext';
-import { DeliveryStatusType, OrderStatusType } from '@/src/types/types';
+import {
+  DeliveryStatusType,
+  OrderStatusType,
+  ViewModeType,
+} from '@/src/types/types';
 
 export const usePreordersTable = () => {
   const { orders, isOrdersLoading } = useOrders();
@@ -31,7 +35,7 @@ export const usePreordersTable = () => {
   const [rowsPerPage, setRowsPerPage] = useState(10);
 
   const [expandedOrderId, setExpandedOrderId] = useState<number | null>(null);
-  const [viewMode, setViewMode] = useState<'cards' | 'table'>(
+  const [viewMode, setViewMode] = useState<ViewModeType>(
     isAdmin ? (isDesktop ? 'table' : 'cards') : 'cards',
   );
 

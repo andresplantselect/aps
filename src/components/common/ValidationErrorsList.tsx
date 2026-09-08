@@ -19,7 +19,7 @@ export default function ValidationErrorsList({
           key={`${e}-${i}`}
         >
           <ErrorOutlineIcon color="error" sx={{ width: 14 }} />
-          <Typography fontSize={12} color="error">
+          <Typography variant="caption" color="error">
             {e}
           </Typography>
         </Stack>

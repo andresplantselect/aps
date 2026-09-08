@@ -358,7 +358,7 @@ async function getOrderByComment(comment: string, env: Record<string, string>) {
   };
 
   const res = await fetch(
-    `${baseUrl}/rest/v1/orders?comment=eq.${encodeURIComponent(comment)}&select=id,total,items,user_id,status,comment&order=created_at.desc&limit=1`,
+    `${baseUrl}/rest/v1/orders?comment=eq.${encodeURIComponent(comment)}&select=id,total,items,user_id,status,delivery_status,comment&order=created_at.desc&limit=1`,
     { headers: authHeaders },
   );
   if (!res.ok) {
