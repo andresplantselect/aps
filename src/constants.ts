@@ -72,6 +72,10 @@ export const ALERT_MESSAGES_DICT = {
     productCreated: (title: string) => `Artículo ${title} agregado.`,
     productUpdated: (title: string) => `Artículo ${title} actualizado.`,
     productDeleted: (title: string) => `Artículo ${title} eliminado.`,
+    productsHidden: (count: number) =>
+      count === 1 ? '1 artículo ocultado.' : `${count} artículos ocultados.`,
+    productsBulkDeleted: (count: number) =>
+      count === 1 ? '1 artículo eliminado.' : `${count} artículos eliminados.`,
     orderApproved: 'Pedido aprobado.',
     orderCancelled: 'Pedido rechazado.',
     deliveryDelivered: 'Estado de entrega actualizado: entregado.',

@@ -11,7 +11,9 @@ export function PreordersHistorySection() {
 
   return (
     <Stack spacing={1} mb={2}>
-      <Typography variant="h6">Historial de pedidos</Typography>
+      <Typography variant="h6" color="primary.main">
+        Historial de pedidos
+      </Typography>
       {viewMode === 'table' ? (
         <PreordersHistoryTable />
       ) : (
