@@ -130,6 +130,13 @@ export default function ProductsTab() {
                     </SecondaryButton>
                   </Stack>
 
+                  <PrimaryButton
+                    onClick={() => setShowForm(true)}
+                    endIcon={<AddIcon />}
+                  >
+                    Añadir
+                  </PrimaryButton>
+
                   <SecondaryRoundIconButton
                     onClick={(e) => setActionsAnchorEl(e.currentTarget)}
                   >
@@ -161,13 +168,6 @@ export default function ProductsTab() {
                       <ListItemText>Eliminar varios</ListItemText>
                     </MenuItem>
                   </Menu>
-
-                  <PrimaryButton
-                    onClick={() => setShowForm(true)}
-                    endIcon={<AddIcon />}
-                  >
-                    Añadir
-                  </PrimaryButton>
                 </Stack>
               )}
             </Stack>

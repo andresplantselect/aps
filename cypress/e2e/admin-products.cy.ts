@@ -5,9 +5,12 @@ import { SELECTORS } from '../support/selectors';
 const titleA = `Cypress ${faker.commerce.productName()} ${faker.string.alphanumeric(6)}`;
 const titleAEdited = `${titleA} Edited`;
 const titleB = `Cypress ${faker.commerce.productName()} ${faker.string.alphanumeric(6)}`;
+const titleC = `Cypress ${faker.commerce.productName()} ${faker.string.alphanumeric(6)}`;
+const titleD = `Cypress ${faker.commerce.productName()} ${faker.string.alphanumeric(6)}`;
 
 function searchFor(term: string) {
-  cy.get(SELECTORS.searchInput).clear().type(term);
+  cy.get(SELECTORS.searchInput).clear();
+  if (term) cy.get(SELECTORS.searchInput).type(term);
 }
 
 function switchToCardsView() {
@@ -26,6 +29,10 @@ function waitForProductCard(title: string) {
 
 function toggleFilter(label: string) {
   cy.get(SELECTORS.filtersPanel).contains(label).click();
+}
+
+function openActionsMenu() {
+  cy.get(SELECTORS.moreVertIcon).click();
 }
 
 function setAvailableInline(title: string, value: string) {
@@ -112,6 +119,79 @@ describe('Admin product management', () => {
     toggleFilter('Disponibles');
 
     setAvailableInline(titleB, '4');
+  });
+
+  it('hides out-of-stock products and bulk-deletes selected products from the actions menu', () => {
+    cy.loginAs('admin');
+    switchToTableView();
+
+    cy.contains('button', /^Añadir$/).click();
+    fillCreateProductForm({
+      title: titleC,
+      price: '3.00',
+      unitsPerBox: '1',
+      available: '0',
+    });
+    cy.contains('button', 'Agregar').click();
+    cy.contains(`Artículo ${titleC} agregado.`).should('be.visible');
+
+    switchToTableView();
+    cy.contains('button', /^Añadir$/).click();
+    fillCreateProductForm({
+      title: titleD,
+      price: '4.00',
+      unitsPerBox: '1',
+      available: '7',
+    });
+    cy.contains('button', 'Agregar').click();
+    cy.contains(`Artículo ${titleD} agregado.`).should('be.visible');
+
+    searchFor(titleC);
+    cy.contains('tr', titleC)
+      .find(SELECTORS.visibilityIcon)
+      .should('be.visible');
+    searchFor(titleD);
+    cy.contains('tr', titleD)
+      .find(SELECTORS.visibilityIcon)
+      .should('be.visible');
+    searchFor('');
+
+    openActionsMenu();
+    cy.contains('Ocultar sin stock').click();
+
+    searchFor(titleC);
+    cy.contains('tr', titleC)
+      .find(SELECTORS.visibilityOffIcon)
+      .should('be.visible');
+    searchFor(titleD);
+    cy.contains('tr', titleD)
+      .find(SELECTORS.visibilityIcon)
+      .should('be.visible');
+    searchFor('');
+
+    openActionsMenu();
+    cy.contains('Eliminar varios').click();
+
+    cy.get(SELECTORS.dialog).should('be.visible').as('bulkDeleteDialog');
+    cy.get('@bulkDeleteDialog')
+      .contains('button', 'Eliminar')
+      .should('be.disabled');
+
+    cy.get('@bulkDeleteDialog').contains(titleC).click();
+    cy.get('@bulkDeleteDialog').contains(titleD).click();
+    cy.get('@bulkDeleteDialog')
+      .contains('button', 'Eliminar')
+      .should('not.be.disabled')
+      .click();
+
+    cy.get('@bulkDeleteDialog')
+      .contains(/^Eliminar 2 artículos\?/)
+      .should('be.visible');
+    cy.get('@bulkDeleteDialog').contains('button', 'Eliminar').click();
+    cy.get(SELECTORS.dialog).should('not.exist');
+
+    cy.contains(titleC).should('not.exist');
+    cy.contains(titleD).should('not.exist');
   });
 
   it('lets an admin edit a product, including its image, and edit price/available/visibility from the table view', () => {

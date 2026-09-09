@@ -16,4 +16,7 @@ export const SELECTORS = {
   closeIcon: '[data-testid="CloseIcon"]',
   shippingIcon: '[data-testid="LocalShippingOutlinedIcon"]',
   filtersPanel: '[data-testid="products-filters"]',
+  moreVertIcon: '[data-testid="MoreVertIcon"]',
+  visibilityIcon: '[data-testid="VisibilityOutlinedIcon"]',
+  visibilityOffIcon: '[data-testid="VisibilityOffOutlinedIcon"]',
 };
