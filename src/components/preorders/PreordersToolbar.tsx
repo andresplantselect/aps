@@ -26,13 +26,21 @@ export function PreordersToolbar() {
   const { isAdmin } = useAuth();
 
   return (
-    <Stack spacing={2} mb={2}>
-      <Stack direction="row" justifyContent="space-between">
+    <Stack spacing={2} mb={3}>
+      <Stack
+        direction={isDesktop ? 'row' : 'column'}
+        justifyContent="space-between"
+        spacing={2}
+      >
         {isAdmin && (
           <ViewToggle viewMode={viewMode} setViewMode={setViewMode} />
         )}
 
-        <Stack direction="row" justifyContent="flex-end" spacing={2}>
+        <Stack
+          direction="row"
+          justifyContent={isDesktop ? 'flex-end' : 'flex-start'}
+          spacing={2}
+        >
           <SecondaryButton
             onClick={toggleHistory}
             startIcon={<HistoryIcon fontSize="small" />}

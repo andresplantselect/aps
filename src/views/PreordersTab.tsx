@@ -1,5 +1,6 @@
 'use client';
 
+import { Stack, Typography } from '@mui/material';
 import React from 'react';
 
 import { PreordersDeliveryStatusDialog } from '@/src/components/preorders/PreordersDeliveryStatusDialog';
@@ -18,7 +19,12 @@ function PreordersContent() {
     <>
       <PreordersToolbar />
       {showHistory && <PreordersHistorySection />}
-      {viewMode === 'table' ? <PreordersTable /> : <PreordersGrid />}
+      <Stack spacing={1} mb={2}>
+        <Typography variant="h6" color="primary.main">
+          Pedidos actuales
+        </Typography>
+        {viewMode === 'table' ? <PreordersTable /> : <PreordersGrid />}
+      </Stack>
       <PreordersStatusDialog />
       <PreordersDeliveryStatusDialog />
     </>
