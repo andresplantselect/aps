@@ -401,10 +401,18 @@ describe('Order flow: catalog visibility, buy-units controls, and cart behavior 
       .should('be.visible');
 
     rejectOrder(orderComment3);
+    cy.contains('Historial de pedidos').should('not.exist');
+    cy.contains(orderComment3).should('not.exist');
+
     openHistory();
+    cy.contains('Historial de pedidos').should('be.visible');
     preorderRowForComment(orderComment3)
       .contains('Rechazado')
       .should('be.visible');
+
+    openHistory();
+    cy.contains('Historial de pedidos').should('not.exist');
+    cy.contains(orderComment3).should('not.exist');
 
     cy.task('getOrderByComment', orderComment2).then((order) => {
       const { id: orderId, status } = order as { id: number; status: string };
