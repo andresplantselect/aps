@@ -63,7 +63,7 @@ export default function UsersTabs() {
         </Tabs>
       )}
 
-      <Box sx={{ mt: isMobile ? 2 : 2, pb: isMobile ? 10 : 0 }}>
+      <Box sx={{ mt: isMobile ? 2 : 2, pb: isMobile ? 10 : 3 }}>
         {currentTab.content}
       </Box>
 

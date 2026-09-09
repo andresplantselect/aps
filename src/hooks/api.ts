@@ -216,6 +216,81 @@ export const useDeleteProduct = () => {
   return { deleteProduct };
 };
 
+export const useHideOutOfStockProducts = () => {
+  const { request } = useRequest();
+
+  const hideOutOfStockProducts = async () => {
+    const { data: candidates, error: selectError } = await supabase
+      .from('products')
+      .select('id')
+      .eq('available', 0)
+      .eq('is_visible', true);
+
+    if (selectError) {
+      return {
+        success: null,
+        error: {
+          message: selectError.message,
+          severity: 'error' as AlertColor,
+        },
+        data: null,
+      };
+    }
+
+    if (!candidates || candidates.length === 0) {
+      return {
+        success: {
+          message: 'No hay productos sin stock para ocultar.',
+          severity: 'info' as AlertColor,
+        },
+        error: null,
+        data: null,
+      };
+    }
+
+    const ids = candidates.map((c) => c.id);
+
+    return request(
+      async () =>
+        supabase.from('products').update({ is_visible: false }).in('id', ids),
+      ALERT_MESSAGES_DICT.success.productsHidden(ids.length),
+    );
+  };
+
+  return { hideOutOfStockProducts };
+};
+
+export const useBulkDeleteProducts = () => {
+  const { deleteProduct } = useDeleteProduct();
+
+  const bulkDeleteProducts = async (products: ProductType[]) => {
+    const results = await Promise.all(products.map(deleteProduct));
+    const failed = results.filter((r) => r.error);
+
+    if (failed.length) {
+      return {
+        success: null,
+        error: {
+          message: `No se pudieron eliminar ${failed.length} de ${products.length} artículos.`,
+          severity: 'error' as AlertColor,
+        },
+      };
+    }
+
+    return {
+      success: {
+        message: ALERT_MESSAGES_DICT.success.productsBulkDeleted(
+          products.length,
+        ),
+        severity: 'success' as AlertColor,
+      },
+      error: null,
+    };
+  };
+
+  return { bulkDeleteProducts };
+};
+
 export const useUpdateOrderStatus = () => {
   const { request } = useRequest();
 

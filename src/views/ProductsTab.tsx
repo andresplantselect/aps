@@ -1,9 +1,11 @@
 import AddIcon from '@mui/icons-material/Add';
 import CloseIcon from '@mui/icons-material/Close';
+import DeleteSweepOutlinedIcon from '@mui/icons-material/DeleteSweepOutlined';
 import ExpandLessOutlinedIcon from '@mui/icons-material/ExpandLessOutlined';
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import SearchIcon from '@mui/icons-material/Search';
 import TuneIcon from '@mui/icons-material/Tune';
+import VisibilityOffOutlinedIcon from '@mui/icons-material/VisibilityOffOutlined';
 import YardOutlinedIcon from '@mui/icons-material/YardOutlined';
 import {
   Box,
@@ -17,10 +19,13 @@ import React, { useState } from 'react';
 
 import EmptyStateMessage from '@/src/components/common/EmptyStateMessage';
 import { ViewToggle } from '@/src/components/common/ViewToggle';
+import { ProductsBulkDeleteDialog } from '@/src/components/products/ProductsBulkDeleteDialog';
 import { ProductsFilters } from '@/src/components/products/ProductsFilters';
 import ProductsPage from '@/src/components/products/ProductsPage';
+import { useAlert } from '@/src/context/AlertContext';
 import { useAuth } from '@/src/context/AuthContext';
 import { readProductFormDraft } from '@/src/helpers/productFormDraft';
+import { useHideOutOfStockProducts } from '@/src/hooks/api';
 import { useProductsState } from '@/src/hooks/useProductsState';
 import { PrimaryButton, SecondaryButton } from '@/src/styledComponents';
 import AdminProductFormView from '@/src/views/AdminProductFormView';
@@ -30,10 +35,20 @@ export default function ProductsTab() {
     () => readProductFormDraft()?.mode === 'create',
   );
   const [showFilters, setShowFilters] = useState(false);
+  const [showBulkDelete, setShowBulkDelete] = useState(false);
 
   const { isAdmin } = useAuth();
+  const { showAlert } = useAlert();
+  const { hideOutOfStockProducts } = useHideOutOfStockProducts();
   const productsState = useProductsState();
   const { searchTerm, setSearchTerm } = productsState;
+
+  const handleHideOutOfStock = async () => {
+    const { error, success } = await hideOutOfStockProducts();
+
+    if (error) showAlert(error);
+    else if (success) showAlert(success);
+  };
 
   return (
     <Box>
@@ -102,6 +117,20 @@ export default function ProductsTab() {
                     </SecondaryButton>
                   </Stack>
 
+                  <SecondaryButton
+                    onClick={handleHideOutOfStock}
+                    startIcon={<VisibilityOffOutlinedIcon fontSize="small" />}
+                  >
+                    Ocultar sin stock
+                  </SecondaryButton>
+
+                  <SecondaryButton
+                    onClick={() => setShowBulkDelete(true)}
+                    startIcon={<DeleteSweepOutlinedIcon fontSize="small" />}
+                  >
+                    Eliminar varios
+                  </SecondaryButton>
+
                   <PrimaryButton
                     onClick={() => setShowForm(true)}
                     endIcon={<AddIcon />}
@@ -132,6 +161,13 @@ export default function ProductsTab() {
         <AdminProductFormView
           open={showForm}
           onClose={() => setShowForm(false)}
+        />
+      )}
+
+      {showBulkDelete && (
+        <ProductsBulkDeleteDialog
+          open={showBulkDelete}
+          onClose={() => setShowBulkDelete(false)}
         />
       )}
     </Box>
