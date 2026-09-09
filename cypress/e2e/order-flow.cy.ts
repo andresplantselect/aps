@@ -107,6 +107,10 @@ function preorderRowForComment(comment: string) {
   return cy.contains(comment, { timeout: 15000 }).closest('tr');
 }
 
+function openHistory() {
+  cy.contains('button', 'Historial').click();
+}
+
 function approveOrder(comment: string) {
   preorderRowForComment(comment).find(SELECTORS.checkIcon).parent().click();
   cy.get(SELECTORS.dialog).contains('button', 'Aprobar').click();
@@ -397,6 +401,7 @@ describe('Order flow: catalog visibility, buy-units controls, and cart behavior 
       .should('be.visible');
 
     rejectOrder(orderComment3);
+    openHistory();
     preorderRowForComment(orderComment3)
       .contains('Rechazado')
       .should('be.visible');
@@ -452,6 +457,7 @@ describe('Order flow: catalog visibility, buy-units controls, and cart behavior 
     approveOrder(orderComment4);
 
     markDelivered(orderComment2);
+    openHistory();
     preorderRowForComment(orderComment2)
       .contains('Entregado')
       .should('be.visible');
