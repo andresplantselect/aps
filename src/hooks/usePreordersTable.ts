@@ -2,15 +2,21 @@
 
 import { useMediaQuery, useTheme } from '@mui/material';
 import { startOfDay, endOfDay } from 'date-fns';
-import { useMemo, useState, useEffect } from 'react';
+import { useCallback, useMemo, useState, useEffect } from 'react';
 
 import { useAuth } from '@/src/context/AuthContext';
 import { useOrders } from '@/src/context/OrdersContext';
 import {
   DeliveryStatusType,
   OrderStatusType,
+  OrderType,
   ViewModeType,
 } from '@/src/types/types';
+
+export const isOrderCompleted = (order: OrderType) =>
+  order.status === 'cancelled' ||
+  order.delivery_status === 'delivered' ||
+  order.delivery_status === 'failed';
 
 export const usePreordersTable = () => {
   const { orders, isOrdersLoading } = useOrders();
@@ -38,6 +44,7 @@ export const usePreordersTable = () => {
   const [viewMode, setViewMode] = useState<ViewModeType>(
     isAdmin ? (isDesktop ? 'table' : 'cards') : 'cards',
   );
+  const [showHistory, setShowHistory] = useState(false);
 
   const [dateRange, setDateRange] = useState<[Date | null, Date | null]>([
     null,
@@ -84,6 +91,16 @@ export const usePreordersTable = () => {
     dateTo,
   ]);
 
+  const activeOrders = useMemo(
+    () => filteredOrders.filter((order) => !isOrderCompleted(order)),
+    [filteredOrders],
+  );
+
+  const historyOrders = useMemo(
+    () => filteredOrders.filter(isOrderCompleted),
+    [filteredOrders],
+  );
+
   const users = useMemo(() => {
     const set = new Set<string>();
 
@@ -94,10 +111,8 @@ export const usePreordersTable = () => {
     return [...set].sort((a, b) => a.localeCompare(b));
   }, [orders]);
 
-  const sortedOrders = useMemo(() => {
-    const sorted = [...filteredOrders];
-
-    sorted.sort((a, b) => {
+  const compareOrders = useCallback(
+    (a: OrderType, b: OrderType) => {
       if (sortBy === 'date') {
         return sortDir === 'asc'
           ? new Date(a.created_at).getTime() - new Date(b.created_at).getTime()
@@ -123,10 +138,24 @@ export const usePreordersTable = () => {
         default:
           return 0;
       }
-    });
+    },
+    [sortBy, sortDir],
+  );
 
-    return sorted;
-  }, [filteredOrders, sortBy, sortDir]);
+  const sortedOrders = useMemo(
+    () => [...activeOrders].sort(compareOrders),
+    [activeOrders, compareOrders],
+  );
+
+  const sortedHistoryOrders = useMemo(
+    () => [...historyOrders].sort(compareOrders),
+    [historyOrders, compareOrders],
+  );
+
+  const allSortedOrders = useMemo(
+    () => [...filteredOrders].sort(compareOrders),
+    [filteredOrders, compareOrders],
+  );
 
   const paginated = useMemo(() => {
     const start = page * rowsPerPage;
@@ -146,6 +175,10 @@ export const usePreordersTable = () => {
     users,
     paginated,
     sortedOrders,
+    sortedHistoryOrders,
+    allSortedOrders,
+    showHistory,
+    toggleHistory: () => setShowHistory((prev) => !prev),
     page,
     rowsPerPage,
     setPage,

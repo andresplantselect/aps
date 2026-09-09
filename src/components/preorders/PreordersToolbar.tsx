@@ -3,6 +3,7 @@
 import DownloadIcon from '@mui/icons-material/Download';
 import ExpandLessOutlinedIcon from '@mui/icons-material/ExpandLessOutlined';
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
+import HistoryIcon from '@mui/icons-material/History';
 import TuneIcon from '@mui/icons-material/Tune';
 import { Stack } from '@mui/material';
 import { useTheme, useMediaQuery } from '@mui/material';
@@ -20,7 +21,8 @@ export function PreordersToolbar() {
 
   const theme = useTheme();
   const isDesktop = useMediaQuery(theme.breakpoints.up('md'));
-  const { sortedOrders, viewMode, setViewMode } = usePreordersContext();
+  const { allSortedOrders, showHistory, toggleHistory, viewMode, setViewMode } =
+    usePreordersContext();
   const { isAdmin } = useAuth();
 
   return (
@@ -31,6 +33,20 @@ export function PreordersToolbar() {
         )}
 
         <Stack direction="row" justifyContent="flex-end" spacing={2}>
+          <SecondaryButton
+            onClick={toggleHistory}
+            startIcon={<HistoryIcon fontSize="small" />}
+            endIcon={
+              showHistory ? (
+                <ExpandLessOutlinedIcon fontSize="small" />
+              ) : (
+                <ExpandMoreIcon fontSize="small" />
+              )
+            }
+          >
+            Historial
+          </SecondaryButton>
+
           <SecondaryButton
             onClick={() => setShowFilters(!showFilters)}
             startIcon={<TuneIcon fontSize="small" />}
@@ -48,7 +64,7 @@ export function PreordersToolbar() {
           {isAdmin && isDesktop && (
             <PrimaryButton
               endIcon={<DownloadIcon />}
-              onClick={() => exportOrdersToExcel(sortedOrders)}
+              onClick={() => exportOrdersToExcel(allSortedOrders)}
             >
               Descargar Excel
             </PrimaryButton>
