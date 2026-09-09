@@ -26,8 +26,6 @@ import { PrimaryButton, SecondaryButton } from '@/src/styledComponents';
 import AdminProductFormView from '@/src/views/AdminProductFormView';
 
 export default function ProductsTab() {
-  // Reopen the "add product" dialog if a mobile reload (see
-  // productFormDraft.ts) left a create-mode draft behind.
   const [showForm, setShowForm] = useState(
     () => readProductFormDraft()?.mode === 'create',
   );
@@ -39,7 +37,7 @@ export default function ProductsTab() {
 
   return (
     <Box>
-      <Stack spacing={2}>
+      <Stack spacing={2} mb={3}>
         <Stack
           direction={{ xs: 'column', md: 'row' }}
           spacing={2}
@@ -117,18 +115,18 @@ export default function ProductsTab() {
         </Stack>
 
         {isAdmin && showFilters && <ProductsFilters {...productsState} />}
-
-        {productsState.isProductsLoading ? (
-          <LinearProgress />
-        ) : productsState.isProductListEmpty ? (
-          <EmptyStateMessage
-            message="No hay productos disponibles"
-            icon={<YardOutlinedIcon />}
-          />
-        ) : (
-          <ProductsPage {...productsState} />
-        )}
       </Stack>
+
+      {productsState.isProductsLoading ? (
+        <LinearProgress />
+      ) : productsState.isProductListEmpty ? (
+        <EmptyStateMessage
+          message="No hay productos disponibles"
+          icon={<YardOutlinedIcon />}
+        />
+      ) : (
+        <ProductsPage {...productsState} />
+      )}
 
       {showForm && (
         <AdminProductFormView
