@@ -216,15 +216,15 @@ export const useDeleteProduct = () => {
   return { deleteProduct };
 };
 
-export const useHideOutOfStockProducts = () => {
+export const useSetOutOfStockVisibility = () => {
   const { request } = useRequest();
 
-  const hideOutOfStockProducts = async () => {
+  const setOutOfStockVisibility = async (visible: boolean) => {
     const { data: candidates, error: selectError } = await supabase
       .from('products')
       .select('id')
       .eq('available', 0)
-      .eq('is_visible', true);
+      .eq('is_visible', !visible);
 
     if (selectError) {
       return {
@@ -240,7 +240,9 @@ export const useHideOutOfStockProducts = () => {
     if (!candidates || candidates.length === 0) {
       return {
         success: {
-          message: 'No hay productos sin stock para ocultar.',
+          message: visible
+            ? 'No hay productos sin stock ocultos para mostrar.'
+            : 'No hay productos sin stock para ocultar.',
           severity: 'info' as AlertColor,
         },
         error: null,
@@ -252,12 +254,14 @@ export const useHideOutOfStockProducts = () => {
 
     return request(
       async () =>
-        supabase.from('products').update({ is_visible: false }).in('id', ids),
-      ALERT_MESSAGES_DICT.success.productsHidden(ids.length),
+        supabase.from('products').update({ is_visible: visible }).in('id', ids),
+      visible
+        ? ALERT_MESSAGES_DICT.success.productsShown(ids.length)
+        : ALERT_MESSAGES_DICT.success.productsHidden(ids.length),
     );
   };
 
-  return { hideOutOfStockProducts };
+  return { setOutOfStockVisibility };
 };
 
 export const useBulkDeleteProducts = () => {

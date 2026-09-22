@@ -142,7 +142,7 @@ export default function AuthView({ open, onClose }: AuthFormProps) {
             />
             <RedirectionLink
               linkText=""
-              linkTitle="Volver atrás"
+              linkTitle="Volver al inicio"
               onLinkClick={() => {
                 setAuthForm({});
                 setIsFormValid(false);

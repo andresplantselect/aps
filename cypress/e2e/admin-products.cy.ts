@@ -121,7 +121,7 @@ describe('Admin product management', () => {
     setAvailableInline(titleB, '4');
   });
 
-  it('hides out-of-stock products and bulk-deletes selected products from the actions menu', () => {
+  it('hides and shows out-of-stock products, and bulk-deletes selected products from the actions menu', () => {
     cy.loginAs('admin');
     switchToTableView();
 
@@ -162,6 +162,19 @@ describe('Admin product management', () => {
     searchFor(titleC);
     cy.contains('tr', titleC)
       .find(SELECTORS.visibilityOffIcon)
+      .should('be.visible');
+    searchFor(titleD);
+    cy.contains('tr', titleD)
+      .find(SELECTORS.visibilityIcon)
+      .should('be.visible');
+    searchFor('');
+
+    openActionsMenu();
+    cy.contains('Mostrar sin stock').click();
+
+    searchFor(titleC);
+    cy.contains('tr', titleC)
+      .find(SELECTORS.visibilityIcon)
       .should('be.visible');
     searchFor(titleD);
     cy.contains('tr', titleD)

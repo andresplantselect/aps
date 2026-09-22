@@ -7,6 +7,7 @@ import MoreVertIcon from '@mui/icons-material/MoreVert';
 import SearchIcon from '@mui/icons-material/Search';
 import TuneIcon from '@mui/icons-material/Tune';
 import VisibilityOffOutlinedIcon from '@mui/icons-material/VisibilityOffOutlined';
+import VisibilityOutlinedIcon from '@mui/icons-material/VisibilityOutlined';
 import YardOutlinedIcon from '@mui/icons-material/YardOutlined';
 import {
   Box,
@@ -30,7 +31,7 @@ import ProductsPage from '@/src/components/products/ProductsPage';
 import { useAlert } from '@/src/context/AlertContext';
 import { useAuth } from '@/src/context/AuthContext';
 import { readProductFormDraft } from '@/src/helpers/productFormDraft';
-import { useHideOutOfStockProducts } from '@/src/hooks/api';
+import { useSetOutOfStockVisibility } from '@/src/hooks/api';
 import { useProductsState } from '@/src/hooks/useProductsState';
 import {
   PrimaryButton,
@@ -51,13 +52,13 @@ export default function ProductsTab() {
 
   const { isAdmin } = useAuth();
   const { showAlert } = useAlert();
-  const { hideOutOfStockProducts } = useHideOutOfStockProducts();
+  const { setOutOfStockVisibility } = useSetOutOfStockVisibility();
   const productsState = useProductsState();
   const { searchTerm, setSearchTerm } = productsState;
 
-  const handleHideOutOfStock = async () => {
+  const handleSetOutOfStockVisibility = async (visible: boolean) => {
     setActionsAnchorEl(null);
-    const { error, success } = await hideOutOfStockProducts();
+    const { error, success } = await setOutOfStockVisibility(visible);
 
     if (error) showAlert(error);
     else if (success) showAlert(success);
@@ -150,11 +151,21 @@ export default function ProductsTab() {
                     anchorOrigin={{ vertical: 'bottom', horizontal: 'right' }}
                     transformOrigin={{ vertical: 'top', horizontal: 'right' }}
                   >
-                    <MenuItem onClick={handleHideOutOfStock}>
+                    <MenuItem
+                      onClick={() => handleSetOutOfStockVisibility(false)}
+                    >
                       <ListItemIcon>
                         <VisibilityOffOutlinedIcon fontSize="small" />
                       </ListItemIcon>
                       <ListItemText>Ocultar sin stock</ListItemText>
+                    </MenuItem>
+                    <MenuItem
+                      onClick={() => handleSetOutOfStockVisibility(true)}
+                    >
+                      <ListItemIcon>
+                        <VisibilityOutlinedIcon fontSize="small" />
+                      </ListItemIcon>
+                      <ListItemText>Mostrar sin stock</ListItemText>
                     </MenuItem>
                     <MenuItem
                       onClick={() => {
