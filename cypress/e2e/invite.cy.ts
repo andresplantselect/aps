@@ -88,3 +88,52 @@ describe('Invite flow: admin invites a new regular user', () => {
 describe('Invite flow: admin invites a new admin', () => {
   registerViaInvite('admin');
 });
+
+describe('Register page: links back to login and password recovery', () => {
+  it('lets the user get back to the login dialog or start password recovery from the register page', () => {
+    cy.loginAs('admin');
+
+    cy.get(SELECTORS.menuIcon).click();
+    cy.contains('Crear invitación').click();
+
+    cy.intercept('POST', '**/functions/v1/create-invite').as('createInvite');
+    cy.contains('button', 'Crear').click();
+
+    cy.wait('@createInvite').then(({ response }) => {
+      const inviteUrl = response?.body?.inviteUrl as string | undefined;
+      expect(inviteUrl, 'invite URL returned by create-invite').to.be.a(
+        'string',
+      );
+
+      const inviteToken = new URL(inviteUrl as string).searchParams.get(
+        'invite',
+      ) as string;
+
+      cy.visit(`/register?invite=${inviteToken}`);
+      cy.contains('Ya tienes cuenta?').should('be.visible');
+      cy.contains('button', 'Entrar').click();
+
+      cy.location('pathname').should('eq', '/');
+      cy.location('search').should('eq', '');
+      cy.get(SELECTORS.dialog).should('be.visible');
+      cy.get(SELECTORS.dialog).contains('Iniciar sesión').should('be.visible');
+      cy.getByLabel('Correo electrónico').should('be.visible');
+      cy.getByLabel('Contraseña').should('be.visible');
+      cy.get(SELECTORS.dialog).find(SELECTORS.closeIcon).click();
+      cy.get(SELECTORS.dialog).should('not.exist');
+
+      cy.visit(`/register?invite=${inviteToken}`);
+      cy.contains('No recuerdas tu contraseña?').should('be.visible');
+      cy.contains('button', 'Recuperar').click();
+
+      cy.location('pathname').should('eq', '/');
+      cy.location('search').should('eq', '');
+      cy.get(SELECTORS.dialog).should('be.visible');
+      cy.get(SELECTORS.dialog)
+        .contains('Recuperar contraseña')
+        .should('be.visible');
+      cy.getByLabel('Correo electrónico').should('be.visible');
+      cy.get(SELECTORS.dialog).contains('Contraseña').should('not.exist');
+    });
+  });
+});

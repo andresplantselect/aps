@@ -1,3 +1,4 @@
+import HelpOutlineOutlinedIcon from '@mui/icons-material/HelpOutlineOutlined';
 import { Typography, Box, Stack } from '@mui/material';
 import React from 'react';
 
@@ -52,6 +53,7 @@ export default function WelcomeSection({
         <RedirectionLink
           linkText="Primera vez aquí?"
           linkTitle="Aprende cómo funciona la aplicación"
+          icon={<HelpOutlineOutlinedIcon />}
           onLinkClick={onHelp}
         />
 

@@ -1,10 +1,13 @@
 'use client';
 
+import HomeOutlinedIcon from '@mui/icons-material/HomeOutlined';
+import KeyOutlinedIcon from '@mui/icons-material/KeyOutlined';
 import { useRouter } from 'next/navigation';
 import React, { useState, useEffect } from 'react';
 import { flushSync } from 'react-dom';
 
 import PanelCardFormLayout from '@/src/components/auth/PanelCardFormLayout';
+import RedirectionLink from '@/src/components/common/RedirectionLink';
 import CommonForm from '@/src/components/form/CommonForm';
 import { SignUpFormConfig } from '@/src/components/form/formConfigs';
 import { useAuth } from '@/src/context/AuthContext';
@@ -126,6 +129,22 @@ export default function SignUpForm() {
       loading={isLoading}
       alert={alert}
       setAlert={(v) => setAlert(v)}
+      footer={
+        <>
+          <RedirectionLink
+            linkText="Ya tienes cuenta?"
+            linkTitle="Entrar"
+            icon={<HomeOutlinedIcon />}
+            onLinkClick={() => router.push('/?auth=login')}
+          />
+          <RedirectionLink
+            linkText="No recuerdas tu contraseña?"
+            linkTitle="Recuperar"
+            icon={<KeyOutlinedIcon />}
+            onLinkClick={() => router.push('/?auth=forgot')}
+          />
+        </>
+      }
     >
       <CommonForm<SignUpFormType>
         fillForm={(form, isValid) => {
