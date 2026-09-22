@@ -1,5 +1,7 @@
 'use client';
 
+import ArrowBackOutlinedIcon from '@mui/icons-material/ArrowBackOutlined';
+import KeyOutlinedIcon from '@mui/icons-material/KeyOutlined';
 import LockOpenIcon from '@mui/icons-material/LockOpen';
 import LoginIcon from '@mui/icons-material/Login';
 import { Stack } from '@mui/material';
@@ -24,8 +26,12 @@ import {
   SignInFormType,
 } from '@/src/types/types';
 
-export default function AuthView({ open, onClose }: AuthFormProps) {
-  const [mode, setMode] = useState<AuthMode>('signIn');
+export default function AuthView({
+  open,
+  onClose,
+  initialMode = 'signIn',
+}: AuthFormProps) {
+  const [mode, setMode] = useState<AuthMode>(initialMode);
   const [authForm, setAuthForm] = useState<Record<string, string>>({});
   const [isFormValid, setIsFormValid] = useState(false);
   const [cooldown, setCooldown] = useState(0);
@@ -119,6 +125,7 @@ export default function AuthView({ open, onClose }: AuthFormProps) {
             <RedirectionLink
               linkText="Olvidaste tu contraseña?"
               linkTitle="Recuperar"
+              icon={<KeyOutlinedIcon />}
               onLinkClick={() => {
                 setIsFormValid(false);
                 setMode('forgotPassword');
@@ -143,6 +150,7 @@ export default function AuthView({ open, onClose }: AuthFormProps) {
             <RedirectionLink
               linkText=""
               linkTitle="Volver atrás"
+              icon={<ArrowBackOutlinedIcon />}
               onLinkClick={() => {
                 setAuthForm({});
                 setIsFormValid(false);
