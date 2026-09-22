@@ -9,6 +9,7 @@ import MobileNavDrawer from '@/src/components/main/MobileNavDrawer';
 import WelcomeSection from '@/src/components/main/WelcomeSection';
 import { useAuth } from '@/src/context/AuthContext';
 import { getMenuActions } from '@/src/helpers/helpers';
+import { AuthMode } from '@/src/types/propsTypes';
 import UsersTabs from '@/src/views/UsersTabs';
 import UserView from '@/src/views/UserView';
 const AuthView = dynamic(() => import('@/src/views/AuthView'));
@@ -25,6 +26,7 @@ export default function Page() {
     invite: false,
   });
   const [mobileNavOpen, setMobileNavOpen] = useState(false);
+  const [authInitialMode, setAuthInitialMode] = useState<AuthMode>('signIn');
   const {
     isAuthLoading,
     name,
@@ -42,6 +44,24 @@ export default function Page() {
       window.history.replaceState(null, '', window.location.pathname);
       document.title = 'APS';
     }
+  }, []);
+  useEffect(() => {
+    if (typeof window === 'undefined') return;
+    const params = new URLSearchParams(window.location.search);
+    const authParam = params.get('auth');
+
+    if (authParam !== 'login' && authParam !== 'forgot') return;
+
+    setAuthInitialMode(authParam === 'forgot' ? 'forgotPassword' : 'signIn');
+    setDialogs((prev) => ({ ...prev, auth: true }));
+
+    params.delete('auth');
+    const newSearch = params.toString();
+    window.history.replaceState(
+      null,
+      '',
+      window.location.pathname + (newSearch ? `?${newSearch}` : ''),
+    );
   }, []);
   const openDialog = (key: keyof typeof dialogs) =>
     setDialogs((prev) => ({ ...prev, [key]: true }));
@@ -89,7 +109,13 @@ export default function Page() {
       {dialogs.user && (
         <UpdateUserView open onClose={() => closeDialog('user')} />
       )}
-      {dialogs.auth && <AuthView open onClose={() => closeDialog('auth')} />}
+      {dialogs.auth && (
+        <AuthView
+          open
+          onClose={() => closeDialog('auth')}
+          initialMode={authInitialMode}
+        />
+      )}
       {dialogs.help && <HelpView open onClose={() => closeDialog('help')} />}
       {dialogs.invite && (
         <InviteDialog open onClose={() => closeDialog('invite')} />

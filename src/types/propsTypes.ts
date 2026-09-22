@@ -66,12 +66,13 @@ export interface OrdersContextType {
   refreshOrders: () => Promise<void>;
 }
 
+export type AuthMode = 'signIn' | 'forgotPassword';
+
 export type AuthFormProps = {
   open: boolean;
   onClose: () => void;
+  initialMode?: AuthMode;
 };
-
-export type AuthMode = 'signIn' | 'forgotPassword';
 
 export interface CartItemListProps {
   items: CartItem[];
@@ -83,6 +84,7 @@ export type PanelCardFormLayoutProps = {
   alert: AlertType;
   setAlert: (v: AlertType) => void;
   loading?: boolean;
+  footer?: ReactNode;
 };
 
 export type CartItemSummaryProps = {

@@ -15,13 +15,15 @@ export default function PanelCardFormLayout({
   children,
   submit,
   loading,
+  footer,
 }: PanelCardFormLayoutProps) {
   return (
     <Stack
-      sx={{ height: '100vh', position: 'relative' }}
+      sx={{ minHeight: '100vh', position: 'relative' }}
       justifyContent="center"
       alignItems="center"
       px={{ xs: 1.5, md: 5 }}
+      py={{ xs: 10, md: 12 }}
     >
       {loading ? (
         <Loader />
@@ -42,6 +44,11 @@ export default function PanelCardFormLayout({
             >
               {submit.title}
             </PrimaryButton>
+            {footer && (
+              <Stack spacing={1} alignItems="flex-start" sx={{ width: '100%' }}>
+                {footer}
+              </Stack>
+            )}
           </Stack>
         </PanelCard>
       )}
