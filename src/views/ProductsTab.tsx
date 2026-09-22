@@ -3,15 +3,21 @@ import CloseIcon from '@mui/icons-material/Close';
 import DeleteSweepOutlinedIcon from '@mui/icons-material/DeleteSweepOutlined';
 import ExpandLessOutlinedIcon from '@mui/icons-material/ExpandLessOutlined';
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
+import MoreVertIcon from '@mui/icons-material/MoreVert';
 import SearchIcon from '@mui/icons-material/Search';
 import TuneIcon from '@mui/icons-material/Tune';
 import VisibilityOffOutlinedIcon from '@mui/icons-material/VisibilityOffOutlined';
+import VisibilityOutlinedIcon from '@mui/icons-material/VisibilityOutlined';
 import YardOutlinedIcon from '@mui/icons-material/YardOutlined';
 import {
   Box,
   IconButton,
   InputAdornment,
   LinearProgress,
+  ListItemIcon,
+  ListItemText,
+  Menu,
+  MenuItem,
   OutlinedInput,
   Stack,
 } from '@mui/material';
@@ -25,9 +31,13 @@ import ProductsPage from '@/src/components/products/ProductsPage';
 import { useAlert } from '@/src/context/AlertContext';
 import { useAuth } from '@/src/context/AuthContext';
 import { readProductFormDraft } from '@/src/helpers/productFormDraft';
-import { useHideOutOfStockProducts } from '@/src/hooks/api';
+import { useSetOutOfStockVisibility } from '@/src/hooks/api';
 import { useProductsState } from '@/src/hooks/useProductsState';
-import { PrimaryButton, SecondaryButton } from '@/src/styledComponents';
+import {
+  PrimaryButton,
+  SecondaryButton,
+  SecondaryRoundIconButton,
+} from '@/src/styledComponents';
 import AdminProductFormView from '@/src/views/AdminProductFormView';
 
 export default function ProductsTab() {
@@ -36,15 +46,19 @@ export default function ProductsTab() {
   );
   const [showFilters, setShowFilters] = useState(false);
   const [showBulkDelete, setShowBulkDelete] = useState(false);
+  const [actionsAnchorEl, setActionsAnchorEl] = useState<HTMLElement | null>(
+    null,
+  );
 
   const { isAdmin } = useAuth();
   const { showAlert } = useAlert();
-  const { hideOutOfStockProducts } = useHideOutOfStockProducts();
+  const { setOutOfStockVisibility } = useSetOutOfStockVisibility();
   const productsState = useProductsState();
   const { searchTerm, setSearchTerm } = productsState;
 
-  const handleHideOutOfStock = async () => {
-    const { error, success } = await hideOutOfStockProducts();
+  const handleSetOutOfStockVisibility = async (visible: boolean) => {
+    setActionsAnchorEl(null);
+    const { error, success } = await setOutOfStockVisibility(visible);
 
     if (error) showAlert(error);
     else if (success) showAlert(success);
@@ -117,26 +131,54 @@ export default function ProductsTab() {
                     </SecondaryButton>
                   </Stack>
 
-                  <SecondaryButton
-                    onClick={handleHideOutOfStock}
-                    startIcon={<VisibilityOffOutlinedIcon fontSize="small" />}
-                  >
-                    Ocultar sin stock
-                  </SecondaryButton>
-
-                  <SecondaryButton
-                    onClick={() => setShowBulkDelete(true)}
-                    startIcon={<DeleteSweepOutlinedIcon fontSize="small" />}
-                  >
-                    Eliminar varios
-                  </SecondaryButton>
-
                   <PrimaryButton
                     onClick={() => setShowForm(true)}
                     endIcon={<AddIcon />}
                   >
                     Añadir
                   </PrimaryButton>
+
+                  <SecondaryRoundIconButton
+                    onClick={(e) => setActionsAnchorEl(e.currentTarget)}
+                  >
+                    <MoreVertIcon fontSize="small" />
+                  </SecondaryRoundIconButton>
+
+                  <Menu
+                    anchorEl={actionsAnchorEl}
+                    open={Boolean(actionsAnchorEl)}
+                    onClose={() => setActionsAnchorEl(null)}
+                    anchorOrigin={{ vertical: 'bottom', horizontal: 'right' }}
+                    transformOrigin={{ vertical: 'top', horizontal: 'right' }}
+                  >
+                    <MenuItem
+                      onClick={() => handleSetOutOfStockVisibility(false)}
+                    >
+                      <ListItemIcon>
+                        <VisibilityOffOutlinedIcon fontSize="small" />
+                      </ListItemIcon>
+                      <ListItemText>Ocultar sin stock</ListItemText>
+                    </MenuItem>
+                    <MenuItem
+                      onClick={() => handleSetOutOfStockVisibility(true)}
+                    >
+                      <ListItemIcon>
+                        <VisibilityOutlinedIcon fontSize="small" />
+                      </ListItemIcon>
+                      <ListItemText>Mostrar sin stock</ListItemText>
+                    </MenuItem>
+                    <MenuItem
+                      onClick={() => {
+                        setActionsAnchorEl(null);
+                        setShowBulkDelete(true);
+                      }}
+                    >
+                      <ListItemIcon>
+                        <DeleteSweepOutlinedIcon fontSize="small" />
+                      </ListItemIcon>
+                      <ListItemText>Eliminar varios</ListItemText>
+                    </MenuItem>
+                  </Menu>
                 </Stack>
               )}
             </Stack>

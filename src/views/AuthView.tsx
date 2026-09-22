@@ -149,7 +149,7 @@ export default function AuthView({
             />
             <RedirectionLink
               linkText=""
-              linkTitle="Volver atrás"
+              linkTitle="Volver al inicio"
               icon={<ArrowBackOutlinedIcon />}
               onLinkClick={() => {
                 setAuthForm({});

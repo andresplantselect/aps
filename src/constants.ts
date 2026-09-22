@@ -74,6 +74,8 @@ export const ALERT_MESSAGES_DICT = {
     productDeleted: (title: string) => `Artículo ${title} eliminado.`,
     productsHidden: (count: number) =>
       count === 1 ? '1 artículo ocultado.' : `${count} artículos ocultados.`,
+    productsShown: (count: number) =>
+      count === 1 ? '1 artículo mostrado.' : `${count} artículos mostrados.`,
     productsBulkDeleted: (count: number) =>
       count === 1 ? '1 artículo eliminado.' : `${count} artículos eliminados.`,
     orderApproved: 'Pedido aprobado.',
